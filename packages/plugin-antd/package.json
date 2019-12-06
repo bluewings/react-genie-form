@@ -1,0 +1,43 @@
+{
+  "name": "@react-genie-form/plugin-antd",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sung Won Cha",
+    "email": "mygenie3@naver.com"
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
+  "jsnext:main": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bluewings/react-genie-form.git",
+    "directory": "packages/plugin-antd"
+  },
+  "dependencies": {
+    "antd": "^3.26.0",
+    "lodash-es": "^4.17.15"
+  },
+  "peerDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.3",
+    "@types/react": "^16.9.13",
+    "@types/react-dom": "^16.9.4",
+    "rollup": "^1.27.8",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "typescript": "^3.7.2"
+  },
+  "scripts": {
+    "prestart": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
+    "start": "rollup -c --watch"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "license": "ISC"
+}

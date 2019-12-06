@@ -1,0 +1,11 @@
+.root {
+  padding: 1rem 0;
+
+  h2 {
+    font-family: 'Coiny', cursive;
+  }
+
+  :global(.card) {
+    margin-bottom: 1rem;
+  }
+}
