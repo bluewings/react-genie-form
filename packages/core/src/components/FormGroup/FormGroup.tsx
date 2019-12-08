@@ -48,14 +48,24 @@ function FormGroup({
   );
 
   const Label = useCallback(
-    (injectProps: any) => <BaseLabel {...formProps.current} {...injectProps} />,
+    (injectProps: any) => (
+      <BaseLabel
+        className={classNames.label}
+        {...formProps.current}
+        {...injectProps}
+      />
+    ),
     [BaseLabel],
   );
 
   const FormComponent = useCallback(
     (injectProps: any) =>
       BaseFormComponent ? (
-        <BaseFormComponent {...formProps.current} {...injectProps} />
+        <BaseFormComponent
+          className={classNames.control}
+          {...formProps.current}
+          {...injectProps}
+        />
       ) : null,
     [BaseFormComponent],
   );
@@ -63,7 +73,11 @@ function FormGroup({
   const Description = useCallback(
     (injectProps: any) =>
       schema.description ? (
-        <BaseDescription {...formProps.current} {...injectProps} />
+        <BaseDescription
+          className={classNames.description}
+          {...formProps.current}
+          {...injectProps}
+        />
       ) : null,
     [BaseLabel],
   );

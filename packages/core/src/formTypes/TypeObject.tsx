@@ -23,7 +23,7 @@ function TypeObject({ path, schema, defaultValue, onChange }: any) {
   );
 
   const items = useMemo(() => {
-    if (path === '$' && form) {
+    if (path === '$' && Array.isArray(form) && form.length > 0) {
       const { dict, rest } = properties.reduce(
         (prev: any, e: any) =>
           form.indexOf(e.name) !== -1

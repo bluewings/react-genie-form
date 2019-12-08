@@ -9,6 +9,7 @@ namespace Form {
     form?: any[];
     formTypes?: FormType[];
     parseValue?: any;
+    plugin?: Plugin;
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -19,6 +20,7 @@ function Form({
   form,
   formTypes,
   parseValue,
+  plugin,
   FormGroup,
   Label,
   Description,
@@ -29,6 +31,7 @@ function Form({
     formTypes,
     parseValue,
     FormGroup,
+    plugin,
     Label,
     Description,
   });

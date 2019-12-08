@@ -29,13 +29,10 @@ function BaseFormGroup({
         style={{ display: isHidden ? 'none' : '' }}
         className={classNames.formGroup}
       >
-        <div className={classNames.label}>
-          <Label />
-        </div>
+        <Label />
         <div className={classNames.control}>
           <FormComponent />
           <Description />
-          {/* <ErrorMessage /> */}
         </div>
       </div>
     </div>

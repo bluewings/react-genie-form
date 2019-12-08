@@ -1,25 +1,45 @@
 import { useMemo } from 'react';
+import { get } from 'lodash-es';
 import { css } from '@emotion/core';
 import classNames from '../FormGroup/FormGroup.module.scss';
 
 const FORM_GROUP_GUTTER = '1rem';
 
+const enums = {
+  layout: ['vertical', 'horizontal'],
+  labelAlign: ['right', 'center', 'left'],
+};
+
+const getPreferredValue = (type: string, value: any) => {
+  const values = get(enums, [type], []);
+  return values.indexOf(value) !== -1 ? value : values[0];
+};
+
 function useCss({ layout, labelWidth, labelAlign }: any) {
-  const rootCss = useMemo(() => {
-    if (layout === 'horizontal') {
+  const _layout = useMemo(() => getPreferredValue('layout', layout), [layout]);
+
+  const _labelAlign = useMemo(
+    () => getPreferredValue('labelAlign', labelAlign),
+    [labelAlign],
+  );
+
+  return useMemo(() => {
+    let rootCss;
+    if (_layout === 'horizontal') {
       const values = {
         labelWidth: labelWidth || 100,
         labelAlign: 'flex-end',
       };
-      if (labelAlign === 'left') {
+      if (_labelAlign === 'left') {
         values.labelAlign = 'flex-start';
-      } else if (labelAlign === 'center') {
+      } else if (_labelAlign === 'center') {
         values.labelAlign = 'center';
       }
-      return css`
+      rootCss = css`
         .${classNames.formGroup} {
           display: flex;
           margin-bottom: ${FORM_GROUP_GUTTER};
+          align-items: flex-start;
         }
         .${classNames.label} {
           display: flex;
@@ -34,16 +54,18 @@ function useCss({ layout, labelWidth, labelAlign }: any) {
           flex: 1 1 auto;
         }
       `;
+    } else {
+      rootCss = css`
+        .${classNames.formGroup} {
+          margin-bottom: ${FORM_GROUP_GUTTER};
+        }
+      `;
     }
-
-    return css`
-      .${classNames.formGroup} {
-        margin-bottom: ${FORM_GROUP_GUTTER};
-      }
-    `;
-  }, [layout, labelAlign, labelWidth]);
-
-  return rootCss;
+    return {
+      className: `layout_${_layout} labelAlign_${_labelAlign}`,
+      css: rootCss,
+    };
+  }, [_layout, _labelAlign, labelWidth]);
 }
 
 export default useCss;

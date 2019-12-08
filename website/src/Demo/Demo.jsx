@@ -1,11 +1,13 @@
 import * as React from 'react';
 import Form from '@react-genie-form/core';
-import { formTypes } from '@react-genie-form/plugin-antd';
+import { formTypes, Label, plugin } from '@react-genie-form/plugin-antd';
 import styles from './Demo.module.scss';
 
 const schema = {
   name: {
     type: 'string',
+    title: 'Name',
+    description: 'The description is displayed here.',
   },
   birth: {
     type: 'date',
@@ -18,9 +20,20 @@ const schema = {
     type: 'string',
     formType: 'textarea',
   },
+  etc: {
+    type: 'object',
+    properties: {
+      interest: {
+        type: 'string',
+      },
+      age: {
+        type: 'number',
+      },
+    },
+  },
 };
 
-const form = ['*'];
+const form = ['name', '__divider', 'birth'];
 
 function Demo() {
   return (
@@ -39,7 +52,7 @@ function Demo() {
                 <Form
                   layout="horizontal"
                   schema={schema}
-                  formTypes={formTypes}
+                  plugin={plugin}
                   form={form}
                 />
               </div>
@@ -48,7 +61,7 @@ function Demo() {
           <div className="col-sm-6">
             <div className="card">
               <div className="card-body">
-                <Form schema={schema} formTypes={formTypes} form={form} />
+                <Form schema={schema} formTypes={formTypes} Label={Label} />
               </div>
             </div>
           </div>

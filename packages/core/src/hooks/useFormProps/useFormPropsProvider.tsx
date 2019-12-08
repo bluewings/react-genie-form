@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useMemo } from 'react';
+import { get } from 'lodash-es';
 import Context from './context';
 import defaultFormTypes from '../../formTypes';
 import defaultParseValue from '../../parseValue';
@@ -7,16 +8,21 @@ import defaultParseValue from '../../parseValue';
 function useFormPropsProvider({
   form,
   formTypes,
+  parseValue,
+  plugin,
   FormGroup,
   Label,
   Description,
-  parseValue,
 }: any) {
   const mergedForm = useMemo(() => form || [], [form]);
 
   const mergedFormTypes = useMemo(
     () =>
-      [...(formTypes || []), ...defaultFormTypes]
+      [
+        ...(formTypes || []),
+        ...get(plugin, ['formTypes'], []),
+        ...defaultFormTypes,
+      ]
         .map(({ component, test }) => {
           let testFn;
           if (typeof test === 'function') {
@@ -37,12 +43,16 @@ function useFormPropsProvider({
           return { component, test: testFn };
         })
         .filter(({ test }) => test),
-    [formTypes],
+    [plugin, formTypes],
   );
 
   const mergedParseValue = useMemo(
-    () => ({ ...(parseValue || {}), ...defaultParseValue }),
-    [parseValue],
+    () => ({
+      ...(parseValue || {}),
+      ...get(formTypes, ['parseValue'], {}),
+      ...defaultParseValue,
+    }),
+    [plugin, parseValue],
   );
 
   const formProps = useMemo(
@@ -50,11 +60,12 @@ function useFormPropsProvider({
       form: mergedForm,
       formTypes: mergedFormTypes,
       parseValue: mergedParseValue,
-      FormGroup,
-      Label,
-      Description,
+      FormGroup: FormGroup || get(plugin, ['FormGroup']),
+      Label: Label || get(plugin, ['Label']),
+      Description: Description || get(plugin, ['Description']),
     }),
     [
+      plugin,
       mergedForm,
       mergedFormTypes,
       mergedParseValue,

@@ -33,10 +33,10 @@ function Container({
     currValue.current = value;
   });
 
-  const css = useCss({ layout, labelAlign, labelWidth });
+  const { className, css } = useCss({ layout, labelAlign, labelWidth });
 
   return (
-    <div css={css}>
+    <div className={className} css={css}>
       <FormGroup
         isRoot={true}
         schema={_schema}

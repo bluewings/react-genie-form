@@ -1,0 +1,8 @@
+:global(.layout_horizontal) {
+  .root {
+    display: flex;
+    margin: 0.25rem 0;
+    line-height: calc(1.5rem + 2px);
+    align-items: center;
+  }
+}

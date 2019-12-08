@@ -1,4 +1,7 @@
 import 'antd/dist/antd.css';
 import formTypes from './formTypes';
+import Label from './Label';
 
-export { formTypes };
+const plugin = { formTypes, Label };
+
+export { plugin, formTypes, Label };
