@@ -1,11 +1,43 @@
-import * as React from 'react';
 import { useMemo } from 'react';
 import { get } from 'lodash-es';
-import Context from './context';
+import Context from './Context';
 import defaultFormTypes from '../../formTypes';
 import defaultParseValue from '../../parseValue';
 
-function useFormPropsProvider({
+function useContextProvider(params: any) {
+  const formProps = useFormProps(params);
+
+  const errors = useErrors(params);
+
+  const value = useMemo(() => ({ formProps, errors }), [formProps, errors]);
+
+  return [Context.Provider, value] as any[];
+}
+
+export default useContextProvider;
+
+function useErrors({ errors }: any): any {
+  const serialized = useMemo(() => JSON.stringify(errors), [errors]);
+
+  const errorsByDataPath = useMemo(
+    () =>
+      (errors || []).reduce(
+        (accum: any, e: any) => ({
+          ...accum,
+          [e.dataPath]: [...(accum[e.dataPath] || []), e],
+        }),
+        {},
+      ),
+    [serialized],
+  );
+
+  return useMemo(() => ({ errors, dataPath: errorsByDataPath }), [
+    errors,
+    errorsByDataPath,
+  ]);
+}
+
+function useFormProps({
   form,
   formTypes,
   parseValue,
@@ -13,6 +45,7 @@ function useFormPropsProvider({
   FormGroup,
   Label,
   Description,
+  ErrorMessage,
 }: any) {
   const mergedForm = useMemo(() => form || [], [form]);
 
@@ -63,6 +96,7 @@ function useFormPropsProvider({
       FormGroup: FormGroup || get(plugin, ['FormGroup']),
       Label: Label || get(plugin, ['Label']),
       Description: Description || get(plugin, ['Description']),
+      ErrorMessage: ErrorMessage || get(plugin, ['ErrorMessage']),
     }),
     [
       plugin,
@@ -72,17 +106,9 @@ function useFormPropsProvider({
       FormGroup,
       Label,
       Description,
+      ErrorMessage,
     ],
   );
 
-  const Provider = useMemo(
-    () => ({ children }: any) => (
-      <Context.Provider value={formProps}>{children}</Context.Provider>
-    ),
-    [formProps],
-  );
-
-  return Provider;
+  return formProps;
 }
-
-export default useFormPropsProvider;

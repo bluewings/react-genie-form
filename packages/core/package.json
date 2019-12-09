@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.22",
+    "ajv": "^6.10.2",
     "lodash-es": "^4.17.15"
   },
   "peerDependencies": {

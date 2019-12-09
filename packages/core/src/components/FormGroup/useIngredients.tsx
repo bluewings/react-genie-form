@@ -4,6 +4,7 @@ import { get } from 'lodash-es';
 import BaseFormGroup from './BaseFormGroup';
 import BaseLabel from '../Label';
 import BaseDescription from '../Description';
+import BaseErrorMessage from '../ErrorMessage';
 import { useFormProps } from '../../hooks';
 
 const identity = (e: any) => e;
@@ -15,6 +16,7 @@ function useFormComponent(schema: any) {
     FormGroup,
     Label,
     Description,
+    ErrorMessage,
   }: any = useFormProps();
 
   const hint: Hint = useMemo(
@@ -48,6 +50,7 @@ function useFormComponent(schema: any) {
     BaseFormGroup: FormGroup || BaseFormGroup,
     BaseLabel: Label || BaseLabel,
     BaseDescription: Description || BaseDescription,
+    BaseErrorMessage: ErrorMessage || BaseErrorMessage,
   };
 }
 

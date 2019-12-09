@@ -1,5 +1,7 @@
+import useErrors from './useErrors';
 import useFormProps from './useFormProps';
 import useHandle from './useHandle';
 import useSchema from './useSchema';
+import useValidate from './useValidate';
 
-export { useFormProps, useHandle, useSchema };
+export { useErrors, useFormProps, useHandle, useSchema, useValidate };

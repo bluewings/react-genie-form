@@ -2,7 +2,7 @@
 import { useMemo, useRef } from 'react';
 import { jsx } from '@emotion/core';
 import useCss from './useCss';
-import { useSchema, useHandle } from '../../hooks';
+import { useHandle } from '../../hooks';
 import FormGroup from '../FormGroup';
 
 export type ContainerProps = {
@@ -23,7 +23,6 @@ function Container({
   labelWidth,
 }: ContainerProps) {
   const _defaultValue = useMemo(() => defaultValue || {}, [defaultValue]);
-  const _schema = useSchema(schema);
 
   const currValue = useRef(_defaultValue);
   const handleValueChange = useHandle((value: any) => {
@@ -39,7 +38,7 @@ function Container({
     <div className={className} css={css}>
       <FormGroup
         isRoot={true}
-        schema={_schema}
+        schema={schema}
         defaultValue={_defaultValue}
         onChange={handleValueChange}
       />

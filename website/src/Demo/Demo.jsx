@@ -8,9 +8,14 @@ const schema = {
     type: 'string',
     title: 'Name',
     description: 'The description is displayed here.',
+    minLength: 3,
+  },
+  email: {
+    type: 'string',
+    pattern: '^\\S+@\\S+$',
   },
   birth: {
-    type: 'date',
+    type: 'string',
   },
   gender: {
     type: 'string',

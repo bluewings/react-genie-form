@@ -29,4 +29,5 @@ declare type Plugin = {
   FormGroup?: Component | FunctionComponent;
   Label?: Component | FunctionComponent;
   Description?: Component | FunctionComponent;
+  ErrorMessage?: Component | FunctionComponent;
 };

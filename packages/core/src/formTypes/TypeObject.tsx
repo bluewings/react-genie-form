@@ -4,7 +4,7 @@ import FormGroup from '../components/FormGroup';
 import { useFormProps, useHandle } from '../hooks';
 import { get } from 'lodash-es';
 
-function TypeObject({ path, schema, defaultValue, onChange }: any) {
+function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
   const { form, formTypes }: any = useFormProps();
 
   const handleChange = useHandle(onChange);
@@ -23,7 +23,7 @@ function TypeObject({ path, schema, defaultValue, onChange }: any) {
   );
 
   const items = useMemo(() => {
-    if (path === '$' && Array.isArray(form) && form.length > 0) {
+    if (dataPath === '' && Array.isArray(form) && form.length > 0) {
       const { dict, rest } = properties.reduce(
         (prev: any, e: any) =>
           form.indexOf(e.name) !== -1
@@ -51,7 +51,7 @@ function TypeObject({ path, schema, defaultValue, onChange }: any) {
         }, []);
     }
     return properties;
-  }, [properties, path, form]);
+  }, [properties, dataPath, form]);
 
   return (
     <>
@@ -68,7 +68,7 @@ function TypeObject({ path, schema, defaultValue, onChange }: any) {
               key={i}
               name={name}
               onChange={onChange}
-              parentPath={path}
+              parentDataPath={dataPath}
               schema={schema}
             />
           ),

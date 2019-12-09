@@ -4,11 +4,10 @@ import * as React from 'react';
 // import { checkPropTypes } from 'prop-types';
 
 function BaseFormGroup({
+  Label,
+  FormComponent,
   Description,
   ErrorMessage,
-  FormComponent,
-  Label,
-
   isHidden,
   classNames,
 }: any) {
@@ -24,7 +23,7 @@ function BaseFormGroup({
           )}
         </>
       )}
-      {/* <h3>[{__params.path}]</h3> */}
+
       <div
         style={{ display: isHidden ? 'none' : '' }}
         className={classNames.formGroup}
@@ -33,6 +32,7 @@ function BaseFormGroup({
         <div className={classNames.control}>
           <FormComponent />
           <Description />
+          <ErrorMessage />
         </div>
       </div>
     </div>

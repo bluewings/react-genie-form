@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
-import { useHandle } from '../../hooks';
+import { useHandle, useErrors } from '../../hooks';
 import useIngredients from './useIngredients';
 
 import classNames from './FormGroup.module.scss';
 
-function FormGroup({
+function FormGroupInner({
   defaultValue,
   isRoot,
   name,
   onChange,
-  parentPath,
   schema = {},
+  BaseFormComponent,
+  BaseFormGroup,
+  BaseLabel,
+  BaseDescription,
+  BaseErrorMessage,
+  parseValue,
+  dataPath,
+  errors,
 }: any) {
-  const {
-    BaseFormComponent,
-    BaseFormGroup,
-    BaseLabel,
-    BaseDescription,
-    parseValue,
-  } = useIngredients(schema);
-
   const [value, setValue] = useState(defaultValue);
   const handleChange = useHandle((event: SyntheticEvent | any) => {
     const received =
@@ -40,11 +39,12 @@ function FormGroup({
       label: schema.title || name,
       name,
       onChange: handleChange,
-      path: isRoot ? '$' : [parentPath, name].join('.'),
+      dataPath,
       schema,
       value,
+      errors,
     }),
-    [defaultValue, handleChange, isRoot, name, schema, value],
+    [defaultValue, handleChange, name, dataPath, schema, value, errors],
   );
 
   const Label = useCallback(
@@ -79,7 +79,19 @@ function FormGroup({
           {...injectProps}
         />
       ) : null,
-    [BaseLabel],
+    [BaseDescription],
+  );
+
+  const ErrorMessage = useCallback(
+    (injectProps: any) =>
+      formProps.current.errors && formProps.current.errors.length > 0 ? (
+        <BaseErrorMessage
+          className={classNames.errorMessage}
+          {...formProps.current}
+          {...injectProps}
+        />
+      ) : null,
+    [BaseErrorMessage],
   );
 
   return isRoot ? (
@@ -91,8 +103,43 @@ function FormGroup({
       Label={Label}
       FormComponent={FormComponent}
       Description={Description}
+      ErrorMessage={ErrorMessage}
     />
   );
 }
 
-export default React.memo(FormGroup);
+const FC = React.memo(FormGroupInner);
+
+function FormGroupOuter(props: any) {
+  const { schema, isRoot, parentDataPath, name } = props;
+  const {
+    BaseFormComponent,
+    BaseFormGroup,
+    BaseLabel,
+    BaseDescription,
+    BaseErrorMessage,
+    parseValue,
+  } = useIngredients(schema);
+
+  const dataPath = useMemo(
+    () => (isRoot ? '' : [parentDataPath, name].join('.')),
+    [isRoot, parentDataPath, name],
+  );
+  const errors = useErrors(dataPath);
+
+  return (
+    <FC
+      {...props}
+      dataPath={dataPath}
+      errors={errors}
+      BaseFormComponent={BaseFormComponent}
+      BaseFormGroup={BaseFormGroup}
+      BaseLabel={BaseLabel}
+      BaseDescription={BaseDescription}
+      BaseErrorMessage={BaseErrorMessage}
+      parseValue={parseValue}
+    />
+  );
+}
+
+export default FormGroupOuter;
