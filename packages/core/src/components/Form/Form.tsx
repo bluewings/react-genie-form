@@ -54,7 +54,7 @@ function Form({
     formTypes,
     parseValue,
     plugin,
-    schema,
+    schema: _schema,
     FormGroup,
     Label,
     Description,

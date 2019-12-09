@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, isValidElement } from 'react';
 import { get } from 'lodash-es';
 import Context from './Context';
 import defaultFormTypes from '../../formTypes';
@@ -38,6 +38,7 @@ function useErrors({ errors }: any): any {
 }
 
 function useFormProps({
+  schema,
   form,
   formTypes,
   parseValue,
@@ -47,7 +48,34 @@ function useFormProps({
   Description,
   ErrorMessage,
 }: any) {
-  const mergedForm = useMemo(() => form || [], [form]);
+  const mergedForm = useMemo(() => {
+    let merged = (form || ['*'])
+      .map((name: any) =>
+        typeof name === 'string'
+          ? { name }
+          : typeof name === 'object' && isValidElement(name)
+          ? { name: '__reactElement', reactElement: name }
+          : name,
+      )
+      .filter(
+        (e: any, i: number, arr: any[]) =>
+          e &&
+          typeof e.name === 'string' &&
+          (arr.findIndex(({ name }: any) => e.name === name) === i ||
+            e.name.match(/^__/)),
+      );
+    const names = merged.map((e: any) => e.name);
+    const rest = Object.keys(schema.properties || {}).filter(
+      (e) => names.indexOf(e) === -1,
+    );
+    return merged.reduce(
+      (accum: any, e: any) =>
+        e.name === '*'
+          ? [...accum, ...rest.map((name: string) => ({ ...e, name }))]
+          : [...accum, e],
+      [],
+    );
+  }, [schema, form]);
 
   const mergedFormTypes = useMemo(
     () =>

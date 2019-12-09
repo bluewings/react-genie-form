@@ -3,6 +3,17 @@ import { Fragment, isValidElement, useMemo } from 'react';
 import FormGroup from '../components/FormGroup';
 import { useFormProps, useHandle } from '../hooks';
 import { get } from 'lodash-es';
+import styles from './TypeObject.module.scss';
+
+const getMaxWidth = (grid: any) => {
+  const maxWidth =
+    typeof grid === 'number'
+      ? (grid / 12) * 100
+      : typeof grid === 'string' && grid.match(/^[0-9]+%$/)
+      ? ~~grid.replace(/%/, '')
+      : 100;
+  return `${Math.min(100, maxWidth)}%`;
+};
 
 function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
   const { form, formTypes }: any = useFormProps();
@@ -22,57 +33,75 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
     [schema],
   );
 
-  const items = useMemo(() => {
+  const childNodes = useMemo(() => {
+    let items;
     if (dataPath === '' && Array.isArray(form) && form.length > 0) {
-      const { dict, rest } = properties.reduce(
-        (prev: any, e: any) =>
-          form.indexOf(e.name) !== -1
-            ? { ...prev, dict: { ...prev.dict, [e.name]: e } }
-            : { ...prev, rest: [...prev.rest, e] },
-        { dict: {}, rest: [] },
+      const dict = properties.reduce(
+        (accum: any, property: any) => ({
+          ...accum,
+          [property.name]: property,
+        }),
+        {},
       );
-      return form
-        .filter(
-          (e: any, i: number, arr: any[]) =>
-            arr.indexOf(e) === i || (typeof e === 'string' && e.match(/^__/)),
-        )
-        .reduce((items: any, e: string) => {
-          if (e === '*') {
-            return [...items, ...rest];
-          } else if (dict[e]) {
-            return [...items, dict[e]];
-          } else if (typeof e === 'object' && isValidElement(e)) {
-            return [...items, { reactElement: e }];
+      items = form
+        .reduce((items: any, e: any) => {
+          const { name, reactElement } = e;
+          if (dict[name]) {
+            return [...items, { ...dict[name], ...e }];
+          } else if (
+            name === '__reactElement' &&
+            isValidElement(reactElement)
+          ) {
+            return [...items, { ...e, reactElement }];
           }
           const Found = (
-            formTypes.find(({ test }: any) => test({ type: e })) || {}
+            formTypes.find(({ test }: any) => test({ type: name })) || {}
           ).component;
-          return Found ? [...items, { reactElement: <Found /> }] : items;
-        }, []);
+          return Found ? [...items, { ...e, reactElement: <Found /> }] : items;
+        }, [])
+        .map((e: any) => {
+          const maxWidth = getMaxWidth(e.grid || get(e, ['schema', 'ui:grid']));
+          return { style: { flex: `0 0 ${maxWidth}`, maxWidth }, ...e };
+        });
+    } else {
+      items = properties;
     }
-    return properties;
+    return items.map((item: any) => {
+      const { defaultValue, name, onChange, reactElement, schema } = item;
+      return {
+        ...item,
+        reactElement: reactElement ? (
+          reactElement
+        ) : (
+          <FormGroup
+            defaultValue={defaultValue}
+            name={name}
+            onChange={onChange}
+            parentDataPath={dataPath}
+            schema={schema}
+          />
+        ),
+      };
+    });
   }, [properties, dataPath, form]);
+
+  if (dataPath === '') {
+    return (
+      <div className={styles.root}>
+        {childNodes.map(({ style, reactElement }: any, i: number) => (
+          <div className={styles.inner} key={i} style={style}>
+            {reactElement}
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <>
-      {items.map(
-        (
-          { defaultValue, name, onChange, reactElement, schema }: any,
-          i: number,
-        ) =>
-          reactElement ? (
-            <Fragment key={i}>{reactElement}</Fragment>
-          ) : (
-            <FormGroup
-              defaultValue={defaultValue}
-              key={i}
-              name={name}
-              onChange={onChange}
-              parentDataPath={dataPath}
-              schema={schema}
-            />
-          ),
-      )}
+      {childNodes.map(({ reactElement }: any, i: number) => (
+        <Fragment key={i}>{reactElement}</Fragment>
+      ))}
     </>
   );
 }
