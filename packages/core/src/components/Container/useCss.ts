@@ -15,13 +15,15 @@ const getPreferredValue = (type: string, value: any) => {
   return values.indexOf(value) !== -1 ? value : values[0];
 };
 
-function useCss({ layout, labelWidth, labelAlign }: any) {
+function useCss({ layout, labelWidth, labelAlign, styles }: any) {
   const _layout = useMemo(() => getPreferredValue('layout', layout), [layout]);
 
   const _labelAlign = useMemo(
     () => getPreferredValue('labelAlign', labelAlign),
     [labelAlign],
   );
+
+  const _serializedStyles = useMemo(() => JSON.stringify(styles), [styles]);
 
   return useMemo(() => {
     let rootCss;
@@ -61,11 +63,21 @@ function useCss({ layout, labelWidth, labelAlign }: any) {
         }
       `;
     }
+    let userCss;
+    try {
+      userCss = Object.entries(JSON.parse(_serializedStyles)).reduce(
+        (accum: any, [k, v]: any) =>
+          classNames[k] ? { ...accum, [`.${classNames[k]}`]: v } : accum,
+        {},
+      );
+    } catch (e) {
+      userCss = {};
+    }
     return {
       className: `layout_${_layout} labelAlign_${_labelAlign}`,
-      css: rootCss,
+      css: css(rootCss, userCss),
     };
-  }, [_layout, _labelAlign, labelWidth]);
+  }, [_layout, _labelAlign, labelWidth, _serializedStyles]);
 }
 
 export default useCss;

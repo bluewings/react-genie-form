@@ -12,6 +12,7 @@ export type ContainerProps = {
   layout?: 'vertical' | 'horizontal';
   labelAlign?: 'left' | 'center' | 'right';
   labelWidth?: number | string;
+  styles?: StringAnyMap;
 };
 
 function Container({
@@ -21,6 +22,7 @@ function Container({
   layout,
   labelAlign,
   labelWidth,
+  styles,
 }: ContainerProps) {
   const _defaultValue = useMemo(() => defaultValue || {}, [defaultValue]);
 
@@ -32,7 +34,15 @@ function Container({
     currValue.current = value;
   });
 
-  const { className, css } = useCss({ layout, labelAlign, labelWidth });
+  const { className, css } = useCss({ layout, labelAlign, labelWidth, styles });
+
+  console.log(styles);
+
+  // useMemo(() => {
+
+  // }, [])
+
+  console.log(css);
 
   return (
     <div className={className} css={css}>
