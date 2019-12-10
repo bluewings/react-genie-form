@@ -60,14 +60,24 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
           return Found ? [...items, { ...e, reactElement: <Found /> }] : items;
         }, [])
         .map((e: any) => {
-          const maxWidth = getMaxWidth(e.grid || get(e, ['schema', 'ui:grid']));
+          const maxWidth = getMaxWidth(e.grid);
           return { style: { flex: `0 0 ${maxWidth}`, maxWidth }, ...e };
         });
     } else {
       items = properties;
     }
     return items.map((item: any) => {
-      const { defaultValue, name, onChange, reactElement, schema } = item;
+      const {
+        defaultValue,
+        name,
+        onChange,
+        reactElement,
+        schema,
+        FormComponent,
+        Label,
+        Description,
+        ErrorMessage,
+      } = item;
       return {
         ...item,
         reactElement: reactElement ? (
@@ -79,6 +89,10 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
             onChange={onChange}
             parentDataPath={dataPath}
             schema={schema}
+            FormComponent={FormComponent}
+            Label={Label}
+            Description={Description}
+            ErrorMessage={ErrorMessage}
           />
         ),
       };

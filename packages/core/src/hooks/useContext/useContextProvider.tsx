@@ -68,13 +68,26 @@ function useFormProps({
     const rest = Object.keys(schema.properties || {}).filter(
       (e) => names.indexOf(e) === -1,
     );
-    return merged.reduce(
-      (accum: any, e: any) =>
-        e.name === '*'
-          ? [...accum, ...rest.map((name: string) => ({ ...e, name }))]
-          : [...accum, e],
-      [],
+    const dict = Object.entries(schema.properties || {}).reduce(
+      (accum: any, [name, subSchema]: any) => ({
+        ...accum,
+        [name]: Object.entries(subSchema).reduce(
+          (prev: any, [k, v]: any) =>
+            k.match(/^ui:.*$/) ? { ...prev, [k.replace(/^ui:/, '')]: v } : prev,
+          {},
+        ),
+      }),
+      {},
     );
+    return merged
+      .reduce(
+        (accum: any, e: any) =>
+          e.name === '*'
+            ? [...accum, ...rest.map((name: string) => ({ ...e, name }))]
+            : [...accum, e],
+        [],
+      )
+      .map((e: any) => ({ ...(dict[e.name] || {}), ...e }));
   }, [schema, form]);
 
   const mergedFormTypes = useMemo(

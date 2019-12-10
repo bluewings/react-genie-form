@@ -111,7 +111,16 @@ function FormGroupInner({
 const FC = React.memo(FormGroupInner);
 
 function FormGroupOuter(props: any) {
-  const { schema, isRoot, parentDataPath, name } = props;
+  const {
+    schema,
+    isRoot,
+    parentDataPath,
+    name,
+    FormComponent,
+    Label,
+    Description,
+    ErrorMessage,
+  } = props;
   const {
     BaseFormComponent,
     BaseFormGroup,
@@ -132,11 +141,11 @@ function FormGroupOuter(props: any) {
       {...props}
       dataPath={dataPath}
       errors={errors}
-      BaseFormComponent={BaseFormComponent}
+      BaseFormComponent={FormComponent || BaseFormComponent}
       BaseFormGroup={BaseFormGroup}
-      BaseLabel={BaseLabel}
-      BaseDescription={BaseDescription}
-      BaseErrorMessage={BaseErrorMessage}
+      BaseLabel={Label || BaseLabel}
+      BaseDescription={Description || BaseDescription}
+      BaseErrorMessage={ErrorMessage || BaseErrorMessage}
       parseValue={parseValue}
     />
   );
