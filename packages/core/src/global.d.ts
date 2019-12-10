@@ -30,6 +30,7 @@ declare type Plugin = {
   Label?: Component | FunctionComponent;
   Description?: Component | FunctionComponent;
   ErrorMessage?: Component | FunctionComponent;
+  styles?: StringAnyMap;
 };
 
 declare interface StringTMap<T> {

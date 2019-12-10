@@ -47,7 +47,7 @@ const formTypes: FormType[] = [
     test: { type: 'number' },
   },
   {
-    component: () => <Divider />,
+    component: () => <Divider style={{ margin: '0 0 1.5rem' }} />,
     test: { type: '__divider' },
   },
 ];

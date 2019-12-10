@@ -10,7 +10,6 @@ namespace Form {
     form?: any[];
     formTypes?: FormType[];
     parseValue?: any;
-    plugin?: Plugin;
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -65,7 +64,12 @@ function Form({
 
   return (
     <Provider value={value}>
-      <Container {...restProps} schema={_schema} onChange={handleChange} />
+      <Container
+        {...restProps}
+        schema={_schema}
+        plugin={plugin}
+        onChange={handleChange}
+      />
     </Provider>
   );
 }

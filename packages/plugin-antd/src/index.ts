@@ -2,6 +2,12 @@ import 'antd/dist/antd.css';
 import formTypes from './formTypes';
 import Label from './Label';
 
-const plugin = { formTypes, Label };
+const styles = {
+  formGroup: {
+    marginBottom: '1.5rem',
+  },
+};
 
-export { plugin, formTypes, Label };
+const plugin = { formTypes, Label, styles };
+
+export { plugin, formTypes, Label, styles };
