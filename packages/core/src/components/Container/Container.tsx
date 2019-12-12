@@ -11,8 +11,9 @@ export type ContainerProps = {
   onChange?: (value: any) => void;
   layout?: 'vertical' | 'horizontal';
   labelAlign?: 'left' | 'center' | 'right';
+  size?: 'small' | 'default' | 'large';
   labelWidth?: number | string;
-  styles?: StringAnyMap;
+  styles?: StringAnyMap | Function;
   plugin?: Plugin;
 };
 
@@ -24,6 +25,7 @@ function Container({
   labelAlign,
   labelWidth,
   styles,
+  size,
   plugin,
 }: ContainerProps) {
   const _defaultValue = useMemo(() => defaultValue || {}, [defaultValue]);
@@ -42,6 +44,7 @@ function Container({
     labelWidth,
     styles,
     plugin,
+    size,
   });
 
   return (

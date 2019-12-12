@@ -8,7 +8,7 @@ const schema = {
   name: {
     type: 'string',
     title: 'Name',
-    description: 'The description is displayed here.',
+    // description: 'The description is displayed here.',
     minLength: 3,
   },
   email: {
@@ -41,6 +41,15 @@ const schema = {
 
 const form = ['name', '__divider', 'birth'];
 
+const customStyles = {
+  // label: {
+  //   margin: '2px 0 0',
+  //   lineHeight: '1.3125rem',
+  // },
+  // formGroup: {
+  //   marginBottom: '0.25rem',
+  // },
+};
 function Demo() {
   return (
     <div className={styles.root}>
@@ -67,7 +76,15 @@ function Demo() {
           <div className="col-sm-6">
             <div className="card">
               <div className="card-body">
-                <Form schema={schema} formTypes={formTypes} Label={Label} />
+                <Form
+                  layout="horizontal"
+                  size="small"
+                  schema={schema}
+                  plugin={plugin}
+                  // formTypes={formTypes}
+                  // Label={Label}
+                  styles={customStyles}
+                />
               </div>
             </div>
           </div>

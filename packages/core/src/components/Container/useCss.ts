@@ -5,36 +5,25 @@ import classNames from '../FormGroup/FormGroup.module.scss';
 
 const FORM_GROUP_GUTTER = '1rem';
 
-const enums = {
-  layout: ['vertical', 'horizontal'],
-  labelAlign: ['right', 'center', 'left'],
-};
+const getStyles = (styles: any, size: any) =>
+  typeof styles === 'function' ? styles({ size }) : styles;
 
-const getPreferredValue = (type: string, value: any) => {
-  const values = get(enums, [type], []);
-  return values.indexOf(value) !== -1 ? value : values[0];
-};
-
-function useCss({ layout, labelWidth, labelAlign, styles, plugin }: any) {
-  const _layout = useMemo(() => getPreferredValue('layout', layout), [layout]);
-
-  const _labelAlign = useMemo(
-    () => getPreferredValue('labelAlign', labelAlign),
-    [labelAlign],
+function useCss({ layout, labelWidth, labelAlign, styles, plugin, size }: any) {
+  const _serializedStyles = useMemo(
+    () => JSON.stringify(getStyles(styles, size)),
+    [styles, size],
   );
-
-  const _serializedStyles = useMemo(() => JSON.stringify(styles), [styles]);
 
   return useMemo(() => {
     let rootCss;
-    if (_layout === 'horizontal') {
+    if (layout === 'horizontal') {
       const values = {
         labelWidth: labelWidth || 100,
         labelAlign: 'flex-end',
       };
-      if (_labelAlign === 'left') {
+      if (labelAlign === 'left') {
         values.labelAlign = 'flex-start';
-      } else if (_labelAlign === 'center') {
+      } else if (labelAlign === 'center') {
         values.labelAlign = 'center';
       }
       rootCss = css`
@@ -63,7 +52,9 @@ function useCss({ layout, labelWidth, labelAlign, styles, plugin }: any) {
         }
       `;
     }
-    let pluginCss = Object.entries((plugin && plugin.styles) || {}).reduce(
+    let pluginCss = Object.entries(
+      getStyles(plugin && plugin.styles, size) || {},
+    ).reduce(
       (accum: any, [k, v]: any) =>
         classNames[k] ? { ...accum, [`.${classNames[k]}`]: v } : accum,
       {},
@@ -79,10 +70,10 @@ function useCss({ layout, labelWidth, labelAlign, styles, plugin }: any) {
       userCss = {};
     }
     return {
-      className: `layout_${_layout} labelAlign_${_labelAlign}`,
+      className: `layout_${layout} labelAlign_${labelAlign}`,
       css: css(rootCss, pluginCss, userCss),
     };
-  }, [_layout, _labelAlign, labelWidth, _serializedStyles, plugin]);
+  }, [layout, labelAlign, labelWidth, _serializedStyles, plugin, size]);
 }
 
 export default useCss;

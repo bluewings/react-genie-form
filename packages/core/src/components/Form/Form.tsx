@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Component, FunctionComponent, useState, useMemo, useRef } from 'react';
+import { get } from 'lodash-es';
 import Container from '../Container';
 import { ContainerProps } from '../Container/Container';
 import useContextProvider from '../../hooks/useContext/useContextProvider';
@@ -10,7 +11,6 @@ namespace Form {
     form?: any[];
     formTypes?: FormType[];
     parseValue?: any;
-    size?: 'small' | 'default' | 'large';
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -19,7 +19,14 @@ namespace Form {
 }
 
 const enums = {
-  sizes: ['default', 'small', 'large'],
+  layout: ['vertical', 'horizontal'],
+  labelAlign: ['right', 'center', 'left'],
+  size: ['default', 'small', 'large'],
+};
+
+const getPreferredValue = (type: string, value: any) => {
+  const values = get(enums, [type], []);
+  return values.indexOf(value) !== -1 ? value : values[0];
 };
 
 function Form({
@@ -28,6 +35,8 @@ function Form({
   parseValue,
   plugin,
   schema,
+  layout,
+  labelAlign,
   size,
   FormGroup,
   Label,
@@ -54,10 +63,12 @@ function Form({
     }
   });
 
-  const _size = useMemo(
-    () => (enums.sizes.indexOf(size || '') !== -1 ? size : enums.sizes[0]),
-    [size],
+  const _layout = useMemo(() => getPreferredValue('layout', layout), [layout]);
+  const _labelAlign = useMemo(
+    () => getPreferredValue('labelAlign', labelAlign),
+    [labelAlign],
   );
+  const _size = useMemo(() => getPreferredValue('size', size), [size]);
 
   const [Provider, value] = useContextProvider({
     form,
@@ -65,6 +76,8 @@ function Form({
     parseValue,
     plugin,
     schema: _schema,
+    layout: _layout,
+    labelAlign: _labelAlign,
     size: _size,
     FormGroup,
     Label,
@@ -79,6 +92,9 @@ function Form({
       <Container
         {...restProps}
         schema={_schema}
+        layout={_layout}
+        labelAlign={_labelAlign}
+        size={_size}
         plugin={plugin}
         onChange={handleChange}
       />
