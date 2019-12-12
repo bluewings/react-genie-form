@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Component, FunctionComponent, useState, useRef } from 'react';
+import { Component, FunctionComponent, useState, useMemo, useRef } from 'react';
 import Container from '../Container';
 import { ContainerProps } from '../Container/Container';
 import useContextProvider from '../../hooks/useContext/useContextProvider';
@@ -10,6 +10,7 @@ namespace Form {
     form?: any[];
     formTypes?: FormType[];
     parseValue?: any;
+    size?: 'small' | 'default' | 'large';
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -17,12 +18,17 @@ namespace Form {
   }
 }
 
+const enums = {
+  sizes: ['default', 'small', 'large'],
+};
+
 function Form({
   form,
   formTypes,
   parseValue,
   plugin,
   schema,
+  size,
   FormGroup,
   Label,
   Description,
@@ -48,12 +54,18 @@ function Form({
     }
   });
 
+  const _size = useMemo(
+    () => (enums.sizes.indexOf(size || '') !== -1 ? size : enums.sizes[0]),
+    [size],
+  );
+
   const [Provider, value] = useContextProvider({
     form,
     formTypes,
     parseValue,
     plugin,
     schema: _schema,
+    size: _size,
     FormGroup,
     Label,
     Description,

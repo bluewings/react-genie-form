@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Slider } from 'antd';
+import cx from 'classnames';
 import styles from './FormTypeSlider.module.scss';
 
-function FormTypeSlider(props: any) {
-  const { defaultValue, onChange } = props;
+function FormTypeSlider({ size, defaultValue, onChange }: any) {
   return (
     <Slider
-      className={styles.root}
+      className={cx(styles.root, size === 'small' && styles.small)}
       defaultValue={defaultValue}
       onAfterChange={onChange}
     />

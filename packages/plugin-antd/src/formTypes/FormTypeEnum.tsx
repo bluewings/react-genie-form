@@ -5,8 +5,7 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-function FormTypeEnum(props: any) {
-  const { schema, defaultValue, onChange } = props;
+function FormTypeEnum({ size, schema, defaultValue, onChange }: any) {
   const options = useMemo(() => {
     return get(schema, ['enum'], []).map((s: string, i: number) => {
       return (
@@ -18,6 +17,7 @@ function FormTypeEnum(props: any) {
   }, [schema]);
   return (
     <Select
+      size={size}
       defaultValue={defaultValue}
       onChange={onChange}
       style={{ minWidth: 120 }}

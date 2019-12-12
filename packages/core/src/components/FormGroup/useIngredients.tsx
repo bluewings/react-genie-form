@@ -13,6 +13,7 @@ function useFormComponent(schema: any) {
   const {
     formTypes,
     parseValue,
+    size,
     FormGroup,
     Label,
     Description,
@@ -46,6 +47,7 @@ function useFormComponent(schema: any) {
 
   return {
     parseValue: _parseValue,
+    size,
     BaseFormComponent,
     BaseFormGroup: FormGroup || BaseFormGroup,
     BaseLabel: Label || BaseLabel,

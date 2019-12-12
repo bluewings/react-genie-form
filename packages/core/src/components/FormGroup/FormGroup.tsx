@@ -11,6 +11,7 @@ function FormGroupInner({
   name,
   onChange,
   schema = {},
+  size,
   BaseFormComponent,
   BaseFormGroup,
   BaseLabel,
@@ -42,9 +43,10 @@ function FormGroupInner({
       dataPath,
       schema,
       value,
+      size,
       errors,
     }),
-    [defaultValue, handleChange, name, dataPath, schema, value, errors],
+    [defaultValue, handleChange, name, dataPath, schema, value, size, errors],
   );
 
   const Label = useCallback(
@@ -128,6 +130,7 @@ function FormGroupOuter(props: any) {
     BaseDescription,
     BaseErrorMessage,
     parseValue,
+    size,
   } = useIngredients(schema);
 
   const dataPath = useMemo(
@@ -147,6 +150,7 @@ function FormGroupOuter(props: any) {
       BaseDescription={Description || BaseDescription}
       BaseErrorMessage={ErrorMessage || BaseErrorMessage}
       parseValue={parseValue}
+      size={size}
     />
   );
 }

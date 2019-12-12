@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { InputNumber } from 'antd';
 
-function TypeNumber({ name, defaultValue, onChange }: any) {
+function TypeNumber({ name, size, defaultValue, onChange }: any) {
   return (
-    <InputNumber name={name} defaultValue={defaultValue} onChange={onChange} />
+    <InputNumber
+      name={name}
+      size={size}
+      defaultValue={defaultValue}
+      onChange={onChange}
+    />
   );
 }
 
