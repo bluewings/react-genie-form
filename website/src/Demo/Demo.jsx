@@ -18,6 +18,9 @@ const schema = {
   birth: {
     type: 'string',
   },
+  test: {
+    type: 'boolean',
+  },
   gender: {
     type: 'string',
     enum: ['unknown', 'male', 'female'],
@@ -39,7 +42,7 @@ const schema = {
   },
 };
 
-const form = ['name', '__divider', 'birth'];
+const form = ['name', 'birth', '__divider', '*'];
 
 const customStyles = {
   // label: {

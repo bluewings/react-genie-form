@@ -1,10 +1,15 @@
 import * as React from 'react';
+import TypeBoolean from './TypeBoolean';
 import TypeDate from './TypeDate';
 import TypeNumber from './TypeNumber';
 import TypeObject from './TypeObject';
 import TypeString from './TypeString';
 
 const formTypes: FormType[] = [
+  {
+    component: TypeBoolean,
+    test: { type: 'boolean' },
+  },
   {
     component: TypeDate,
     test: { type: 'date' },

@@ -4,6 +4,7 @@ import FormTypeEnum from './FormTypeEnum';
 import FormTypeSlider from './FormTypeSlider';
 import FormTypeTextarea from './FormTypeTextarea';
 import FormTypeURI from './FormTypeURI';
+import TypeBoolean from './TypeBoolean';
 import TypeDate from './TypeDate';
 import TypeNumber from './TypeNumber';
 import TypeString from './TypeString';
@@ -33,6 +34,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeURI,
     test: { type: 'string', formType: 'uri' },
+  },
+  {
+    component: TypeBoolean,
+    test: { type: 'boolean' },
   },
   {
     component: TypeDate,
