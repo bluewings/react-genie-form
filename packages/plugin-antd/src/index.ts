@@ -1,4 +1,3 @@
-import 'antd/dist/antd.css';
 import formTypes from './formTypes';
 import Label from './Label';
 

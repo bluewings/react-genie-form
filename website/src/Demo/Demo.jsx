@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Form from '@react-genie-form/core';
 import { formTypes, Label, plugin } from '@react-genie-form/plugin-antd';
+import 'antd/dist/antd.css';
 import styles from './Demo.module.scss';
 
 const schema = {
