@@ -21,6 +21,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.22",
     "ajv": "^6.10.2",
+    "date-fns": "^2.8.1",
     "lodash-es": "^4.17.15"
   },
   "peerDependencies": {

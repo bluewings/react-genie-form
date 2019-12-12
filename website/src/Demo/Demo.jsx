@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Form from '@react-genie-form/core';
 import { formTypes, Label, plugin } from '@react-genie-form/plugin-antd';
 import 'antd/dist/antd.css';
@@ -14,6 +15,21 @@ const schema = {
   email: {
     type: 'string',
     pattern: '^\\S+@\\S+$',
+  },
+  // "date": New in draft 7 Date, for example, 2018-11-13.
+  date: {
+    type: 'string',
+    format: 'date',
+  },
+  // "time": New in draft 7 Time, for example, 20:20:39+00:00
+  time: {
+    type: 'string',
+    format: 'time',
+  },
+  // "date-time": Date and time together, for example, 2018-11-13T20:20:39+00:00.
+  dateTime: {
+    type: 'string',
+    format: 'date-time',
   },
   birth: {
     type: 'string',
@@ -46,7 +62,7 @@ const schema = {
   },
 };
 
-const form = ['name', 'birth', '__divider', '*'];
+const form = ['date', 'dateTime', 'time', '__divider', 'name', 'birth', '*'];
 
 const customStyles = {
   // label: {
@@ -58,6 +74,8 @@ const customStyles = {
   // },
 };
 function Demo() {
+  const [value, setValue] = useState({});
+
   return (
     <div className={styles.root}>
       <div className="container">
@@ -74,8 +92,9 @@ function Demo() {
                 <Form
                   layout="horizontal"
                   schema={schema}
-                  plugin={plugin}
+                  // plugin={plugin}
                   form={form}
+                  onChange={setValue}
                 />
               </div>
             </div>
@@ -83,7 +102,8 @@ function Demo() {
           <div className="col-sm-6">
             <div className="card">
               <div className="card-body">
-                <Form
+                <pre>{JSON.stringify(value, null, 2)}</pre>
+                {/* <Form
                   layout="horizontal"
                   size="small"
                   schema={schema}
@@ -91,7 +111,7 @@ function Demo() {
                   // formTypes={formTypes}
                   // Label={Label}
                   styles={customStyles}
-                />
+                /> */}
               </div>
             </div>
           </div>
