@@ -18,8 +18,12 @@ const schema = {
   birth: {
     type: 'string',
   },
-  test: {
+  bool: {
     type: 'boolean',
+  },
+  boolSwitch: {
+    type: 'boolean',
+    formType: 'switch',
   },
   gender: {
     type: 'string',

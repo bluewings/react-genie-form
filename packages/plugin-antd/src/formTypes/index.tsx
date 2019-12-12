@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Divider } from 'antd';
 import FormTypeEnum from './FormTypeEnum';
 import FormTypeSlider from './FormTypeSlider';
+import FormTypeSwitch from './FormTypeSwitch';
 import FormTypeTextarea from './FormTypeTextarea';
 import FormTypeURI from './FormTypeURI';
 import TypeBoolean from './TypeBoolean';
@@ -18,6 +19,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeSlider,
     test: { type: 'number', formType: 'slider' },
+  },
+  {
+    component: FormTypeSwitch,
+    test: { type: 'boolean', formType: 'switch' },
   },
   {
     component: FormTypeTextarea,

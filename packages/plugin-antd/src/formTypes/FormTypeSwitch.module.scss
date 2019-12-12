@@ -1,0 +1,9 @@
+.root {
+  display: flex;
+  height: 2rem;
+  align-items: center;
+
+  &.small {
+    height: 1.5rem;
+  }
+}
