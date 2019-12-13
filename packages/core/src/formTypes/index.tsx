@@ -8,7 +8,7 @@ import TypeString from './TypeString';
 const formTypes: FormType[] = [
   {
     component: TypeDate,
-    test: { type: 'string', format: ['date', 'date-time', 'time'] },
+    test: { type: 'string', format: ['date', 'date-time', 'time', 'month'] },
   },
   {
     component: TypeBoolean,

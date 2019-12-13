@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Divider } from 'antd';
 import FormTypeDate from './FormTypeDate';
 import FormTypeTime from './FormTypeTime';
+import FormTypeMonth from './FormTypeMonth';
 import FormTypeEnum from './FormTypeEnum';
 import FormTypeSlider from './FormTypeSlider';
 import FormTypeSwitch from './FormTypeSwitch';
@@ -19,6 +20,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeTime,
     test: { type: 'string', format: 'time' },
+  },
+  {
+    component: FormTypeMonth,
+    test: { type: 'string', format: 'month' },
   },
   {
     component: FormTypeEnum,

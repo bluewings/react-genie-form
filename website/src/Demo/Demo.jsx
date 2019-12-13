@@ -27,9 +27,9 @@ const schema = {
     format: 'time',
   },
   // "date-time": Date and time together, for example, 2018-11-13T20:20:39+00:00.
-  dateTime: {
+  month: {
     type: 'string',
-    format: 'date-time',
+    format: 'month',
   },
   birth: {
     type: 'string',
@@ -62,7 +62,7 @@ const schema = {
   },
 };
 
-const form = ['date', 'dateTime', 'time', '__divider', 'name', 'birth', '*'];
+const form = ['date', 'month', 'time', '__divider', 'name', 'birth', '*'];
 
 const customStyles = {
   // label: {
