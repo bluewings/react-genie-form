@@ -19,11 +19,11 @@ const schema = {
   // "date": New in draft 7 Date, for example, 2018-11-13.
   startDate: {
     type: 'string',
-    format: 'date',
+    format: 'month',
   },
   endDate: {
     type: 'string',
-    format: 'date',
+    format: 'month',
   },
   // "time": New in draft 7 Time, for example, 20:20:39+00:00
   time: {

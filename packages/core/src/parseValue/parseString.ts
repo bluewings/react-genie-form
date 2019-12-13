@@ -11,7 +11,7 @@ const getFormat = (schema: any) =>
 const isPassword = (schema: any) => getFormat(schema) === 'password';
 
 const isDate = (() => {
-  const formats = ['date-time', 'time', 'date'];
+  const formats = ['date-time', 'time', 'date', 'month'];
   return (schema: any) => formats.indexOf(getFormat(schema)) !== -1;
 })();
 
@@ -21,6 +21,8 @@ function parseDate(value: any, prevValue: any, schema: any) {
     if (format === 'date') {
       // "date": New in draft 7 Date, for example, 2018-11-13.
       return dateFormat(new Date(value), 'yyyy-MM-dd');
+    } else if (format === 'month') {
+      return dateFormat(new Date(value), 'yyyy-MM');
     } else if (format === 'time') {
       // "time": New in draft 7 Time, for example, 20:20:39+00:00
       if (value.match(/^[0-9]{2}:[0-9]{2}:[0-9]{2}[-+][0-9]{2}:[0-9]{2}/)) {
