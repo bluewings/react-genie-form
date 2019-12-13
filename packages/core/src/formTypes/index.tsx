@@ -4,6 +4,7 @@ import TypeDate from './TypeDate';
 import TypeNumber from './TypeNumber';
 import TypeObject from './TypeObject';
 import TypeString from './TypeString';
+import TypeVirtual from './TypeVirtual';
 
 const formTypes: FormType[] = [
   {
@@ -29,6 +30,10 @@ const formTypes: FormType[] = [
   {
     component: TypeString,
     test: { type: 'string' },
+  },
+  {
+    component: TypeVirtual,
+    test: { type: '__virtual' },
   },
   {
     component: () => <hr />,

@@ -1,17 +1,24 @@
 import * as React from 'react';
+import { useMemo } from 'react';
 import { DatePicker } from 'antd';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { useHandle } from '../hooks';
 
-function FormTypeMonth(props: any) {
-  const { name, defaultValue, onChange } = props;
+const dateFormat = 'YYYY-MM';
+
+function FormTypeMonth({ size, name, defaultValue, onChange }: any) {
   const handleChange = useHandle((moment: Moment) => {
-    onChange(moment ? moment.format('YYYY-MM') : moment);
+    onChange(moment ? moment.format(dateFormat) : moment);
   });
+  const _defaultValue = useMemo(
+    () => defaultValue && moment(defaultValue, dateFormat),
+    [defaultValue],
+  );
   return (
     <DatePicker.MonthPicker
+      size={size}
       name={name}
-      defaultValue={defaultValue}
+      defaultValue={_defaultValue}
       onChange={handleChange}
     />
   );

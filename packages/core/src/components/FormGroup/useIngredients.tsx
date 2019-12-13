@@ -6,10 +6,11 @@ import BaseLabel from '../Label';
 import BaseDescription from '../Description';
 import BaseErrorMessage from '../ErrorMessage';
 import { useFormProps } from '../../hooks';
+import { getHint } from '../../helpers/util';
 
 const identity = (e: any) => e;
 
-function useFormComponent(schema: any) {
+function useIngredients(schema: any) {
   const {
     formTypes,
     parseValue,
@@ -20,16 +21,8 @@ function useFormComponent(schema: any) {
     ErrorMessage,
   }: any = useFormProps();
 
-  const hint: Hint = useMemo(
-    () => ({
-      type: get(schema, ['type']),
-      schema,
-      format: get(schema, ['options', 'format']) || get(schema, ['format']),
-      formType:
-        get(schema, ['options', 'formType']) || get(schema, ['formType']),
-    }),
-    [schema],
-  );
+  const hint: Hint = useMemo(() => getHint(schema), [schema]);
+
   const BaseFormComponent = useMemo(() => {
     const Found = formTypes.reduce(
       (found: any, { component, test }: any) =>
@@ -38,6 +31,9 @@ function useFormComponent(schema: any) {
           : found,
       null,
     );
+    if (!Found) {
+      console.log(schema, hint);
+    }
     return Found ? React.memo(Found) : null;
   }, [hint, formTypes]);
 
@@ -56,4 +52,4 @@ function useFormComponent(schema: any) {
   };
 }
 
-export default useFormComponent;
+export default useIngredients;

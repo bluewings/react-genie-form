@@ -1,16 +1,23 @@
 import * as React from 'react';
+import { useMemo } from 'react';
 import { TimePicker } from 'antd';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { useHandle } from '../hooks';
 
-function FormTypeTime(props: any) {
-  const { defaultValue, onChange } = props;
+const dateFormat = 'HH:mm:00Z';
+
+function FormTypeTime({ size, defaultValue, onChange }: any) {
   const handleChange = useHandle((moment: Moment) => {
     onChange(moment ? moment.format('HH:mm:00Z') : moment);
   });
+  const _defaultValue = useMemo(
+    () => defaultValue && moment(defaultValue, dateFormat),
+    [defaultValue],
+  );
   return (
     <TimePicker
-      defaultValue={defaultValue}
+      size={size}
+      defaultValue={_defaultValue}
       format="HH:mm"
       onChange={handleChange}
     />

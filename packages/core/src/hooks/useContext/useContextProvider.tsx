@@ -50,6 +50,17 @@ function useFormProps({
   ErrorMessage,
 }: any) {
   const mergedForm = useMemo(() => {
+    const virtual = Object.entries(
+      get(schema, ['options', 'virtual'], {}),
+    ).reduce(
+      (accum: any, [name, v]: any) => ({
+        ...accum,
+        [v.fields[0]]: { type: '__virtual', ...v, name },
+        [name]: { type: '__virtual', ...v, name },
+      }),
+      {},
+    );
+    let virtualFields: string[] = [];
     let merged = (form || ['*'])
       .map((name: any) =>
         typeof name === 'string'
@@ -58,16 +69,27 @@ function useFormProps({
           ? { name: '__reactElement', reactElement: name }
           : name,
       )
+      .map((e: any) => {
+        let next = e;
+        if (virtual[e.name] && Array.isArray(virtual[e.name].fields)) {
+          next = { type: '__virtual', ...virtual[e.name] };
+        }
+        if (next.type === '__virtual' && Array.isArray(next.fields)) {
+          virtualFields = [...virtualFields, ...next.fields];
+        }
+        return next;
+      })
       .filter(
         (e: any, i: number, arr: any[]) =>
           e &&
           typeof e.name === 'string' &&
+          virtualFields.indexOf(e.name) === -1 &&
           (arr.findIndex(({ name }: any) => e.name === name) === i ||
             e.name.match(/^__/)),
       );
     const names = merged.map((e: any) => e.name);
     const rest = Object.keys(schema.properties || {}).filter(
-      (e) => names.indexOf(e) === -1,
+      (e) => names.indexOf(e) === -1 && virtualFields.indexOf(e) === -1,
     );
     const dict = Object.entries(schema.properties || {}).reduce(
       (accum: any, [name, subSchema]: any) => ({

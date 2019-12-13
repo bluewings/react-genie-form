@@ -17,7 +17,11 @@ const schema = {
     pattern: '^\\S+@\\S+$',
   },
   // "date": New in draft 7 Date, for example, 2018-11-13.
-  date: {
+  startDate: {
+    type: 'string',
+    format: 'date',
+  },
+  endDate: {
     type: 'string',
     format: 'date',
   },
@@ -62,7 +66,53 @@ const schema = {
   },
 };
 
-const form = ['date', 'month', 'time', '__divider', 'name', 'birth', '*'];
+const _schema = {
+  type: 'object',
+  properties: schema,
+  options: {
+    virtual: {
+      schedule: {
+        formType: 'dateRange',
+        fields: ['startDate', 'endDate'],
+      },
+    },
+  },
+};
+
+const form = ['startDate', 'month', 'time', '__divider', 'name', 'birth', '*'];
+
+const form2 = [
+  // {
+  //   name: ['startDate', 'endDate'],
+  // },
+  // {
+  //   type: 'virtual',
+  //   name: 'adschedule',
+  //   formType: 'period',
+  //   fields: ['startDate', 'endDate'],
+  //   // immutable: true,
+  //   // refer: 'adGroup',
+
+  //   // virtual: {
+  //   //   adSchedule: {
+
+  //   //   },
+  //   // },
+  // },
+  // ''
+  'schedule',
+
+  '__divider',
+  'month',
+  'time',
+  '__divider',
+  // 'startDate',
+  // 'endDate',
+  // '__divider',
+  'name',
+  'birth',
+  '*',
+];
 
 const customStyles = {
   // label: {
@@ -72,6 +122,13 @@ const customStyles = {
   // formGroup: {
   //   marginBottom: '0.25rem',
   // },
+};
+
+const _value = {
+  startDate: '2019-01-01',
+  endDate: '2019-12-01',
+  time: '12:23:00+09:00',
+  month: '2019-05',
 };
 function Demo() {
   const [value, setValue] = useState({});
@@ -91,10 +148,12 @@ function Demo() {
               <div className="card-body">
                 <Form
                   layout="horizontal"
-                  schema={schema}
+                  size="small"
+                  schema={_schema}
                   plugin={plugin}
                   form={form}
                   onChange={setValue}
+                  defaultValue={_value}
                 />
               </div>
             </div>

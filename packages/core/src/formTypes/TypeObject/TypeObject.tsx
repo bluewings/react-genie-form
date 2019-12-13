@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Fragment, isValidElement, useMemo } from 'react';
-import FormGroup from '../components/FormGroup';
-import { useFormProps, useHandle } from '../hooks';
+import FormGroup from '../../components/FormGroup';
+import { useFormProps, useHandle } from '../../hooks';
 import { get } from 'lodash-es';
 import styles from './TypeObject.module.scss';
 
@@ -45,7 +45,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
       );
       items = form
         .reduce((items: any, e: any) => {
-          const { name, reactElement } = e;
+          const { name, reactElement, type, fields } = e;
           if (dict[name]) {
             return [...items, { ...dict[name], ...e }];
           } else if (
@@ -53,6 +53,41 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
             isValidElement(reactElement)
           ) {
             return [...items, { ...e, reactElement }];
+          } else if (
+            type === '__virtual' &&
+            Array.isArray(fields) &&
+            fields.length === fields.filter((name) => dict[name]).length
+          ) {
+            return [
+              ...items,
+              {
+                ...e,
+                schema: {
+                  type: '__virtual',
+                  __fields: fields.map((e) => dict[e]),
+                  __schema: { ...e, type: 'array' },
+                },
+                defaultValue: fields.map((name: string) =>
+                  get(defaultValue, [name]),
+                ),
+                onChange: (values: any) => {
+                  if (
+                    Array.isArray(values) &&
+                    values.length === fields.length
+                  ) {
+                    handleChange(
+                      values.reduce(
+                        (accum: any, value: any, i: number) => ({
+                          ...accum,
+                          [fields[i]]: value,
+                        }),
+                        {},
+                      ),
+                    );
+                  }
+                },
+              },
+            ];
           }
           const Found = (
             formTypes.find(({ test }: any) => test({ type: name })) || {}
