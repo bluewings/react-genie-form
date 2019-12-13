@@ -3,7 +3,7 @@ import { DatePicker } from 'antd';
 import { Moment } from 'moment';
 import { useHandle } from '../hooks';
 
-function TypeDate(props: any) {
+function FormTypeDate(props: any) {
   const { name, defaultValue, onChange } = props;
   const handleChange = useHandle((moment: Moment) => {
     onChange(moment ? moment.format('YYYY-MM-DD') : moment);
@@ -17,4 +17,4 @@ function TypeDate(props: any) {
   );
 }
 
-export default TypeDate;
+export default FormTypeDate;

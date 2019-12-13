@@ -1,16 +1,25 @@
 import * as React from 'react';
 import { Divider } from 'antd';
+import FormTypeDate from './FormTypeDate';
+import FormTypeTime from './FormTypeTime';
 import FormTypeEnum from './FormTypeEnum';
 import FormTypeSlider from './FormTypeSlider';
 import FormTypeSwitch from './FormTypeSwitch';
 import FormTypeTextarea from './FormTypeTextarea';
 import FormTypeURI from './FormTypeURI';
 import TypeBoolean from './TypeBoolean';
-import TypeDate from './TypeDate';
 import TypeNumber from './TypeNumber';
 import TypeString from './TypeString';
 
 const formTypes: FormType[] = [
+  {
+    component: FormTypeDate,
+    test: { type: 'string', format: 'date' },
+  },
+  {
+    component: FormTypeTime,
+    test: { type: 'string', format: 'time' },
+  },
   {
     component: FormTypeEnum,
     test: ({ type, schema }: any) =>
@@ -43,10 +52,6 @@ const formTypes: FormType[] = [
   {
     component: TypeBoolean,
     test: { type: 'boolean' },
-  },
-  {
-    component: TypeDate,
-    test: { type: 'date' },
   },
   {
     component: TypeString,

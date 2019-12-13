@@ -92,7 +92,7 @@ function Demo() {
                 <Form
                   layout="horizontal"
                   schema={schema}
-                  // plugin={plugin}
+                  plugin={plugin}
                   form={form}
                   onChange={setValue}
                 />
