@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Fragment, isValidElement, useMemo } from 'react';
-import FormGroup from '../../components/FormGroup';
-import { useFormProps, useHandle } from '../../hooks';
+import FormGroup from '../components/FormGroup';
+import { useFormProps, useHandle } from '../hooks';
 import { get } from 'lodash-es';
 import styles from './TypeObject.module.scss';
 
