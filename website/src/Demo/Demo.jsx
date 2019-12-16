@@ -72,7 +72,7 @@ const _schema = {
   options: {
     virtual: {
       schedule: {
-        formType: 'dateRange',
+        formType: 'monthRange',
         fields: ['startDate', 'endDate'],
       },
     },

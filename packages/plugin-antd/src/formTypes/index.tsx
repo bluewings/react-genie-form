@@ -4,6 +4,7 @@ import FormTypeDate from './FormTypeDate';
 import FormTypeDateRange from './FormTypeDateRange';
 import FormTypeTime from './FormTypeTime';
 import FormTypeMonth from './FormTypeMonth';
+import FormTypeMonthRange from './FormTypeMonthRange';
 import FormTypeEnum from './FormTypeEnum';
 import FormTypeSlider from './FormTypeSlider';
 import FormTypeSwitch from './FormTypeSwitch';
@@ -17,6 +18,13 @@ const formTypes: FormType[] = [
   {
     component: FormTypeDateRange,
     test: { type: 'array', formType: ['date-range', 'dateRange', 'daterange'] },
+  },
+  {
+    component: FormTypeMonthRange,
+    test: {
+      type: 'array',
+      formType: ['month-range', 'monthRange', 'monthrange'],
+    },
   },
   {
     component: FormTypeDate,
