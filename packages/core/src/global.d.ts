@@ -23,7 +23,7 @@ declare type FormType = {
     | Function;
 };
 
-declare type Plugin = {
+declare type FormPlugin = {
   formTypes?: FormType[];
   parseValue?: any;
   FormGroup?: Component | FunctionComponent;

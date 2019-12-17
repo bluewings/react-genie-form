@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react';
+import {
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { get } from 'lodash-es';
 import { useHandle, useErrors } from '../../hooks';
 import useIngredients from './useIngredients';
 
@@ -21,21 +29,35 @@ function FormGroupInner({
   dataPath,
   errors,
 }: any) {
-  const [value, setValue] = useState(defaultValue);
+  const _defaultValue = useMemo(
+    () =>
+      typeof defaultValue !== 'undefined'
+        ? defaultValue
+        : get(schema, ['default']),
+    [],
+  );
+  const [value, setValue] = useState(_defaultValue);
+
   const handleChange = useHandle((event: SyntheticEvent | any) => {
     const received =
       event && event.constructor.name === 'SyntheticEvent'
         ? event.target.value
         : event;
-    const nextValue = parseValue(received, value, schema);
-    setValue(nextValue);
-    onChange(nextValue);
+    setValue((prevValue: any) => parseValue(received, prevValue, schema));
   });
+  useMemo(() => {
+    onChange(value);
+  }, [value]);
+  useEffect(() => {
+    if (defaultValue !== _defaultValue) {
+      handleChange(_defaultValue);
+    }
+  }, []);
 
   const formProps = useRef<any>();
   formProps.current = useMemo(
     () => ({
-      defaultValue,
+      defaultValue: _defaultValue,
       description: schema.description,
       label: schema.title || name,
       name,
@@ -46,7 +68,7 @@ function FormGroupInner({
       size,
       errors,
     }),
-    [defaultValue, handleChange, name, dataPath, schema, value, size, errors],
+    [_defaultValue, handleChange, name, dataPath, schema, value, size, errors],
   );
 
   const Label = useCallback(

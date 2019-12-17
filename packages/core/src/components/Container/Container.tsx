@@ -14,7 +14,7 @@ export type ContainerProps = {
   size?: 'small' | 'default' | 'large';
   labelWidth?: number | string;
   styles?: StringAnyMap | Function;
-  plugin?: Plugin;
+  plugin?: FormPlugin;
 };
 
 function Container({

@@ -18,6 +18,6 @@ const styles = ({ size }: any) =>
         },
       };
 
-const plugin = { formTypes, Label, styles };
+const plugin: any = { formTypes, Label, styles };
 
 export { plugin, formTypes, Label, styles };
