@@ -11,6 +11,7 @@ namespace Form {
     form?: any[];
     formTypes?: FormType[];
     parseValue?: any;
+    plugin?: any;
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;

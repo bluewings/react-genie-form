@@ -4,6 +4,7 @@ import FormGroup from '../components/FormGroup';
 import { useFormProps, useHandle } from '../hooks';
 import { get } from 'lodash-es';
 import styles from './TypeObject.module.scss';
+import formGroupStyles from '../components/FormGroup/FormGroup.module.scss';
 
 const getMaxWidth = (grid: any) => {
   const maxWidth =
@@ -138,7 +139,11 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
     return (
       <div className={styles.root}>
         {childNodes.map(({ style, reactElement }: any, i: number) => (
-          <div className={styles.inner} key={i} style={style}>
+          <div
+            className={`${styles.inner} ${formGroupStyles.grid}`}
+            key={i}
+            style={style}
+          >
             {reactElement}
           </div>
         ))}
