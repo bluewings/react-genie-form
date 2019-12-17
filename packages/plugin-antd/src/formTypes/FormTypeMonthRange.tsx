@@ -17,9 +17,13 @@ function FormTypeMonthRange({ size, name, value, onChange }: any) {
   });
   const _value: any = useMemo(
     () =>
-      Array.isArray(value) && value.length === 2
-        ? [moment(value[0], dateFormat), moment(value[1], dateFormat)]
-        : [undefined, undefined],
+      (Array.isArray(value) && value.length === 2
+        ? value
+        : [undefined, undefined]
+      ).map((e) => {
+        const f = moment(e, dateFormat);
+        return f.isValid() ? f : undefined;
+      }),
     [value],
   );
   return (
