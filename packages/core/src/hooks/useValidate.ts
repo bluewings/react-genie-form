@@ -1,11 +1,49 @@
 import { useMemo, useRef } from 'react';
 import Ajv from 'ajv';
 
-function useValidate(jsonSchema: any) {
+function useValidate(
+  jsonSchema: any,
+  customValidate: StringFunctionMap | undefined,
+) {
   const errorRef = useRef<any[]>([]);
 
   const validate = useMemo(() => {
     const ajv = new Ajv({ allErrors: true, unknownFormats: 'ignore' });
+
+    if (customValidate) {
+      ajv.addKeyword('customValidate', {
+        validate: function validate(...args: any) {
+          const [name, , , dataPath] = args;
+          if (name in customValidate) {
+            const context = this;
+            let out: any = customValidate[name](...args, ajv, context);
+            let result = { valid: true, errors: [] } as any;
+            if (typeof out === 'boolean') {
+              result = { ...result, valid: out, errors: [{}] };
+            } else if (typeof out === 'string') {
+              result = { ...result, valid: false, errors: [{ message: out }] };
+            } else if (typeof out === 'object') {
+              result = { ...result, valid: false, errors: [out] };
+            }
+            if (!result.valid) {
+              // @ts-ignore
+              validate.errors = (result.errors || []).map((error: any) => ({
+                keyword: name,
+                message: `should pass "${name}" validation`,
+                ...error,
+                params: { keyword: name, ...error.params },
+                dataPath,
+              }));
+            }
+            return result.valid;
+          }
+          // @ts-ignore
+          validate.errors = [{ keyword: 'type', dataPath }];
+          return false;
+        },
+        errors: true,
+      });
+    }
     const schema = jsonSchema;
     schema.$async = true;
     let validateFn: Function;
@@ -36,7 +74,7 @@ function useValidate(jsonSchema: any) {
       }
       return errorRef.current;
     };
-  }, [jsonSchema]);
+  }, [jsonSchema, customValidate]);
 
   return validate;
 }

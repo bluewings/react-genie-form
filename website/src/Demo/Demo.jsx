@@ -19,7 +19,16 @@ const schema = {
   // "date": New in draft 7 Date, for example, 2018-11-13.
   startDate: {
     type: 'string',
-    format: 'month',
+    format: 'date',
+    options: {
+      disabledDate: (val) => {
+        console.log(val);
+        console.log(val.toDate(), typeof val.toDate());
+        console.dir(val.toDate());
+        return true;
+      },
+    },
+    // disabledDate
   },
   endDate: {
     type: 'string',
@@ -33,7 +42,17 @@ const schema = {
   // "date-time": Date and time together, for example, 2018-11-13T20:20:39+00:00.
   month: {
     type: 'string',
-    format: 'month',
+    format: 'date',
+    // disabledDate:
+    options: {
+      disabledDate: (val) => {
+        console.log(val);
+        console.log(val.toDate(), typeof val.toDate());
+        console.dir(val.toDate());
+        return true;
+      },
+    },
+    customValidate: 'month:start',
   },
   birth: {
     type: 'string',
@@ -79,7 +98,11 @@ const _schema = {
   },
 };
 
-const form = ['startDate', 'month', 'time', '__divider', 'name', 'birth', '*'];
+const form = [
+  'startDate',
+  'month',
+  // 'time', '__divider', 'name', 'birth', '*'
+];
 
 const form2 = [
   // {
@@ -100,18 +123,18 @@ const form2 = [
   //   // },
   // },
   // ''
-  'schedule',
+  // 'schedule',
 
-  '__divider',
-  'month',
-  'time',
-  '__divider',
-  // 'startDate',
-  // 'endDate',
   // '__divider',
-  'name',
-  'birth',
-  '*',
+  'month',
+  // 'time',
+  // '__divider',
+  // // 'startDate',
+  // // 'endDate',
+  // // '__divider',
+  // 'name',
+  // 'birth',
+  // '*',
 ];
 
 const customStyles = {
@@ -130,6 +153,21 @@ const _value = {
   time: '12:23:00+09:00',
   month: '2019-05',
 };
+
+const customValidate = {
+  'month:start': (...args) => {
+    const [validatorName, data, , currentDataPath, , , root, ajv] = args;
+
+    if (data && data.match(/05/)) {
+      return true;
+    }
+
+    // console.log(args);
+
+    return false;
+  },
+};
+
 function Demo() {
   const [value, setValue] = useState({});
 
@@ -154,6 +192,7 @@ function Demo() {
                   form={form}
                   onChange={setValue}
                   defaultValue={_value}
+                  customValidate={customValidate}
                 />
               </div>
             </div>

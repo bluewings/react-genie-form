@@ -12,6 +12,7 @@ namespace Form {
     formTypes?: FormType[];
     parseValue?: any;
     plugin?: any;
+    customValidate?: StringFunctionMap;
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -36,6 +37,7 @@ function Form({
   parseValue,
   plugin,
   schema,
+  customValidate,
   layout,
   labelAlign,
   size,
@@ -47,7 +49,7 @@ function Form({
   ...restProps
 }: Form.Props) {
   const _schema = useSchema(schema);
-  const validate = useValidate(_schema);
+  const validate = useValidate(_schema, customValidate);
 
   const [errors, setErrors] = useState<any[]>([]);
   const handleChange = useHandle(async (value: any) => {

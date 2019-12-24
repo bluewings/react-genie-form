@@ -9,7 +9,15 @@ function TypeVirtual(props: any) {
   const { schema, onChange } = props;
 
   const nextProps = useMemo(
-    () => ({ ...props, schema: get(schema, ['__schema'], {}) }),
+    () => ({
+      ...props,
+      schema: {
+        ...get(schema, ['__schema'], {}),
+        fieldsSchema: get(schema, ['__fields'], []).map(
+          ({ schema }: any) => schema,
+        ),
+      },
+    }),
     [props],
   );
 
