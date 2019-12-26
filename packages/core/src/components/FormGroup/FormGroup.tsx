@@ -159,8 +159,7 @@ function FormGroupOuter(props: any) {
     () => (isRoot ? '' : [parentDataPath, name].join('.')),
     [isRoot, parentDataPath, name],
   );
-  const errors = useErrors(dataPath);
-
+  const errors = useErrors(dataPath, schema);
   return (
     <FC
       {...props}

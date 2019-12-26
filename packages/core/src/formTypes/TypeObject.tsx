@@ -16,6 +16,8 @@ const getMaxWidth = (grid: any) => {
   return `${Math.min(100, maxWidth)}%`;
 };
 
+const identity = (e: any) => e;
+
 function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
   const { form, formTypes }: any = useFormProps();
 
@@ -40,7 +42,10 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
       const dict = properties.reduce(
         (accum: any, property: any) => ({
           ...accum,
-          [property.name]: property,
+          [property.name]: {
+            dataPath: [dataPath, property.name].join('.'),
+            ...property,
+          },
         }),
         {},
       );
@@ -66,6 +71,9 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
                 schema: {
                   type: '__virtual',
                   __fields: fields.map((e) => dict[e]),
+                  __dataPaths: fields
+                    .map((e: any) => get(dict, [e, 'dataPath']))
+                    .filter(identity),
                   __schema: { ...e, type: 'array' },
                 },
                 defaultValue: fields.map((name: string) =>
