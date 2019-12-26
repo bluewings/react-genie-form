@@ -168,6 +168,18 @@ const customValidate = {
   },
 };
 
+const errors = [
+  {
+    keyword: 'format',
+    dataPath: '.startDate',
+    schemaPath: '#/properties/startDate/format',
+    params: {
+      format: 'date',
+    },
+    message: 'should match format "dat222e"',
+  },
+];
+
 function Demo() {
   const [value, setValue] = useState({});
 
@@ -193,6 +205,7 @@ function Demo() {
                   onChange={setValue}
                   defaultValue={_value}
                   customValidate={customValidate}
+                  errors={errors}
                 />
               </div>
             </div>

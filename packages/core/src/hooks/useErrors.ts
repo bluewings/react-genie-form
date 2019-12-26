@@ -14,6 +14,7 @@ function useErrors(dataPath: string, schema: any) {
         (accum: any[], dataPath: any) => [
           ...accum,
           ...get(value, ['dataPath', dataPath], []),
+          ...get(value, ['receivedDataPath', dataPath], []),
         ],
         [],
       )

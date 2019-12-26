@@ -13,6 +13,7 @@ namespace Form {
     parseValue?: any;
     plugin?: any;
     customValidate?: StringFunctionMap;
+    errors?: any[];
     FormGroup?: Component | FunctionComponent;
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
@@ -41,6 +42,7 @@ function Form({
   layout,
   labelAlign,
   size,
+  errors: errorsReceived,
   FormGroup,
   Label,
   Description,
@@ -88,6 +90,7 @@ function Form({
     ErrorMessage,
     onChange,
     errors,
+    errorsReceived,
   });
 
   return (
