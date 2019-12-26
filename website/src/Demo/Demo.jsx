@@ -20,19 +20,20 @@ const schema = {
   startDate: {
     type: 'string',
     format: 'date',
-    options: {
-      disabledDate: (val) => {
-        console.log(val);
-        console.log(val.toDate(), typeof val.toDate());
-        console.dir(val.toDate());
-        return true;
-      },
-    },
+    // options: {
+    //   disabledDate: (val) => {
+    //     console.log(val);
+    //     console.log(val.toDate(), typeof val.toDate());
+    //     console.dir(val.toDate());
+    //     return true;
+    //   },
+    // },
     // disabledDate
   },
   endDate: {
     type: 'string',
     format: 'month',
+    customValidate: ['since-next-month', 'gte(startDate)'],
   },
   // "time": New in draft 7 Time, for example, 20:20:39+00:00
   time: {
@@ -52,7 +53,7 @@ const schema = {
         return true;
       },
     },
-    customValidate: 'month:start',
+    customValidate: 'since-next-month',
   },
   birth: {
     type: 'string',
@@ -88,18 +89,19 @@ const schema = {
 const _schema = {
   type: 'object',
   properties: schema,
-  options: {
-    virtual: {
-      schedule: {
-        formType: 'monthRange',
-        fields: ['startDate', 'endDate'],
-      },
-    },
-  },
+  // options: {
+  //   virtual: {
+  //     schedule: {
+  //       formType: 'monthRange',
+  //       fields: ['startDate', 'endDate'],
+  //     },
+  //   },
+  // },
 };
 
 const form = [
   'startDate',
+  'endDate',
   'month',
   // 'time', '__divider', 'name', 'birth', '*'
 ];
@@ -155,29 +157,62 @@ const _value = {
 };
 
 const customValidate = {
-  'month:start': (...args) => {
-    const [validatorName, data, , currentDataPath, , , root, ajv] = args;
+  // 'month:start': (...args) => {
+  //   const [validatorName, data, , currentDataPath, , , root, ajv] = args;
 
-    if (data && data.match(/05/)) {
-      return true;
-    }
+  //   if (data && data.match(/05/)) {
+  //     return true;
+  //   }
 
-    // console.log(args);
+  //   // console.log(args);
 
-    return false;
+  //   return false;
+  // },
+  'since-next-month': async (
+    { schema, data, parentSchema, parentData, parentDataProperty, rootData },
+    context,
+  ) => {
+    // console.log('>> customValidate');
+    return !data || new Date(data).toISOString() > new Date().toISOString()
+      ? true
+      : 'available from next month.';
+  },
+  gte: async (
+    {
+      schema,
+      data,
+      parentSchema,
+      parentData,
+      parentDataProperty,
+      params,
+      rootData,
+    },
+    context,
+  ) => {
+    const compareProperty = params[0];
+    const val = parentData[compareProperty];
+    return val <= data
+      ? true
+      : {
+          message: `${parentDataProperty} must be greater than or equal to ${compareProperty}.`,
+          params: {
+            [parentDataProperty]: data,
+            [compareProperty]: val,
+          },
+        };
   },
 };
 
 const errors = [
-  {
-    keyword: 'format',
-    dataPath: '.startDate',
-    schemaPath: '#/properties/startDate/format',
-    params: {
-      format: 'date',
-    },
-    message: 'should match format "dat222e"',
-  },
+  // {
+  //   keyword: 'format',
+  //   dataPath: '.startDate',
+  //   schemaPath: '#/properties/startDate/format',
+  //   params: {
+  //     format: 'date',
+  //   },
+  //   message: 'should match format "dat222e"',
+  // },
 ];
 
 function Demo() {
