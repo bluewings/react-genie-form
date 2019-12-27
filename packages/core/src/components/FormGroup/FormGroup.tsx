@@ -10,8 +10,13 @@ import {
 import { get } from 'lodash-es';
 import { useHandle, useErrors } from '../../hooks';
 import useIngredients from './useIngredients';
-
 import classNames from './FormGroup.module.scss';
+
+type FormState = {
+  hasBeenFocused: boolean;
+  isDirty: boolean;
+  isTouched: boolean;
+};
 
 function FormGroupInner({
   defaultValue,
@@ -29,30 +34,43 @@ function FormGroupInner({
   dataPath,
   errors,
 }: any) {
-  const _defaultValue = useMemo(
+  const [_defaultValue, isSchemaDefault] = useMemo(
     () =>
       typeof defaultValue !== 'undefined'
-        ? defaultValue
-        : get(schema, ['default']),
+        ? [defaultValue, false]
+        : [get(schema, ['default']), true],
     [],
   );
+  const batch = useRef<boolean>(isSchemaDefault);
   const [value, setValue] = useState(_defaultValue);
 
-  const handleChange = useHandle((event: SyntheticEvent | any) => {
-    const received =
-      event && event.constructor.name === 'SyntheticEvent'
-        ? event.target.value
-        : event;
-    setValue((prevValue: any) => parseValue(received, prevValue, schema));
+  const [formState, setFormState] = useState({
+    isDirty: false,
+    isTouched: false,
   });
-  useMemo(() => {
-    onChange(value);
-  }, [value]);
+
+  const handleChange = useHandle(
+    (event: SyntheticEvent | any, _batch?: boolean) => {
+      const received =
+        event && event.constructor.name === 'SyntheticEvent'
+          ? event.target.value
+          : event;
+      setValue((prevValue: any) => parseValue(received, prevValue, schema));
+      if (_batch !== true && formState.isDirty !== true) {
+        setFormState((state) => ({ ...state, isDirty: true }));
+      }
+    },
+  );
   useEffect(() => {
-    if (defaultValue !== _defaultValue) {
-      handleChange(_defaultValue);
-    }
-  }, []);
+    onChange(value, batch.current);
+    batch.current = false;
+  }, [value]);
+  // useEffect(() => {
+  //   if (defaultValue !== _defaultValue) {
+  //     console.log('_defaultValue', _defaultValue);
+  //     handleChange(_defaultValue, true);
+  //   }
+  // }, []);
 
   const formProps = useRef<any>();
   formProps.current = useMemo(
@@ -67,8 +85,21 @@ function FormGroupInner({
       value,
       size,
       errors,
+      isDirty: formState.isDirty,
+      isTouched: formState.isTouched,
     }),
-    [_defaultValue, handleChange, name, dataPath, schema, value, size, errors],
+    [
+      _defaultValue,
+      handleChange,
+      name,
+      dataPath,
+      schema,
+      value,
+      size,
+      errors,
+      formState.isDirty,
+      formState.isTouched,
+    ],
   );
 
   const Label = useCallback(

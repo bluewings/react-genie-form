@@ -18,6 +18,7 @@ namespace Form {
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
     ErrorMessage?: Component | FunctionComponent;
+    showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
   }
 }
 
@@ -44,6 +45,7 @@ function Form({
   labelAlign,
   size,
   errors: errorsReceived,
+  showError,
   FormGroup,
   Label,
   Description,
@@ -92,6 +94,7 @@ function Form({
     onChange,
     errors,
     errorsReceived,
+    showError,
   });
 
   return (

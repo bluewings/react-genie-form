@@ -30,7 +30,8 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
           name,
           schema,
           defaultValue: get(defaultValue, [name]),
-          onChange: (value: any) => handleChange({ [name]: value }),
+          onChange: (value: any, batch: boolean) =>
+            handleChange({ [name]: value }, batch === true),
         }),
       ),
     [schema],
@@ -79,7 +80,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
                 defaultValue: fields.map((name: string) =>
                   get(defaultValue, [name]),
                 ),
-                onChange: (values: any) => {
+                onChange: (values: any, batch: boolean) => {
                   if (
                     Array.isArray(values) &&
                     values.length === fields.length
@@ -92,6 +93,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
                         }),
                         {},
                       ),
+                      batch === true,
                     );
                   }
                 },
