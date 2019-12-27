@@ -19,6 +19,7 @@ function useIngredients(schema: any) {
     Label,
     Description,
     ErrorMessage,
+    showError,
   }: any = useFormProps();
 
   const hint: Hint = useMemo(() => getHint(schema), [schema]);
@@ -49,6 +50,7 @@ function useIngredients(schema: any) {
     BaseLabel: Label || BaseLabel,
     BaseDescription: Description || BaseDescription,
     BaseErrorMessage: ErrorMessage || BaseErrorMessage,
+    showError,
   };
 }
 

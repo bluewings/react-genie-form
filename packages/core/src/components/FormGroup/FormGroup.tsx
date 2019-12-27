@@ -30,6 +30,7 @@ function FormGroupInner({
   parseValue,
   dataPath,
   errors,
+  showError,
 }: any) {
   const [_defaultValue, isSchemaDefault] = useMemo(
     () =>
@@ -160,9 +161,31 @@ function FormGroupInner({
     [BaseDescription],
   );
 
+  const { isPrimitiveType, isDirty, isFocused, isTouched } = formProps.current;
+
+  // true | false | 'always' | 'dirty' | 'touched' | 'dirty+touched';
+  const _showError = useRef<any>();
+  _showError.current = useMemo(() => {
+    switch (showError) {
+      case 'dirty':
+        return isDirty;
+      case 'touched':
+        return isTouched;
+      case 'dirty+touched':
+        return isDirty && isTouched;
+      case true:
+      case 'always':
+        return true;
+      default:
+        return false;
+    }
+  }, [showError, isDirty, isTouched]);
+
   const ErrorMessage = useCallback(
     (injectProps: any) =>
-      formProps.current.errors && formProps.current.errors.length > 0 ? (
+      _showError.current &&
+      formProps.current.errors &&
+      formProps.current.errors.length > 0 ? (
         <BaseErrorMessage
           className={classNames.errorMessage}
           {...formProps.current}
@@ -205,8 +228,6 @@ function FormGroupInner({
     },
     [],
   );
-
-  const { isPrimitiveType, isDirty, isFocused, isTouched } = formProps.current;
 
   return isRoot ? (
     <FormComponent />
@@ -251,6 +272,7 @@ function FormGroupOuter(props: any) {
     BaseErrorMessage,
     parseValue,
     size,
+    showError,
   } = useIngredients(schema);
 
   const dataPath = useMemo(
@@ -270,6 +292,7 @@ function FormGroupOuter(props: any) {
       BaseErrorMessage={ErrorMessage || BaseErrorMessage}
       parseValue={parseValue}
       size={size}
+      showError={showError}
     />
   );
 }

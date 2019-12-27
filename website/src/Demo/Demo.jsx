@@ -253,6 +253,7 @@ function Demo() {
                   defaultValue={_value}
                   customValidate={customValidate}
                   errors={errors}
+                  showError="always"
                   styles={customStyles}
                 />
               </div>
