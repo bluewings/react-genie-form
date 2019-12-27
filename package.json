@@ -9,5 +9,9 @@
   },
   "scripts": {
     "start": "lerna run start --parallel"
+  },
+  "dependencies": {
+    "@types/classnames": "^2.2.9",
+    "classnames": "^2.2.6"
   }
 }

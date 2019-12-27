@@ -103,6 +103,8 @@ const form = [
   'startDate',
   'endDate',
   'month',
+
+  'etc',
   // 'time', '__divider', 'name', 'birth', '*'
 ];
 
@@ -147,6 +149,9 @@ const customStyles = {
   // formGroup: {
   //   marginBottom: '0.25rem',
   // },
+  isDirty: {
+    background: 'orange',
+  },
 };
 
 const _value = {
@@ -241,6 +246,7 @@ function Demo() {
                   defaultValue={_value}
                   customValidate={customValidate}
                   errors={errors}
+                  styles={customStyles}
                 />
               </div>
             </div>

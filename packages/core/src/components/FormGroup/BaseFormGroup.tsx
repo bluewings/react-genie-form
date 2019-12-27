@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 // import { Fragment } from 'react';
 // import styles from './FormGroup.module.scss';
 // import { checkPropTypes } from 'prop-types';
@@ -9,10 +9,11 @@ function BaseFormGroup({
   Description,
   ErrorMessage,
   isHidden,
+  className,
   classNames,
 }: any) {
   return (
-    <div className={classNames.root}>
+    <div className={className}>
       {/* <Counter> </Counter> */}
       {isHidden && (
         <>

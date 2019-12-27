@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { get } from 'lodash-es';
+import cx from 'classnames';
 import { useHandle, useErrors } from '../../hooks';
 import useIngredients from './useIngredients';
 import classNames from './FormGroup.module.scss';
@@ -17,6 +18,8 @@ type FormState = {
   isDirty: boolean;
   isTouched: boolean;
 };
+
+const primitives = ['string', 'number', 'boolean'];
 
 function FormGroupInner({
   defaultValue,
@@ -85,6 +88,7 @@ function FormGroupInner({
       value,
       size,
       errors,
+      isPrimitiveType: primitives.indexOf(schema.type) !== -1,
       isDirty: formState.isDirty,
       isTouched: formState.isTouched,
     }),
@@ -105,7 +109,12 @@ function FormGroupInner({
   const Label = useCallback(
     (injectProps: any) => (
       <BaseLabel
-        className={classNames.label}
+        className={cx(
+          classNames.label,
+          formProps.current.isPrimitiveType &&
+            formProps.current.isDirty &&
+            classNames.isDirty,
+        )}
         {...formProps.current}
         {...injectProps}
       />
@@ -117,7 +126,12 @@ function FormGroupInner({
     (injectProps: any) =>
       BaseFormComponent ? (
         <BaseFormComponent
-          className={classNames.control}
+          className={cx(
+            classNames.control,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isDirty &&
+              classNames.isDirty,
+          )}
           {...formProps.current}
           {...injectProps}
         />
@@ -149,11 +163,17 @@ function FormGroupInner({
     [BaseErrorMessage],
   );
 
+  const { isPrimitiveType, isDirty } = formProps.current;
+
   return isRoot ? (
     <FormComponent />
   ) : (
     <BaseFormGroup
       {...formProps.current}
+      className={cx(
+        classNames.root,
+        isPrimitiveType && isDirty && classNames.isDirty,
+      )}
       classNames={classNames}
       Label={Label}
       FormComponent={FormComponent}
