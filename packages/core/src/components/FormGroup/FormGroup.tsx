@@ -48,6 +48,7 @@ function FormGroupInner({
   const [value, setValue] = useState(_defaultValue);
 
   const [formState, setFormState] = useState({
+    isFocused: false,
     isDirty: false,
     isTouched: false,
   });
@@ -90,6 +91,7 @@ function FormGroupInner({
       errors,
       isPrimitiveType: primitives.indexOf(schema.type) !== -1,
       isDirty: formState.isDirty,
+      isFocused: formState.isFocused,
       isTouched: formState.isTouched,
     }),
     [
@@ -102,6 +104,7 @@ function FormGroupInner({
       size,
       errors,
       formState.isDirty,
+      formState.isFocused,
       formState.isTouched,
     ],
   );
@@ -114,6 +117,9 @@ function FormGroupInner({
           formProps.current.isPrimitiveType &&
             formProps.current.isDirty &&
             classNames.isDirty,
+          formProps.current.isPrimitiveType &&
+            formProps.current.isFocused &&
+            classNames.isFocused,
         )}
         {...formProps.current}
         {...injectProps}
@@ -131,6 +137,9 @@ function FormGroupInner({
             formProps.current.isPrimitiveType &&
               formProps.current.isDirty &&
               classNames.isDirty,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isFocused &&
+              classNames.isFocused,
           )}
           {...formProps.current}
           {...injectProps}
@@ -163,7 +172,37 @@ function FormGroupInner({
     [BaseErrorMessage],
   );
 
-  const { isPrimitiveType, isDirty } = formProps.current;
+  const { isPrimitiveType, isDirty, isFocused } = formProps.current;
+
+  const timerBlur = useRef<any>();
+
+  const handleFocus = useHandle(() => {
+    if (timerBlur.current) {
+      clearTimeout(timerBlur.current);
+      timerBlur.current = null;
+    } else if (formState.isFocused !== true) {
+      setFormState((state) => ({ ...state, isFocused: true }));
+    }
+  });
+
+  const handleBlur = useHandle(() => {
+    timerBlur.current = setTimeout(() => {
+      timerBlur.current = null;
+      if (formState.isFocused !== false) {
+        setFormState((state) => ({ ...state, isFocused: false }));
+      }
+    });
+  });
+
+  useEffect(
+    () => () => {
+      if (timerBlur.current) {
+        clearTimeout(timerBlur.current);
+        timerBlur.current = null;
+      }
+    },
+    [],
+  );
 
   return isRoot ? (
     <FormComponent />
@@ -173,12 +212,15 @@ function FormGroupInner({
       className={cx(
         classNames.root,
         isPrimitiveType && isDirty && classNames.isDirty,
+        isPrimitiveType && isFocused && classNames.isFocused,
       )}
       classNames={classNames}
       Label={Label}
       FormComponent={FormComponent}
       Description={Description}
       ErrorMessage={ErrorMessage}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
     />
   );
 }

@@ -11,9 +11,11 @@ function BaseFormGroup({
   isHidden,
   className,
   classNames,
+  onFocus,
+  onBlur,
 }: any) {
   return (
-    <div className={className}>
+    <div className={className} onFocus={onFocus} onBlur={onBlur}>
       {/* <Counter> </Counter> */}
       {isHidden && (
         <>

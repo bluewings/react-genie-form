@@ -105,6 +105,7 @@ const form = [
   'month',
 
   'etc',
+  'description',
   // 'time', '__divider', 'name', 'birth', '*'
 ];
 
@@ -151,6 +152,9 @@ const customStyles = {
   // },
   isDirty: {
     background: 'orange',
+  },
+  isFocused: {
+    background: 'lightblue',
   },
 };
 
