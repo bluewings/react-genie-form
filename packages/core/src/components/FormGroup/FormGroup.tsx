@@ -84,6 +84,7 @@ function FormGroupInner({
       value,
       size,
       errors,
+      error: { message: '', params: {}, ...get(errors, [0], {}) },
       isPrimitiveType: primitives.indexOf(schema.type) !== -1,
       isDirty: formState.isDirty,
       isFocused: formState.isFocused,
