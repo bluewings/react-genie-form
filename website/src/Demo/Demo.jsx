@@ -245,7 +245,7 @@ function Demo() {
               <div className="card-body">
                 <Form
                   layout="horizontal"
-                  size="small"
+                  // size="small"
                   schema={_schema}
                   plugin={plugin}
                   form={form}

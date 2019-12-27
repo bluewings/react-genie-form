@@ -1,5 +1,6 @@
 import formTypes from './formTypes';
 import Label from './Label';
+import ErrorMessage from './ErrorMessage';
 
 const styles = ({ size }: any) =>
   size === 'small'
@@ -18,6 +19,6 @@ const styles = ({ size }: any) =>
         },
       };
 
-const plugin: any = { formTypes, Label, styles };
+const plugin: any = { formTypes, Label, ErrorMessage, styles };
 
-export { plugin, formTypes, Label, styles };
+export { plugin, formTypes, Label, ErrorMessage, styles };
