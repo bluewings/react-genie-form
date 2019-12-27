@@ -13,12 +13,6 @@ import { useHandle, useErrors } from '../../hooks';
 import useIngredients from './useIngredients';
 import classNames from './FormGroup.module.scss';
 
-type FormState = {
-  hasBeenFocused: boolean;
-  isDirty: boolean;
-  isTouched: boolean;
-};
-
 const primitives = ['string', 'number', 'boolean'];
 
 function FormGroupInner({
@@ -120,6 +114,9 @@ function FormGroupInner({
           formProps.current.isPrimitiveType &&
             formProps.current.isFocused &&
             classNames.isFocused,
+          formProps.current.isPrimitiveType &&
+            formProps.current.isTouched &&
+            classNames.isTouched,
         )}
         {...formProps.current}
         {...injectProps}
@@ -140,6 +137,9 @@ function FormGroupInner({
             formProps.current.isPrimitiveType &&
               formProps.current.isFocused &&
               classNames.isFocused,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isTouched &&
+              classNames.isTouched,
           )}
           {...formProps.current}
           {...injectProps}
@@ -172,8 +172,6 @@ function FormGroupInner({
     [BaseErrorMessage],
   );
 
-  const { isPrimitiveType, isDirty, isFocused } = formProps.current;
-
   const timerBlur = useRef<any>();
 
   const handleFocus = useHandle(() => {
@@ -189,7 +187,11 @@ function FormGroupInner({
     timerBlur.current = setTimeout(() => {
       timerBlur.current = null;
       if (formState.isFocused !== false) {
-        setFormState((state) => ({ ...state, isFocused: false }));
+        setFormState((state) => ({
+          ...state,
+          isFocused: false,
+          isTouched: true,
+        }));
       }
     });
   });
@@ -204,6 +206,8 @@ function FormGroupInner({
     [],
   );
 
+  const { isPrimitiveType, isDirty, isFocused, isTouched } = formProps.current;
+
   return isRoot ? (
     <FormComponent />
   ) : (
@@ -213,6 +217,7 @@ function FormGroupInner({
         classNames.root,
         isPrimitiveType && isDirty && classNames.isDirty,
         isPrimitiveType && isFocused && classNames.isFocused,
+        isPrimitiveType && isTouched && classNames.isTouched,
       )}
       classNames={classNames}
       Label={Label}

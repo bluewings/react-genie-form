@@ -156,6 +156,9 @@ const customStyles = {
   isFocused: {
     background: 'lightblue',
   },
+  isTouched: {
+    background: 'lightgreen',
+  },
 };
 
 const _value = {
