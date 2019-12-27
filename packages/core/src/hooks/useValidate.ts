@@ -1,9 +1,11 @@
 import { useMemo, useRef } from 'react';
+import { get } from 'lodash-es';
 import Ajv from 'ajv';
 
 function useValidate(
   jsonSchema: any,
   customValidate: StringFunctionMap | undefined,
+  previousRootData: any,
 ) {
   const errorRef = useRef<any[]>([]);
 
@@ -33,6 +35,9 @@ function useValidate(
               const _rootData = { __context: null, ...rootData };
               delete _parentData.__context;
               delete _rootData.__context;
+              const previousData = get(previousRootData, [
+                parentDataProperty || '',
+              ]);
               let out: any = await customValidate[schema](
                 {
                   schema,
@@ -41,10 +46,13 @@ function useValidate(
                   parentData: _parentData,
                   parentDataProperty,
                   rootData: _rootData,
+                  previousData,
+                  previousRootData,
                   params: (params || '')
                     .split(',')
                     .map((e: string) => e.trim())
                     .filter((e: string) => e),
+                  hasChanged: data !== previousData,
                   ajv,
                 },
                 // @ts-ignore
@@ -112,7 +120,7 @@ function useValidate(
       }
       return errorRef.current;
     };
-  }, [jsonSchema, customValidate]);
+  }, [jsonSchema, customValidate, previousRootData]);
 
   return validate;
 }

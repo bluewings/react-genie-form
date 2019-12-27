@@ -39,6 +39,7 @@ function Form({
   plugin,
   schema,
   customValidate,
+  defaultValue,
   layout,
   labelAlign,
   size,
@@ -51,7 +52,7 @@ function Form({
   ...restProps
 }: Form.Props) {
   const _schema = useSchema(schema);
-  const validate = useValidate(_schema, customValidate);
+  const validate = useValidate(_schema, customValidate, defaultValue);
 
   const [errors, setErrors] = useState<any[]>([]);
   const handleChange = useHandle(async (value: any) => {
@@ -98,6 +99,7 @@ function Form({
       <Container
         {...restProps}
         schema={_schema}
+        defaultValue={defaultValue}
         layout={_layout}
         labelAlign={_labelAlign}
         size={_size}
