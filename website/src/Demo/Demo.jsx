@@ -259,7 +259,7 @@ function Demo() {
                   errors={errors}
                   showError="always"
                   styles={customStyles}
-                  ErrorSummary={ErrorS}
+                  // ErrorSummary={ErrorS}
                 />
               </div>
             </div>
