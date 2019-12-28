@@ -69,6 +69,7 @@ function useFormProps({
   Label,
   Description,
   ErrorMessage,
+  ErrorSummary,
   showError,
 }: any) {
   const mergedForm = useMemo(() => {
@@ -184,6 +185,7 @@ function useFormProps({
       Label: Label || get(plugin, ['Label']),
       Description: Description || get(plugin, ['Description']),
       ErrorMessage: ErrorMessage || get(plugin, ['ErrorMessage']),
+      ErrorSummary: ErrorSummary || get(plugin, ['ErrorSummary']),
       showError: showError || false,
     }),
     [
@@ -196,6 +198,7 @@ function useFormProps({
       Label,
       Description,
       ErrorMessage,
+      ErrorSummary,
       showError,
     ],
   );

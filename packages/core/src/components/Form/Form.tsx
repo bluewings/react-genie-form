@@ -18,6 +18,7 @@ namespace Form {
     Label?: Component | FunctionComponent;
     Description?: Component | FunctionComponent;
     ErrorMessage?: Component | FunctionComponent;
+    ErrorSummary?: Component | FunctionComponent;
     showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
   }
 }
@@ -50,6 +51,7 @@ function Form({
   Label,
   Description,
   ErrorMessage,
+  ErrorSummary,
   onChange,
   ...restProps
 }: Form.Props) {
@@ -91,6 +93,7 @@ function Form({
     Label,
     Description,
     ErrorMessage,
+    ErrorSummary,
     onChange,
     errors,
     errorsReceived,

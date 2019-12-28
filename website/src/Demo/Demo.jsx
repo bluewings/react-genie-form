@@ -227,6 +227,10 @@ const errors = [
   // },
 ];
 
+function ErrorS() {
+  return <h1>Err</h1>;
+}
+
 function Demo() {
   const [value, setValue] = useState({});
 
@@ -255,6 +259,7 @@ function Demo() {
                   errors={errors}
                   showError="always"
                   styles={customStyles}
+                  ErrorSummary={ErrorS}
                 />
               </div>
             </div>
