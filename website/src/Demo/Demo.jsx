@@ -32,8 +32,8 @@ const schema = {
   },
   endDate: {
     type: 'string',
-    format: 'month',
-    customValidate: ['since-next-month', 'gte(startDate)'],
+    format: 'date',
+    // customValidate: ['since-next-month', 'gte(startDate)'],
   },
   // "time": New in draft 7 Time, for example, 20:20:39+00:00
   time: {
@@ -45,15 +45,15 @@ const schema = {
     type: 'string',
     format: 'date',
     // disabledDate:
-    options: {
-      disabledDate: (val) => {
-        console.log(val);
-        console.log(val.toDate(), typeof val.toDate());
-        console.dir(val.toDate());
-        return true;
-      },
-    },
-    customValidate: 'since-next-month',
+    // options: {
+    //   disabledDate: (val) => {
+    //     console.log(val);
+    //     console.log(val.toDate(), typeof val.toDate());
+    //     console.dir(val.toDate());
+    //     return true;
+    //   },
+    // },
+    // customValidate: 'since-next-month',
   },
   birth: {
     type: 'string',
@@ -162,8 +162,8 @@ const customStyles = {
 };
 
 const _value = {
-  startDate: '2019-01-01',
-  endDate: '2019-12-01',
+  startDate: '2019-01',
+  endDate: '2019-12',
   time: '12:23:00+09:00',
   month: '2019-05',
 };

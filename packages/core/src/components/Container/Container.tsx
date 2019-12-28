@@ -4,6 +4,7 @@ import { jsx } from '@emotion/core';
 import useCss from './useCss';
 import { useHandle } from '../../hooks';
 import FormGroup from '../FormGroup';
+import ErrorSummary from '../ErrorSummary';
 
 export type ContainerProps = {
   schema: any;
@@ -55,6 +56,7 @@ function Container({
         defaultValue={_defaultValue}
         onChange={handleValueChange}
       />
+      <ErrorSummary />
     </div>
   );
 }
