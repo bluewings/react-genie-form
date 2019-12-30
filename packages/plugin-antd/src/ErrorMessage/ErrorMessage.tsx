@@ -3,10 +3,14 @@ import { useMemo } from 'react';
 import { get } from 'lodash-es';
 import styles from './ErrorMessage.module.scss';
 
-function ErrorMessage({ className, errors, error: { message } }: any) {
+function ErrorMessage({
+  className,
+  errors,
+  error: { message, formattedMessage },
+}: any) {
   // const message = useMemo(() => get(errors, [0, 'message']), [errors]);
-  return message ? (
-    <p className={`${styles.root} ${className}`}>{message}</p>
+  return formattedMessage ? (
+    <p className={`${styles.root} ${className}`}>{formattedMessage}</p>
   ) : null;
 }
 

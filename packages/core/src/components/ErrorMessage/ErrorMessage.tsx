@@ -2,9 +2,15 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { get } from 'lodash-es';
 
-function ErrorMessage({ className, errors, error: { message } }: any) {
+function ErrorMessage({
+  className,
+  errors,
+  error: { message, formattedMessage },
+}: any) {
   // const message = useMemo(() => get(errors, [0, 'message']), [errors]);
-  return message ? <p className={className}>{message}</p> : null;
+  return formattedMessage ? (
+    <p className={className}>{formattedMessage}</p>
+  ) : null;
 }
 
 export default ErrorMessage;

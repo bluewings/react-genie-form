@@ -19,6 +19,9 @@ namespace Form {
     Description?: Component | FunctionComponent;
     ErrorMessage?: Component | FunctionComponent;
     ErrorSummary?: Component | FunctionComponent;
+    formatLabel?: Function;
+    formatErrorMessage?: Function;
+    formatEnum?: Function;
     showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
   }
 }
@@ -52,6 +55,9 @@ function Form({
   Description,
   ErrorMessage,
   ErrorSummary,
+  formatLabel,
+  formatErrorMessage,
+  formatEnum,
   onChange,
   ...restProps
 }: Form.Props) {
@@ -94,6 +100,9 @@ function Form({
     Description,
     ErrorMessage,
     ErrorSummary,
+    formatLabel,
+    formatErrorMessage,
+    formatEnum,
     onChange,
     errors,
     errorsReceived,

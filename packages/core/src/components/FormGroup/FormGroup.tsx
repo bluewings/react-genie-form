@@ -27,6 +27,9 @@ function FormGroupInner({
   BaseLabel,
   BaseDescription,
   BaseErrorMessage,
+  formatLabel,
+  formatErrorMessage,
+  formatEnum,
   parseValue,
   dataPath,
   errors,
@@ -72,8 +75,8 @@ function FormGroupInner({
   // }, []);
 
   const formProps = useRef<any>();
-  formProps.current = useMemo(
-    () => ({
+  formProps.current = useMemo(() => {
+    let props = {
       defaultValue: _defaultValue,
       description: schema.description,
       label: schema.title || name,
@@ -89,21 +92,50 @@ function FormGroupInner({
       isDirty: formState.isDirty,
       isFocused: formState.isFocused,
       isTouched: formState.isTouched,
-    }),
-    [
-      _defaultValue,
-      handleChange,
-      name,
-      dataPath,
-      schema,
-      value,
-      size,
-      errors,
-      formState.isDirty,
-      formState.isFocused,
-      formState.isTouched,
-    ],
-  );
+    };
+    if (Array.isArray(schema.enum)) {
+      props = {
+        ...props,
+        schema: {
+          ...schema,
+          options: {
+            ...schema.options,
+            alias: schema.enum.reduce(
+              (accum: any, value: string) => ({
+                ...accum,
+                [value]: formatEnum(value, props),
+              }),
+              {},
+            ),
+          },
+        },
+      };
+    }
+    return {
+      ...props,
+      formattedLabel: formatLabel(props.label, props),
+      error: {
+        ...props.error,
+        formattedMessage:
+          props.error.message && formatErrorMessage(props.error.message, props),
+      },
+    };
+  }, [
+    _defaultValue,
+    handleChange,
+    name,
+    dataPath,
+    schema,
+    value,
+    size,
+    errors,
+    formState.isDirty,
+    formState.isFocused,
+    formState.isTouched,
+    formatLabel,
+    formatErrorMessage,
+    formatEnum,
+  ]);
 
   const Label = useCallback(
     (injectProps: any) => (
@@ -274,6 +306,9 @@ function FormGroupOuter(props: any) {
     parseValue,
     size,
     showError,
+    formatLabel,
+    formatErrorMessage,
+    formatEnum,
   } = useIngredients(schema);
 
   const dataPath = useMemo(
@@ -291,6 +326,9 @@ function FormGroupOuter(props: any) {
       BaseLabel={Label || BaseLabel}
       BaseDescription={Description || BaseDescription}
       BaseErrorMessage={ErrorMessage || BaseErrorMessage}
+      formatLabel={formatLabel}
+      formatErrorMessage={formatErrorMessage}
+      formatEnum={formatEnum}
       parseValue={parseValue}
       size={size}
       showError={showError}

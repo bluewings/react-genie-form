@@ -19,6 +19,9 @@ function useIngredients(schema: any) {
     Label,
     Description,
     ErrorMessage,
+    formatLabel,
+    formatErrorMessage,
+    formatEnum,
     showError,
   }: any = useFormProps();
 
@@ -50,6 +53,9 @@ function useIngredients(schema: any) {
     BaseLabel: Label || BaseLabel,
     BaseDescription: Description || BaseDescription,
     BaseErrorMessage: ErrorMessage || BaseErrorMessage,
+    formatLabel: formatLabel || identity,
+    formatErrorMessage: formatErrorMessage || identity,
+    formatEnum: formatEnum || identity,
     showError,
   };
 }

@@ -100,6 +100,7 @@ const _schema = {
 };
 
 const form = [
+  'gender',
   'startDate',
   'endDate',
   'month',
@@ -231,6 +232,10 @@ function ErrorS() {
   return <h1>Err</h1>;
 }
 
+function formatFn(a, b) {
+  return `fn: ${a}`;
+}
+
 function Demo() {
   const [value, setValue] = useState({});
 
@@ -259,6 +264,9 @@ function Demo() {
                   errors={errors}
                   showError="always"
                   styles={customStyles}
+                  // formatLabel={formatFn}
+                  // formatErrorMessage={formatFn}
+                  // formatEnum={formatFn}
                   // ErrorSummary={ErrorS}
                 />
               </div>

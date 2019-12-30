@@ -7,13 +7,12 @@ const { Option } = Select;
 
 function FormTypeEnum({ size, schema, defaultValue, onChange }: any) {
   const options = useMemo(() => {
-    return get(schema, ['enum'], []).map((s: string, i: number) => {
-      return (
-        <Option key={i} value={s}>
-          {s}
-        </Option>
-      );
-    });
+    const alias = get(schema, ['options', 'alias'], {});
+    return get(schema, ['enum'], []).map((s: string, i: number) => (
+      <Option key={i} value={s}>
+        {alias[s] || s}
+      </Option>
+    ));
   }, [schema]);
   return (
     <Select
