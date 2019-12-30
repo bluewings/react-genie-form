@@ -19,7 +19,7 @@ function FormTypeEnum({ size, schema, defaultValue, onChange }: any) {
       size={size}
       defaultValue={defaultValue}
       onChange={onChange}
-      style={{ minWidth: 120 }}
+      style={{ minWidth: 171 }}
     >
       {options}
     </Select>
