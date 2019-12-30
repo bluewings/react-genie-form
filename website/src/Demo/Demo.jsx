@@ -163,8 +163,8 @@ const customStyles = {
 };
 
 const _value = {
-  startDate: '2019-01',
-  endDate: '2019-12',
+  startDate: '2019-01-01',
+  endDate: '2019-12-01',
   time: '12:23:00+09:00',
   month: '2019-05',
 };
@@ -264,6 +264,7 @@ function Demo() {
                   errors={errors}
                   showError="always"
                   styles={customStyles}
+                  showErrorSummary={true}
                   // formatLabel={formatFn}
                   // formatErrorMessage={formatFn}
                   // formatEnum={formatFn}

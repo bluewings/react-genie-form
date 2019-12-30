@@ -16,6 +16,7 @@ export type ContainerProps = {
   labelWidth?: number | string;
   styles?: StringAnyMap | Function;
   plugin?: FormPlugin;
+  showErrorSummary?: Boolean;
 };
 
 function Container({
@@ -28,6 +29,7 @@ function Container({
   styles,
   size,
   plugin,
+  showErrorSummary,
 }: ContainerProps) {
   const _defaultValue = useMemo(() => defaultValue || {}, [defaultValue]);
 
@@ -56,7 +58,7 @@ function Container({
         defaultValue={_defaultValue}
         onChange={handleValueChange}
       />
-      <ErrorSummary />
+      {showErrorSummary ? <ErrorSummary /> : null}
     </div>
   );
 }

@@ -50,6 +50,7 @@ function Form({
   size,
   errors: errorsReceived,
   showError,
+  showErrorSummary,
   FormGroup,
   Label,
   Description,
@@ -120,6 +121,7 @@ function Form({
         size={_size}
         plugin={plugin}
         onChange={handleChange}
+        showErrorSummary={showErrorSummary}
       />
     </Provider>
   );

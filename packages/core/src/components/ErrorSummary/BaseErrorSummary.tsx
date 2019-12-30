@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './ErrorSummary.module.scss';
 
 function BaseErrorSummary({ errorsByKeyword, errors }: any) {
-  return (
+  return errorsByKeyword && errorsByKeyword.length > 0 ? (
     <div className={styles.root}>
       {/* <h3>ErrorSummary</h3> */}
       {/* <pre>{JSON.stringify(errorsByKeyword, null, 2)}</pre>
@@ -20,7 +20,7 @@ function BaseErrorSummary({ errorsByKeyword, errors }: any) {
         ))}
       </ul>
     </div>
-  );
+  ) : null;
 }
 
 export default BaseErrorSummary;
