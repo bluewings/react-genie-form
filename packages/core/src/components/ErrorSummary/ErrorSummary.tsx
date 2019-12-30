@@ -18,6 +18,7 @@ function ErrorSummaryOuter(props: any) {
     return Object.keys(groups).map((keyword) => ({
       keyword,
       message: get(groups, [keyword, 0, 'message']),
+      __message: get(groups, [keyword, 0, '__message']),
       items: get(groups, [keyword]),
     }));
   }, [errors]);

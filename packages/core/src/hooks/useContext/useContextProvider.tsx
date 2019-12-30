@@ -16,24 +16,40 @@ function useContextProvider(params: any) {
 
 export default useContextProvider;
 
-function useErrors({ errors, errorsReceived: received }: any): any {
-  const serialized = useMemo(() => JSON.stringify(errors), [errors]);
+const addMessageKey = (errors: any) =>
+  (errors || []).map((e: any) => ({
+    __message: (e.message || '')
+      .replace(/\s+/g, '_')
+      .toLowerCase()
+      .replace(/"[^"]+"/g, '_STR_')
+      .replace(/[0-9]+/g, '_N_')
+      .replace(/_{1,}/g, '_')
+      .replace(/(^_|_$)/, ''),
+    ...e,
+  }));
+
+function useErrors({ errors: _errors, errorsReceived: _received }: any): any {
+  const serialized = useMemo(() => JSON.stringify(_errors), [_errors]);
+  const errors = useMemo(() => addMessageKey(_errors), [serialized]);
+
+  const serializedReceived = useMemo(() => JSON.stringify(_received), [
+    _received,
+  ]);
+  const received = useMemo(() => addMessageKey(_received), [
+    serializedReceived,
+  ]);
 
   const errorsByDataPath = useMemo(
     () =>
-      (errors || []).reduce(
+      errors.reduce(
         (accum: any, e: any) => ({
           ...accum,
           [e.dataPath]: [...(accum[e.dataPath] || []), e],
         }),
         {},
       ),
-    [serialized],
+    [errors],
   );
-
-  const serializedReceived = useMemo(() => JSON.stringify(received), [
-    received,
-  ]);
 
   const receivedDataPath = useMemo(
     () =>

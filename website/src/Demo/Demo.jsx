@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Form from '@react-genie-form/core';
 import { formTypes, Label, plugin } from '@react-genie-form/plugin-antd';
 import 'antd/dist/antd.css';
@@ -20,6 +20,7 @@ const schema = {
   startDate: {
     type: 'string',
     format: 'date',
+    readOnly: true,
     // options: {
     //   disabledDate: (val) => {
     //     console.log(val);
@@ -33,6 +34,7 @@ const schema = {
   endDate: {
     type: 'string',
     format: 'date',
+    readOnly: true,
     // customValidate: ['since-next-month', 'gte(startDate)'],
   },
   // "time": New in draft 7 Time, for example, 20:20:39+00:00
@@ -72,6 +74,7 @@ const schema = {
   description: {
     type: 'string',
     formType: 'textarea',
+    maxLength: 10,
   },
   etc: {
     type: 'object',
@@ -89,14 +92,14 @@ const schema = {
 const _schema = {
   type: 'object',
   properties: schema,
-  // options: {
-  //   virtual: {
-  //     schedule: {
-  //       formType: 'monthRange',
-  //       fields: ['startDate', 'endDate'],
-  //     },
-  //   },
-  // },
+  options: {
+    virtual: {
+      schedule: {
+        formType: 'monthRange',
+        fields: ['startDate', 'endDate'],
+      },
+    },
+  },
 };
 
 const form = [
@@ -236,8 +239,24 @@ function formatFn(a, b) {
   return `fn: ${a}`;
 }
 
+function formatFn2(a) {
+  // return <pre>{JSON.stringify(a, null, 2)}</pre>;
+  return `fn: ${a.message}`;
+}
+
 function Demo() {
   const [value, setValue] = useState({});
+
+  const formRef = useRef();
+
+  useEffect(() => {
+    setTimeout(async () => {
+      if (formRef.current) {
+        const aaa = await formRef.current.getValue();
+        console.log(aaa);
+      }
+    }, 1000);
+  }, []);
 
   return (
     <div className={styles.root}>
@@ -253,6 +272,7 @@ function Demo() {
             <div className="card">
               <div className="card-body">
                 <Form
+                  ref={formRef}
                   layout="horizontal"
                   // size="small"
                   schema={_schema}
@@ -266,7 +286,7 @@ function Demo() {
                   styles={customStyles}
                   showErrorSummary={true}
                   // formatLabel={formatFn}
-                  // formatErrorMessage={formatFn}
+                  formatErrorMessage={formatFn2}
                   // formatEnum={formatFn}
                   // ErrorSummary={ErrorS}
                 />

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useMemo, useState } from 'react';
+import { get } from 'lodash-es';
 import { DatePicker } from 'antd';
 import moment, { Moment } from 'moment';
 import { useHandle } from '../hooks';
@@ -8,7 +9,7 @@ const dateFormat = 'YYYY-MM';
 
 const mode = ['month', 'month'];
 
-function FormTypeMonthRange({ size, name, value, onChange }: any) {
+function FormTypeMonthRange({ schema, size, name, value, onChange }: any) {
   const handleChange = useHandle(([start, end]: [Moment, Moment]) => {
     onChange([
       start ? start.format(dateFormat) : start,
@@ -26,6 +27,13 @@ function FormTypeMonthRange({ size, name, value, onChange }: any) {
       }),
     [value],
   );
+  const [readOnly1, readOnly2] = useMemo(
+    () => [
+      get(schema, ['fieldsSchema', 0, 'readOnly'], false),
+      get(schema, ['fieldsSchema', 1, 'readOnly'], false),
+    ],
+    [schema],
+  );
   return (
     <DatePicker.RangePicker
       size={size}
@@ -35,6 +43,7 @@ function FormTypeMonthRange({ size, name, value, onChange }: any) {
       mode={mode}
       onChange={handleChange}
       onPanelChange={handleChange}
+      disabled={readOnly1 && readOnly2}
     />
   );
 }

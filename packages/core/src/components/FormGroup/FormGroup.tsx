@@ -117,7 +117,7 @@ function FormGroupInner({
       error: {
         ...props.error,
         formattedMessage:
-          props.error.message && formatErrorMessage(props.error.message, props),
+          props.error.message && formatErrorMessage(props.error, props),
       },
     };
   }, [

@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { Component, FunctionComponent, useState, useMemo, useRef } from 'react';
+import {
+  Component,
+  FunctionComponent,
+  forwardRef,
+  useState,
+  useMemo,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 import { get } from 'lodash-es';
 import Container from '../Container';
 import { ContainerProps } from '../Container/Container';
@@ -37,36 +45,41 @@ const getPreferredValue = (type: string, value: any) => {
   return values.indexOf(value) !== -1 ? value : values[0];
 };
 
-function Form({
-  form,
-  formTypes,
-  parseValue,
-  plugin,
-  schema,
-  customValidate,
-  defaultValue,
-  layout,
-  labelAlign,
-  size,
-  errors: errorsReceived,
-  showError,
-  showErrorSummary,
-  FormGroup,
-  Label,
-  Description,
-  ErrorMessage,
-  ErrorSummary,
-  formatLabel,
-  formatErrorMessage,
-  formatEnum,
-  onChange,
-  ...restProps
-}: Form.Props) {
+function Form(
+  {
+    form,
+    formTypes,
+    parseValue,
+    plugin,
+    schema,
+    customValidate,
+    defaultValue,
+    layout,
+    labelAlign,
+    size,
+    errors: errorsReceived,
+    showError,
+    showErrorSummary,
+    FormGroup,
+    Label,
+    Description,
+    ErrorMessage,
+    ErrorSummary,
+    formatLabel,
+    formatErrorMessage,
+    formatEnum,
+    onChange,
+    ...restProps
+  }: Form.Props,
+  ref: any,
+) {
   const _schema = useSchema(schema);
   const validate = useValidate(_schema, customValidate, defaultValue);
 
+  const currValue = useRef<any>(defaultValue);
   const [errors, setErrors] = useState<any[]>([]);
   const handleChange = useHandle(async (value: any) => {
+    currValue.current = value;
     if (typeof onChange === 'function') {
       onChange(value);
     }
@@ -110,6 +123,14 @@ function Form({
     showError,
   });
 
+  useImperativeHandle(ref, () => ({
+    getValue: async () => {
+      const value = currValue.current;
+      const errors: any[] = await validate(value);
+      return { value, errors };
+    },
+  }));
+
   return (
     <Provider value={value}>
       <Container
@@ -127,4 +148,4 @@ function Form({
   );
 }
 
-export default Form;
+export default forwardRef(Form);

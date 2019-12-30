@@ -10,6 +10,8 @@ import { getHint } from '../../helpers/util';
 
 const identity = (e: any) => e;
 
+const getMessage = (e: any) => e && e.message;
+
 function useIngredients(schema: any) {
   const {
     formTypes,
@@ -54,7 +56,7 @@ function useIngredients(schema: any) {
     BaseDescription: Description || BaseDescription,
     BaseErrorMessage: ErrorMessage || BaseErrorMessage,
     formatLabel: formatLabel || identity,
-    formatErrorMessage: formatErrorMessage || identity,
+    formatErrorMessage: formatErrorMessage || getMessage,
     formatEnum: formatEnum || identity,
     showError,
   };
