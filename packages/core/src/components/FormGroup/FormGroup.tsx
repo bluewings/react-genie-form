@@ -225,7 +225,7 @@ function FormGroupInner({
           {...injectProps}
         />
       ) : null,
-    [BaseErrorMessage],
+    [BaseErrorMessage, _showError.current, formProps.current.errors],
   );
 
   const timerBlur = useRef<any>();

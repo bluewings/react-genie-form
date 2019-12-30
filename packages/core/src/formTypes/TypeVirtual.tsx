@@ -6,29 +6,26 @@ import useIngredients from '../components/FormGroup//useIngredients';
 import { getHint } from '../helpers/util';
 
 function TypeVirtual(props: any) {
-  const { schema, onChange } = props;
+  const { schema: _schema, onChange } = props;
 
-  const nextProps = useMemo(
+  const schema = useMemo(
     () => ({
-      ...props,
-      schema: {
-        ...get(schema, ['__schema'], {}),
-        fieldsSchema: get(schema, ['__fields'], []).map(
-          ({ schema }: any) => schema,
-        ),
-      },
+      ...get(_schema, ['__schema'], {}),
+      fieldsSchema: get(_schema, ['__fields'], []).map(
+        ({ schema }: any) => schema,
+      ),
     }),
-    [props],
+    [_schema],
   );
 
   const { parseValue }: any = useFormProps();
   const parseValueFuncs = useMemo(
     () =>
-      get(schema, ['__fields'], []).map(({ schema }: any) => {
+      get(_schema, ['__fields'], []).map(({ schema }: any) => {
         const _parseValue = parseValue[getHint(schema).type] || identity;
         return (value: any) => _parseValue(value, undefined, schema);
       }),
-    [props],
+    [_schema],
   );
 
   const handleChange = useHandle((values: any[]) => {
@@ -37,12 +34,12 @@ function TypeVirtual(props: any) {
     );
   });
 
-  const { BaseFormComponent } = useIngredients(nextProps.schema);
+  const { BaseFormComponent } = useIngredients(schema);
 
   return (
     <>
       {BaseFormComponent && (
-        <BaseFormComponent {...nextProps} onChange={handleChange} />
+        <BaseFormComponent {...props} schema={schema} onChange={handleChange} />
       )}
     </>
   );
