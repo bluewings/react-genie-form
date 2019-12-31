@@ -95,6 +95,9 @@ const schema = {
       },
     },
   },
+  amt: {
+    type: 'number',
+  },
 };
 
 const _schema = {
@@ -111,6 +114,19 @@ const _schema = {
 };
 
 const form = [
+  {
+    name: 'amt',
+    schema: {
+      options: {
+        formatter: (value) =>
+          `$ ${value.replace(/[^0-9]/g, '')}`.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ',',
+          ),
+        parser: (value) => value.replace(/\$\s?|(,*)/g, ''),
+      },
+    },
+  },
   'gender',
   'startDate',
   'endDate',

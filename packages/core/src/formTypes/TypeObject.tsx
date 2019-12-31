@@ -54,7 +54,14 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
         .reduce((items: any, e: any) => {
           const { name, reactElement, type, fields } = e;
           if (dict[name]) {
-            return [...items, { ...dict[name], ...e }];
+            return [
+              ...items,
+              {
+                ...dict[name],
+                ...e,
+                schema: { ...dict[name].schema, ...e.schema },
+              },
+            ];
           } else if (
             name === '__reactElement' &&
             isValidElement(reactElement)
