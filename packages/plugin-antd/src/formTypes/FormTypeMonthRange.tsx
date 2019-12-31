@@ -27,8 +27,9 @@ function FormTypeMonthRange({ schema, size, name, value, onChange }: any) {
       }),
     [value],
   );
-  const [readOnly1, readOnly2] = useMemo(
+  const [readOnly, readOnly1, readOnly2] = useMemo(
     () => [
+      get(schema, ['readOnly'], false),
       get(schema, ['fieldsSchema', 0, 'readOnly'], false),
       get(schema, ['fieldsSchema', 1, 'readOnly'], false),
     ],
@@ -43,7 +44,7 @@ function FormTypeMonthRange({ schema, size, name, value, onChange }: any) {
       mode={mode}
       onChange={handleChange}
       onPanelChange={handleChange}
-      disabled={readOnly1 && readOnly2}
+      disabled={readOnly || (readOnly1 && readOnly2)}
     />
   );
 }
