@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-function useSchema(schema?: any) {
+function useSchema(schema?: any, required?: string[]) {
   const [serialized, reviver] = useMemo(() => {
     const local: any = {};
     const replacer = (key: any, value: any) => {
@@ -23,6 +23,7 @@ function useSchema(schema?: any) {
     return [serialized, reviver];
   }, [schema]);
 
+  const requiredStr = useMemo(() => JSON.stringify(required), [required]);
   const jsonSchema = useMemo(() => {
     let properties;
     try {
@@ -30,12 +31,20 @@ function useSchema(schema?: any) {
     } catch (e) {
       properties = {};
     }
-    return typeof properties === 'object' &&
+    let schema =
+      typeof properties === 'object' &&
       properties.type === 'object' &&
       typeof properties.properties === 'object'
-      ? properties
-      : { type: 'object', properties: properties };
-  }, [serialized, reviver]);
+        ? properties
+        : { type: 'object', properties: properties };
+    return {
+      ...schema,
+      required: [...(schema.required || []), ...(required || [])].filter(
+        (e: string, i: number, arr: string[]) =>
+          arr.indexOf(e) === i && schema.properties[e],
+      ),
+    };
+  }, [serialized, reviver, requiredStr]);
 
   return jsonSchema;
 }

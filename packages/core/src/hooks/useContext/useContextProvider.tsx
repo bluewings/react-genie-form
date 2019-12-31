@@ -22,6 +22,7 @@ const addMessageKey = (errors: any) =>
       .replace(/\s+/g, '_')
       .toLowerCase()
       .replace(/"[^"]+"/g, '_STR_')
+      .replace(/'[^']+'/g, '_STR_')
       .replace(/[0-9]+/g, '_N_')
       .replace(/_{1,}/g, '_')
       .replace(/(^_|_$)/, ''),
@@ -41,25 +42,39 @@ function useErrors({ errors: _errors, errorsReceived: _received }: any): any {
 
   const errorsByDataPath = useMemo(
     () =>
-      errors.reduce(
-        (accum: any, e: any) => ({
+      errors.reduce((accum: any, e: any) => {
+        let next = {
           ...accum,
           [e.dataPath]: [...(accum[e.dataPath] || []), e],
-        }),
-        {},
-      ),
+        };
+        if (e.keyword === 'required' && e.params && e.params.missingProperty) {
+          const dataPath = `${e.dataPath}.${e.params.missingProperty}`;
+          next = {
+            ...accum,
+            [dataPath]: [...(accum[dataPath] || []), { ...e, dataPath }],
+          };
+        }
+        return next;
+      }, {}),
     [errors],
   );
 
   const receivedDataPath = useMemo(
     () =>
-      (received || []).reduce(
-        (accum: any, e: any) => ({
+      (received || []).reduce((accum: any, e: any) => {
+        let next = {
           ...accum,
           [e.dataPath]: [...(accum[e.dataPath] || []), e],
-        }),
-        {},
-      ),
+        };
+        if (e.keyword === 'required' && e.params && e.params.missingProperty) {
+          const dataPath = `${e.dataPath}.${e.params.missingProperty}`;
+          next = {
+            ...accum,
+            [dataPath]: [...(accum[dataPath] || []), { ...e, dataPath }],
+          };
+        }
+        return next;
+      }, {}),
     [serializedReceived],
   );
 

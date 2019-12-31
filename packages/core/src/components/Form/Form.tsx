@@ -31,6 +31,7 @@ namespace Form {
     formatErrorMessage?: Function;
     formatEnum?: Function;
     showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
+    required?: string[];
   }
 }
 
@@ -60,6 +61,7 @@ function Form(
     errors: errorsReceived,
     showError,
     showErrorSummary,
+    required,
     FormGroup,
     Label,
     Description,
@@ -73,7 +75,7 @@ function Form(
   }: Form.Props,
   ref: any,
 ) {
-  const _schema = useSchema(schema);
+  const _schema = useSchema(schema, required);
   const validate = useValidate(_schema, customValidate, defaultValue);
 
   const currValue = useRef<any>(defaultValue);

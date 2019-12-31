@@ -282,6 +282,8 @@ function Demo() {
     }, 1000);
   }, []);
 
+  const required = ['gender', 'description'];
+
   return (
     <div className={styles.root}>
       <div className="container">
@@ -311,6 +313,7 @@ function Demo() {
                   showErrorSummary={true}
                   // formatLabel={formatFn}
                   formatErrorMessage={formatFn2}
+                  required={required}
                   // formatEnum={formatFn}
                   // ErrorSummary={ErrorS}
                 />
