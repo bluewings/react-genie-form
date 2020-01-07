@@ -53,10 +53,9 @@ function FormGroupInner({
 
   const handleChange = useHandle(
     (event: SyntheticEvent | any, _batch?: boolean) => {
+      // event && event.constructor.name === 'SyntheticEvent'
       const received =
-        event && event.constructor.name === 'SyntheticEvent'
-          ? event.target.value
-          : event;
+        event && typeof event.target === 'object' ? event.target.value : event;
       setValue((prevValue: any) => parseValue(received, prevValue, schema));
       if (_batch !== true && formState.isDirty !== true) {
         setFormState((state) => ({ ...state, isDirty: true }));
