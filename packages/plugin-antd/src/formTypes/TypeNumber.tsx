@@ -3,13 +3,15 @@ import { InputNumber } from 'antd';
 import { useMemo } from 'react';
 import { get } from 'lodash-es';
 
-const identity = (e: any) => e;
+// const identity = (e: any) => e;
+
+const style = { minWidth: 171 };
 
 function TypeNumber({ schema, name, size, defaultValue, onChange }: any) {
   const [formatter, parser] = useMemo(
     () => [
-      get(schema, ['options', 'formatter'], identity),
-      get(schema, ['options', 'parser'], identity),
+      get(schema, ['options', 'formatter']),
+      get(schema, ['options', 'parser']),
     ],
     [schema],
   );
@@ -20,7 +22,7 @@ function TypeNumber({ schema, name, size, defaultValue, onChange }: any) {
       size={size}
       defaultValue={defaultValue}
       onChange={onChange}
-      style={{ minWidth: 171 }}
+      style={style}
       formatter={formatter}
       parser={parser}
     />
