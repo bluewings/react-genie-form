@@ -313,6 +313,7 @@ function FormGroupOuter(props: any) {
     BaseLabel,
     BaseDescription,
     BaseErrorMessage,
+    preParser,
     parseValue,
     size,
     showError,
@@ -339,6 +340,7 @@ function FormGroupOuter(props: any) {
       formatLabel={formatLabel}
       formatErrorMessage={formatErrorMessage}
       formatEnum={formatEnum}
+      preParser={preParser}
       parseValue={parseValue}
       size={size}
       showError={showError}
