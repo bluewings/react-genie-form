@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { get } from 'lodash-es';
 import BaseFormGroup from './BaseFormGroup';
 import BaseLabel from '../Label';
@@ -27,7 +27,10 @@ function useIngredients(schema: any) {
     showError,
   }: any = useFormProps();
 
-  const hint: Hint = useMemo(() => getHint(schema), [schema]);
+  const [hint, parser]: [Hint, Function] = useMemo(
+    () => [getHint(schema), get(schema, ['options', 'parser'], identity)],
+    [schema],
+  );
 
   const BaseFormComponent = useMemo(() => {
     const Found = formTypes.reduce(
@@ -43,9 +46,15 @@ function useIngredients(schema: any) {
     return Found ? React.memo(Found) : null;
   }, [hint, formTypes]);
 
-  const _parseValue = useMemo(() => parseValue[hint.type] || identity, [
-    hint.type,
-  ]);
+  const _parseValue = useCallback(
+    (received: any, prevValue: any, schema: any) =>
+      (parseValue[hint.type] || identity)(
+        parser(received, prevValue, schema),
+        prevValue,
+        schema,
+      ),
+    [parseValue, hint.type, parser],
+  );
 
   return {
     parseValue: _parseValue,
