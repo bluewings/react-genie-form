@@ -54,6 +54,14 @@ function FormGroupInner({
   const handleChange = useHandle(
     (event: SyntheticEvent | any, _batch?: boolean) => {
       // event && event.constructor.name === 'SyntheticEvent'
+      if (name) {
+        console.log({
+          name,
+          event: event,
+          nativeEvent: event && event.nativeEvent,
+          target: event && event.target,
+        });
+      }
       const received =
         event && typeof event.target === 'object' ? event.target.value : event;
       setValue((prevValue: any) => parseValue(received, prevValue, schema));
