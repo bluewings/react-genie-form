@@ -27,7 +27,7 @@ function useIngredients(schema: any) {
     showError,
   }: any = useFormProps();
 
-  const [hint, parser]: [Hint, Function] = useMemo(
+  const [hint, preParser]: [Hint, Function] = useMemo(
     () => [getHint(schema), get(schema, ['options', 'parser'], identity)],
     [schema],
   );
@@ -46,17 +46,12 @@ function useIngredients(schema: any) {
     return Found ? React.memo(Found) : null;
   }, [hint, formTypes]);
 
-  const _parseValue = useCallback(
-    (received: any, prevValue: any, schema: any) =>
-      (parseValue[hint.type] || identity)(
-        parser(received, prevValue, schema),
-        prevValue,
-        schema,
-      ),
-    [parseValue, hint.type, parser],
-  );
+  const _parseValue = useMemo(() => parseValue[hint.type] || identity, [
+    hint.type,
+  ]);
 
   return {
+    preParser,
     parseValue: _parseValue,
     size,
     BaseFormComponent,

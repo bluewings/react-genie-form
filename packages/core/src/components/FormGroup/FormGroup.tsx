@@ -30,6 +30,7 @@ function FormGroupInner({
   formatLabel,
   formatErrorMessage,
   formatEnum,
+  preParser,
   parseValue,
   dataPath,
   errors,
@@ -64,7 +65,9 @@ function FormGroupInner({
       }
       const received =
         event && typeof event.target === 'object' ? event.target.value : event;
-      setValue((prevValue: any) => parseValue(received, prevValue, schema));
+      const parsed = preParser(received);
+      console.log([received, parsed]);
+      setValue((prevValue: any) => parseValue(parsed, prevValue, schema));
       if (_batch !== true && formState.isDirty !== true) {
         setFormState((state) => ({ ...state, isDirty: true }));
       }
