@@ -1,5 +1,7 @@
 function parseNumber(value: any) {
-  const parsed = parseFloat(value);
+  let parsed =
+    typeof value === 'string' ? value.replace(/[^\d-.]/g, '') : value;
+  parsed = parseFloat(parsed);
   return isNaN(parsed) ? undefined : parsed;
 }
 
