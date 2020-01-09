@@ -48,12 +48,6 @@ const getPreferredValue = (type: string, value: any) => {
   return values.indexOf(value) !== -1 ? value : values[0];
 };
 
-const structError = (value: any, errors: any) => ({
-  hash: hashCode({ value, errors }),
-  value,
-  errors,
-});
-
 function Form(
   {
     form,
@@ -88,19 +82,22 @@ function Form(
   const validate = useValidate(_schema, customValidate, defaultValue);
 
   const currValue = useRef<any>(defaultValue);
-  const [errStruct, setErrors] = useState<any>(structError(defaultValue, []));
-  const { errors } = errStruct;
+
+  const [errors, setErrors] = useState<any[]>([]);
+  const [asyncValue, setAsyncValue] = useState<any>(defaultValue);
+
+  const asyncValueHash = useMemo(() => hashCode({ asyncValue, errors }), [
+    asyncValue,
+    errors,
+  ]);
 
   const handleChangeWithErrors = useHandle(onChangeWithErrors);
   useEffect(() => {
     handleChangeWithErrors(
-      errStruct.value,
-      errStruct.errors && errStruct.errors.length > 0
-        ? errStruct.errors
-        : undefined,
+      asyncValue,
+      errors && errors.length > 0 ? errors : undefined,
     );
-  }, [errStruct.hash]);
-
+  }, [asyncValueHash]);
   const handleChange = useHandle(async (value: any) => {
     currValue.current = value;
     if (typeof onChange === 'function') {
@@ -112,8 +109,9 @@ function Form(
       errors !== _errors &&
       JSON.stringify(errors) !== JSON.stringify(_errors)
     ) {
-      setErrors(structError(value, _errors));
+      setErrors(_errors);
     }
+    setAsyncValue(value);
   });
 
   const _layout = useMemo(() => getPreferredValue('layout', layout), [layout]);
