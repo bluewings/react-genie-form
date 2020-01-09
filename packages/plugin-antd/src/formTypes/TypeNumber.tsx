@@ -25,6 +25,8 @@ function TypeNumber({ schema, name, size, defaultValue, onChange }: any) {
       style={style}
       formatter={formatter}
       parser={parser}
+      min={schema.minimum}
+      max={schema.maximum}
     />
   );
 }

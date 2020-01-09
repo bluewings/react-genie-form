@@ -90,13 +90,18 @@ const schema = {
               /\B(?=(\d{3})+(?!\d))/g,
               ',',
             ),
-          parser: (value) => value.replace(/\$\s?|(,*)/g, ''),
+          parser: (value) =>
+            typeof value === 'string'
+              ? value.replace(/\$\s?|(,*)/g, '')
+              : value,
         },
       },
     },
   },
   amt: {
     type: 'number',
+    minimum: 0,
+    maximum: 100,
   },
 };
 
@@ -116,16 +121,18 @@ const _schema = {
 const form = [
   {
     name: 'amt',
-    schema: {
-      options: {
-        formatter: (value) =>
-          `$ ${value.replace(/[^0-9]/g, '')}`.replace(
-            /\B(?=(\d{3})+(?!\d))/g,
-            ',',
-          ),
-        parser: (value) => value.replace(/\$\s?|(,*)/g, ''),
-      },
-    },
+
+    // schema: {
+    //   options: {
+    //     formatter: (value) =>
+    //       `$ ${value.replace(/[^0-9]/g, '')}`.replace(
+    //         /\B(?=(\d{3})+(?!\d))/g,
+    //         ',',
+    //       ),
+    //     parser: (value) =>
+    //       typeof value === 'string' ? value.replace(/\$\s?|(,*)/g, '') : value,
+    //   },
+    // },
   },
   'gender',
   'startDate',
