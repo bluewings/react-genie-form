@@ -1,9 +1,9 @@
 {
   "name": "website",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "private": true,
   "dependencies": {
-    "@react-genie-form/core": "^0.1.44",
+    "@react-genie-form/core": "^0.1.47",
     "@react-genie-form/plugin-antd": "^0.1.46",
     "antd": "^3.26.0",
     "bootstrap": "^4.4.1",
