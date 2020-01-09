@@ -291,6 +291,12 @@ function Demo() {
 
   const required = ['gender', 'description'];
 
+  const [val1, setVal1] = useState({});
+
+  const handleChangeWithErrors = (value, errors) => {
+    setVal1({ value, errors });
+  };
+
   return (
     <div className={styles.root}>
       <div className="container">
@@ -321,6 +327,7 @@ function Demo() {
                   // formatLabel={formatFn}
                   formatErrorMessage={formatFn2}
                   required={required}
+                  onChangeWithErrors={handleChangeWithErrors}
                   // formatEnum={formatFn}
                   // ErrorSummary={ErrorS}
                 />
@@ -330,6 +337,7 @@ function Demo() {
           <div className="col-sm-6">
             <div className="card">
               <div className="card-body">
+                <pre>{JSON.stringify(val1, null, 2)}</pre>
                 <pre>{JSON.stringify(value, null, 2)}</pre>
                 {/* <Form
                   layout="horizontal"

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import {
   Component,
   FunctionComponent,
@@ -13,6 +13,7 @@ import Container from '../Container';
 import { ContainerProps } from '../Container/Container';
 import useContextProvider from '../../hooks/useContext/useContextProvider';
 import { useHandle, useSchema, useValidate } from '../../hooks';
+import { hashCode } from '../../helpers/util';
 
 namespace Form {
   export interface Props extends ContainerProps {
@@ -32,6 +33,7 @@ namespace Form {
     formatEnum?: Function;
     showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
     required?: string[];
+    onChangeWithErrors?: (value: any, errors: any) => void;
   }
 }
 
@@ -45,6 +47,12 @@ const getPreferredValue = (type: string, value: any) => {
   const values = get(enums, [type], []);
   return values.indexOf(value) !== -1 ? value : values[0];
 };
+
+const structError = (value: any, errors: any) => ({
+  hash: hashCode({ value, errors }),
+  value,
+  errors,
+});
 
 function Form(
   {
@@ -71,6 +79,7 @@ function Form(
     formatErrorMessage,
     formatEnum,
     onChange,
+    onChangeWithErrors,
     ...restProps
   }: Form.Props,
   ref: any,
@@ -79,7 +88,19 @@ function Form(
   const validate = useValidate(_schema, customValidate, defaultValue);
 
   const currValue = useRef<any>(defaultValue);
-  const [errors, setErrors] = useState<any[]>([]);
+  const [errStruct, setErrors] = useState<any>(structError(defaultValue, []));
+  const { errors } = errStruct;
+
+  const handleChangeWithErrors = useHandle(onChangeWithErrors);
+  useEffect(() => {
+    handleChangeWithErrors(
+      errStruct.value,
+      errStruct.errors && errStruct.errors.length > 0
+        ? errStruct.errors
+        : undefined,
+    );
+  }, [errStruct.hash]);
+
   const handleChange = useHandle(async (value: any) => {
     currValue.current = value;
     if (typeof onChange === 'function') {
@@ -91,7 +112,7 @@ function Form(
       errors !== _errors &&
       JSON.stringify(errors) !== JSON.stringify(_errors)
     ) {
-      setErrors(_errors);
+      setErrors(structError(value, _errors));
     }
   });
 
