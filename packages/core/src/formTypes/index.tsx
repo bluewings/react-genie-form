@@ -21,7 +21,7 @@ const formTypes: FormType[] = [
   },
   {
     component: TypeNumber,
-    test: { type: 'number' },
+    test: { type: ['number', 'integer'] },
   },
   {
     component: TypeObject,

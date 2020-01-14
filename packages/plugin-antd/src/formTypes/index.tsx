@@ -77,7 +77,7 @@ const formTypes: FormType[] = [
   },
   {
     component: TypeNumber,
-    test: { type: 'number' },
+    test: { type: ['number', 'integer'] },
   },
   {
     component: () => <Divider style={{ margin: '0 0 1.5rem' }} />,
