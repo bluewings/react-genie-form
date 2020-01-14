@@ -289,7 +289,7 @@ function Demo() {
     }, 1000);
   }, []);
 
-  const required = ['gender', 'description'];
+  const required = ['amt', 'gender', 'description'];
 
   const [val1, setVal1] = useState({});
 

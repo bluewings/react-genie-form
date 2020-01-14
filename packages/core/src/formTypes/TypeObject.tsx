@@ -23,19 +23,19 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
 
   const handleChange = useHandle(onChange);
 
-  const properties = useMemo(
-    () =>
-      Object.entries(get(schema, ['properties'], {})).map(
-        ([name, schema]: [string, any]) => ({
-          name,
-          schema,
-          defaultValue: get(defaultValue, [name]),
-          onChange: (value: any, batch: boolean) =>
-            handleChange({ [name]: value }, batch === true),
-        }),
-      ),
-    [schema],
-  );
+  const properties = useMemo(() => {
+    const required = get(schema, ['required'], []);
+    return Object.entries(get(schema, ['properties'], {})).map(
+      ([name, schema]: [string, any]) => ({
+        name,
+        schema,
+        defaultValue: get(defaultValue, [name]),
+        isRequired: required.indexOf(name) !== -1,
+        onChange: (value: any, batch: boolean) =>
+          handleChange({ [name]: value }, batch === true),
+      }),
+    );
+  }, [schema]);
 
   const childNodes = useMemo(() => {
     let items;
@@ -84,6 +84,9 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
                     .filter(identity),
                   __schema: { ...e, type: 'array' },
                 },
+                isRequired:
+                  fields.filter((e) => dict[e] && dict[e].isRequired).length >
+                  0,
                 defaultValue: fields.map((name: string) =>
                   get(defaultValue, [name]),
                 ),
@@ -126,6 +129,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
         onChange,
         reactElement,
         schema,
+        isRequired,
         FormComponent,
         Label,
         Description,
@@ -142,6 +146,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
             onChange={onChange}
             parentDataPath={dataPath}
             schema={schema}
+            isRequired={isRequired}
             FormComponent={FormComponent}
             Label={Label}
             Description={Description}
