@@ -2,16 +2,26 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^3.19.0",
-    "node-sass": "^4.13.0",
-    "prettier": "^1.19.1",
-    "typescript": "^3.7.2"
+    "@babel/core": "^7.9.0",
+    "@storybook/addon-actions": "^5.3.18",
+    "@storybook/addon-docs": "^5.3.18",
+    "@storybook/addon-links": "^5.3.18",
+    "@storybook/addons": "^5.3.18",
+    "@storybook/preset-typescript": "^3.0.0",
+    "@storybook/react": "^5.3.18",
+    "babel-loader": "^8.1.0",
+    "lerna": "^3.20.2",
+    "node-sass": "^4.13.1",
+    "prettier": "^2.0.4",
+    "sass-loader": "^8.0.2",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "lerna run start --parallel"
+    "start": "lerna run start --parallel",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
-  "dependencies": {
-    "@types/classnames": "^2.2.9",
-    "classnames": "^2.2.6"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }

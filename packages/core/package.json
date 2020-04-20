@@ -19,9 +19,10 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@emotion/core": "^10.0.22",
-    "ajv": "^6.10.2",
-    "date-fns": "^2.8.1",
+    "@emotion/core": "^10.0.28",
+    "ajv": "^6.12.0",
+    "classnames": "^2.2.6",
+    "date-fns": "^2.12.0",
     "lodash-es": "^4.17.15"
   },
   "peerDependencies": {
@@ -29,13 +30,14 @@
     "react-dom": "^16.12.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.10",
     "@types/lodash-es": "^4.17.3",
-    "@types/react": "^16.9.13",
-    "@types/react-dom": "^16.9.4",
-    "rollup": "^1.27.8",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-typescript2": "^0.25.2",
-    "typescript": "^3.7.2"
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.6",
+    "rollup": "^2.6.1",
+    "rollup-plugin-postcss": "^2.6.4",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "typescript": "^3.8.3"
   },
   "scripts": {
     "prestart": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
