@@ -19,7 +19,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "antd": "^3.26.0",
+    "antd": "^4.1.4",
     "classnames": "^2.2.6",
     "lodash-es": "^4.17.15"
   },

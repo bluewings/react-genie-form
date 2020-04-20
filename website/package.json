@@ -5,7 +5,7 @@
   "dependencies": {
     "@react-genie-form/core": "^0.1.50",
     "@react-genie-form/plugin-antd": "^0.1.49",
-    "antd": "^3.26.0",
+    "antd": "^4.1.4",
     "bootstrap": "^4.4.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",

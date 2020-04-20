@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { get } from 'lodash-es';
 import { DatePicker } from 'antd';
 import moment, { Moment } from 'moment';
@@ -7,10 +7,9 @@ import { useHandle } from '../hooks';
 
 const dateFormat = 'YYYY-MM';
 
-const mode = ['month', 'month'];
-
 function FormTypeMonthRange({ schema, size, name, value, onChange }: any) {
-  const handleChange = useHandle(([start, end]: [Moment, Moment]) => {
+  const handleChange = useHandle((values: any) => {
+    const [start, end]: [Moment, Moment] = values || [];
     onChange([
       start ? start.format(dateFormat) : start,
       end ? end.format(dateFormat) : end,
@@ -27,24 +26,25 @@ function FormTypeMonthRange({ schema, size, name, value, onChange }: any) {
       }),
     [value],
   );
-  const [readOnly, readOnly1, readOnly2] = useMemo(
-    () => [
-      get(schema, ['readOnly'], false),
-      get(schema, ['fieldsSchema', 0, 'readOnly'], false),
-      get(schema, ['fieldsSchema', 1, 'readOnly'], false),
-    ],
-    [schema],
-  );
+  const disabled = useMemo(() => {
+    const readOnly = get(schema, ['readOnly'], false);
+    const readOnly1 = get(schema, ['fieldsSchema', 0, 'readOnly'], false);
+    const readOnly2 = get(schema, ['fieldsSchema', 1, 'readOnly'], false);
+    if (readOnly || (readOnly1 && readOnly2)) {
+      return true;
+    }
+    return [readOnly1, readOnly2] as [boolean, boolean];
+  }, [schema]);
   return (
     <DatePicker.RangePicker
       size={size}
       name={name}
       format={dateFormat}
       value={_value}
-      mode={mode}
+      picker="month"
       onChange={handleChange}
       onPanelChange={handleChange}
-      disabled={readOnly || (readOnly1 && readOnly2)}
+      disabled={disabled}
     />
   );
 }

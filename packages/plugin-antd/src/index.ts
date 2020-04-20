@@ -1,6 +1,7 @@
 import formTypes from './formTypes';
 import Label from './Label';
 import ErrorMessage from './ErrorMessage';
+import './styles/common.scss';
 
 const styles = ({ size }: any) =>
   size === 'small'

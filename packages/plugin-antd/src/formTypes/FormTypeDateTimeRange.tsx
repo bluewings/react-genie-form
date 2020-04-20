@@ -5,30 +5,26 @@ import { DatePicker } from 'antd';
 import moment, { Moment } from 'moment';
 import { useHandle } from '../hooks';
 
-const dateFormat = 'YYYY-MM-DD';
+const dateTimeFormat = 'YYYY-MM-DD HH:mm';
 
-function FormTypeDateRange({
-  schema,
-  size,
-  name,
-  defaultValue,
-  onChange,
-}: any) {
-  const handleChange = useHandle(([start, end]: [Moment, Moment]) => {
+function FormTypeDateTimeRange({ schema, size, name, value, onChange }: any) {
+  const handleChange = useHandle((values: any) => {
+    const [start, end]: [Moment, Moment] = values || [];
     onChange([
-      start ? start.format(dateFormat) : start,
-      end ? end.format(dateFormat) : end,
+      start ? start.startOf('minute').toDate().toISOString() : start,
+      end ? end.endOf('minute').toDate().toISOString() : end,
     ]);
   });
-  const _defaultValue: any = useMemo(
+  const _value: any = useMemo(
     () =>
-      Array.isArray(defaultValue) && defaultValue.length === 2
-        ? [
-            moment(defaultValue[0], dateFormat),
-            moment(defaultValue[1], dateFormat),
-          ]
-        : [undefined, undefined],
-    [defaultValue],
+      (Array.isArray(value) && value.length === 2
+        ? value
+        : [undefined, undefined]
+      ).map((e) => {
+        const f = moment(new Date(e));
+        return f.isValid() ? f : undefined;
+      }),
+    [value],
   );
   const disabled = useMemo(() => {
     const readOnly = get(schema, ['readOnly'], false);
@@ -43,11 +39,14 @@ function FormTypeDateRange({
     <DatePicker.RangePicker
       size={size}
       name={name}
-      defaultValue={_defaultValue}
+      format={dateTimeFormat}
+      value={_value}
+      showTime={{ format: 'HH:mm' }}
       onChange={handleChange}
+      onPanelChange={handleChange}
       disabled={disabled}
     />
   );
 }
 
-export default FormTypeDateRange;
+export default FormTypeDateTimeRange;

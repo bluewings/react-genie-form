@@ -20,10 +20,11 @@ function FormTypeMonth({ size, name, schema, defaultValue, onChange }: any) {
     return typeof disabledDateFn === 'function' ? disabledDateFn : undefined;
   }, [schema]);
   return (
-    <DatePicker.MonthPicker
+    <DatePicker
       size={size}
       name={name}
       defaultValue={_defaultValue}
+      picker="month"
       onChange={handleChange}
       disabledDate={disabledDate}
     />

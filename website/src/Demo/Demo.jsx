@@ -19,7 +19,7 @@ const schema = {
   // "date": New in draft 7 Date, for example, 2018-11-13.
   startDate: {
     type: 'string',
-    format: 'date',
+    format: 'date-time',
     readOnly: true,
     // options: {
     //   disabledDate: (val) => {
@@ -33,8 +33,8 @@ const schema = {
   },
   endDate: {
     type: 'string',
-    format: 'date',
-    readOnly: true,
+    format: 'date-time',
+    // readOnly: true,
     // customValidate: ['since-next-month', 'gte(startDate)'],
   },
   // "time": New in draft 7 Time, for example, 20:20:39+00:00
@@ -45,7 +45,7 @@ const schema = {
   // "date-time": Date and time together, for example, 2018-11-13T20:20:39+00:00.
   month: {
     type: 'string',
-    format: 'date',
+    format: 'month',
     // disabledDate:
     // options: {
     //   disabledDate: (val) => {
@@ -111,8 +111,10 @@ const _schema = {
   options: {
     virtual: {
       schedule: {
-        formType: 'monthRange',
+        // formType: 'dateTimeRange',
+        formType: 'dateRange',
         fields: ['startDate', 'endDate'],
+        // readOnly: true
       },
     },
   },
@@ -138,6 +140,7 @@ const form = [
   'startDate',
   'endDate',
   'month',
+  'time',
 
   'etc',
   'description',

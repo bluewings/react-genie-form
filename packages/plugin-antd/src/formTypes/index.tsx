@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Divider } from 'antd';
 import FormTypeDate from './FormTypeDate';
 import FormTypeDateRange from './FormTypeDateRange';
+import FormTypeDateTimeRange from './FormTypeDateTimeRange';
 import FormTypeTime from './FormTypeTime';
 import FormTypeMonth from './FormTypeMonth';
 import FormTypeMonthRange from './FormTypeMonthRange';
@@ -18,6 +19,13 @@ const formTypes: FormType[] = [
   {
     component: FormTypeDateRange,
     test: { type: 'array', formType: ['date-range', 'dateRange', 'daterange'] },
+  },
+  {
+    component: FormTypeDateTimeRange,
+    test: {
+      type: 'array',
+      formType: ['date-time-range', 'dateTimeRange', 'datetimerange'],
+    },
   },
   {
     component: FormTypeMonthRange,
