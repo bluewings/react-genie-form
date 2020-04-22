@@ -167,7 +167,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
 
   // if (dataPath === '') {
   return (
-    <div className={styles.root}>
+    <div className={styles.root} style={{ marginBottom: '-1.5rem' }}>
       {childNodes.map(({ style, reactElement }: any, i: number) => (
         <div
           className={`${styles.inner} ${formGroupStyles.grid}`}
@@ -181,13 +181,13 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
   );
   // }
 
-  return (
-    <>
-      {childNodes.map(({ reactElement }: any, i: number) => (
-        <Fragment key={i}>{reactElement}</Fragment>
-      ))}
-    </>
-  );
+  // return (
+  //   <>
+  //     {childNodes.map(({ reactElement }: any, i: number) => (
+  //       <Fragment key={i}>{reactElement}</Fragment>
+  //     ))}
+  //   </>
+  // );
 }
 
 export default TypeObject;

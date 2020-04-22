@@ -4,6 +4,10 @@
 
 .label {
   position: static;
+
+  &.flexInitial {
+    flex: initial !important;
+  }
 }
 
 .control {

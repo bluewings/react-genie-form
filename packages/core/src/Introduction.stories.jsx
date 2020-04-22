@@ -50,7 +50,7 @@ const schema = {
           enum: ['xbox', 'playstation', 'switch'],
           options: {
             grid: 'initial',
-            label: false,
+            // label: false,
           },
         },
         available: {
@@ -59,7 +59,7 @@ const schema = {
           default: false,
           options: {
             grid: 'initial',
-            label: false,
+            // label: false,
           },
         },
       },
@@ -78,14 +78,15 @@ const _form = [
   { name: 'console' },
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,
-
-  { name: 'schedule', grid: 'initial', label: true },
+  '__divider',
+  { name: 'schedule', label: true },
+  '__divider',
   { name: 'age', grid: 6 },
   '*',
 ];
 
 export const usage = () => (
-  <Form schema={schema} plugin={plugin} form={_form} layout="horizontal" />
+  <Form schema={schema} plugin={plugin} form={_form} />
 );
 
 export const form = () => {

@@ -57,18 +57,18 @@ function FormGroupInner({
   const handleChange = useHandle(
     (event: SyntheticEvent | any, _batch?: boolean) => {
       // event && event.constructor.name === 'SyntheticEvent'
-      if (name) {
-        console.log({
-          name,
-          event: event,
-          nativeEvent: event && event.nativeEvent,
-          target: event && event.target,
-        });
-      }
+      // if (name) {
+      //   console.log({
+      //     name,
+      //     event: event,
+      //     nativeEvent: event && event.nativeEvent,
+      //     target: event && event.target,
+      //   });
+      // }
       const received =
         event && typeof event.target === 'object' ? event.target.value : event;
       const parsed = preParser(received);
-      console.log([received, parsed]);
+      // console.log([received, parsed]);
       setValue((prevValue: any) => parseValue(parsed, prevValue, schema));
       if (_batch !== true && formState.isDirty !== true) {
         setFormState((state) => ({ ...state, isDirty: true }));
@@ -169,6 +169,8 @@ function FormGroupInner({
               formProps.current.isPrimitiveType &&
                 formProps.current.isTouched &&
                 classNames.isTouched,
+              formProps.current.__misc.grid === 'initial' &&
+                classNames.flexInitial,
             )}
             {...formProps.current}
             {...injectProps}
