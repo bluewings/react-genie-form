@@ -111,8 +111,8 @@ const _schema = {
   options: {
     virtual: {
       schedule: {
-        // formType: 'dateTimeRange',
-        formType: 'dateRange',
+        formType: 'dateTimeRange',
+        // formType: 'dateRange',
         fields: ['startDate', 'endDate'],
         // readOnly: true
       },

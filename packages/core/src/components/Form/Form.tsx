@@ -15,26 +15,24 @@ import useContextProvider from '../../hooks/useContext/useContextProvider';
 import { useHandle, useSchema, useValidate } from '../../hooks';
 import { hashCode } from '../../helpers/util';
 
-namespace Form {
-  export interface Props extends ContainerProps {
-    form?: any[];
-    formTypes?: FormType[];
-    parseValue?: any;
-    plugin?: any;
-    customValidate?: StringFunctionMap;
-    errors?: any[];
-    FormGroup?: Component | FunctionComponent;
-    Label?: Component | FunctionComponent;
-    Description?: Component | FunctionComponent;
-    ErrorMessage?: Component | FunctionComponent;
-    ErrorSummary?: Component | FunctionComponent;
-    formatLabel?: Function;
-    formatErrorMessage?: Function;
-    formatEnum?: Function;
-    showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
-    required?: string[];
-    onChangeWithErrors?: (value: any, errors: any) => void;
-  }
+export interface FormProps extends ContainerProps {
+  form?: any[];
+  formTypes?: FormType[];
+  parseValue?: any;
+  plugin?: any;
+  customValidate?: StringFunctionMap;
+  errors?: any[];
+  FormGroup?: Component | FunctionComponent;
+  Label?: Component | FunctionComponent;
+  Description?: Component | FunctionComponent;
+  ErrorMessage?: Component | FunctionComponent;
+  ErrorSummary?: Component | FunctionComponent;
+  formatLabel?: Function;
+  formatErrorMessage?: Function;
+  formatEnum?: Function;
+  showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
+  required?: string[];
+  onChangeWithErrors?: (value: any, errors: any) => void;
 }
 
 const enums = {
@@ -48,7 +46,7 @@ const getPreferredValue = (type: string, value: any) => {
   return values.indexOf(value) !== -1 ? value : values[0];
 };
 
-function Form(
+function FormInner(
   {
     form,
     formTypes,
@@ -75,7 +73,7 @@ function Form(
     onChange,
     onChangeWithErrors,
     ...restProps
-  }: Form.Props,
+  }: FormProps,
   ref: any,
 ) {
   const _schema = useSchema(schema, required);
@@ -169,4 +167,6 @@ function Form(
   );
 }
 
-export default forwardRef(Form);
+const Form = forwardRef<any, FormProps>(FormInner);
+
+export default Form as React.FC<FormProps>;

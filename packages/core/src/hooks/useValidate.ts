@@ -2,6 +2,8 @@ import { useMemo, useRef } from 'react';
 import { get } from 'lodash-es';
 import Ajv from 'ajv';
 
+// const Ajv = ajv as any;
+
 function useValidate(
   jsonSchema: any,
   customValidate: StringFunctionMap | undefined,
@@ -10,6 +12,7 @@ function useValidate(
   const errorRef = useRef<any[]>([]);
 
   const validate = useMemo(() => {
+    // @ts-ignore
     const ajv = new Ajv({ allErrors: true, unknownFormats: 'ignore' });
 
     if (customValidate) {
@@ -83,6 +86,7 @@ function useValidate(
             }
           }
           if (allErrors.length > 0) {
+            // @ts-ignore
             throw new Ajv.ValidationError(allErrors);
           }
           return true;
