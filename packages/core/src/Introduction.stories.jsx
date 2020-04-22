@@ -29,14 +29,28 @@ const schema = {
   properties: {
     startDate: {
       type: 'string',
-      format: 'date',
+      format: 'date-time',
     },
     endDate: {
       type: 'string',
-      format: 'date',
+      format: 'date-time',
     },
     name: {
       type: 'string',
+    },
+    console: {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          enum: ['xbox', 'playstation', 'switch'],
+        },
+        available: {
+          type: 'boolean',
+          formType: 'switch',
+          default: false,
+        },
+      },
     },
     age: {
       type: 'number',
@@ -44,12 +58,27 @@ const schema = {
   },
 };
 
-const _form = ['schedule', '*'];
+const _form = [
+  // <h1>Name & Schedule</h1>,
+  { name: 'name', grid: 6 },
 
-export const usage = () => <Form schema={schema} />;
+  '__divider',
+  { name: 'console', grid: 6 },
+  // <h1>Target company</h1>,
+  // <h1>EventId</h1>,
+
+  'schedule',
+  '*',
+];
+
+export const usage = () => (
+  <Form schema={schema} plugin={plugin} form={_form} layout="horizontal" />
+);
 
 export const form = () => {
-  return <Form schema={schema} plugin={plugin} form={_form} />;
+  return (
+    <Form schema={schema} plugin={plugin} form={_form} layout="horizontal" />
+  );
 };
 
 // export const iconByPeriodCondition = () => (
