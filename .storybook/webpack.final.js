@@ -2,11 +2,19 @@ module.exports = (config) => {
   config.module.rules = [
     // process scss files
     {
-      test: /\.scss$/,
+      test: /\.(css|scss)$/,
       exclude: /\/(node_modules)\//,
       use: [
         require.resolve('style-loader'),
-        require.resolve('css-loader'),
+        {
+          loader: require.resolve('css-loader'),
+          options: {
+            importLoaders: 1,
+            modules: {
+              getLocalIdent: require('react-dev-utils/getCSSModuleLocalIdent'),
+            },
+          },
+        },
         {
           loader: require.resolve('postcss-loader'),
           options: {
