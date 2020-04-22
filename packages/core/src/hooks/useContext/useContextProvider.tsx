@@ -129,7 +129,12 @@ function useFormProps({
       .map((e: any) => {
         let next = e;
         if (virtual[e.name] && Array.isArray(virtual[e.name].fields)) {
-          next = { type: '__virtual', ...virtual[e.name] };
+          next = {
+            type: '__virtual',
+            ...e,
+            name: undefined,
+            ...virtual[e.name],
+          };
         }
         if (next.type === '__virtual' && Array.isArray(next.fields)) {
           virtualFields = [...virtualFields, ...next.fields];

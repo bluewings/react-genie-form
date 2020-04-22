@@ -37,6 +37,10 @@ const schema = {
     },
     name: {
       type: 'string',
+      options: {
+        // grid: 3,
+        // label: false,
+      },
     },
     console: {
       type: 'object',
@@ -44,11 +48,19 @@ const schema = {
         name: {
           type: 'string',
           enum: ['xbox', 'playstation', 'switch'],
+          options: {
+            grid: 'initial',
+            label: false,
+          },
         },
         available: {
           type: 'boolean',
           formType: 'switch',
           default: false,
+          options: {
+            grid: 'initial',
+            label: false,
+          },
         },
       },
     },
@@ -60,14 +72,15 @@ const schema = {
 
 const _form = [
   // <h1>Name & Schedule</h1>,
-  { name: 'name', grid: 6 },
+  { name: 'name' },
 
   '__divider',
-  { name: 'console', grid: 6 },
+  { name: 'console' },
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,
 
-  'schedule',
+  { name: 'schedule', grid: 'initial', label: true },
+  { name: 'age', grid: 6 },
   '*',
 ];
 

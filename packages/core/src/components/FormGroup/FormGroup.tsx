@@ -36,6 +36,7 @@ function FormGroupInner({
   dataPath,
   errors,
   showError,
+  __misc,
 }: any) {
   const [_defaultValue, isSchemaDefault] = useMemo(
     () =>
@@ -104,6 +105,7 @@ function FormGroupInner({
       isDirty: formState.isDirty,
       isFocused: formState.isFocused,
       isTouched: formState.isTouched,
+      __misc: __misc || {},
     };
     if (Array.isArray(schema.enum)) {
       props = {
@@ -148,27 +150,32 @@ function FormGroupInner({
     formatLabel,
     formatErrorMessage,
     formatEnum,
+    __misc,
   ]);
 
   const Label = useCallback(
-    (injectProps: any) => (
-      <BaseLabel
-        className={cx(
-          classNames.label,
-          formProps.current.isPrimitiveType &&
-            formProps.current.isDirty &&
-            classNames.isDirty,
-          formProps.current.isPrimitiveType &&
-            formProps.current.isFocused &&
-            classNames.isFocused,
-          formProps.current.isPrimitiveType &&
-            formProps.current.isTouched &&
-            classNames.isTouched,
-        )}
-        {...formProps.current}
-        {...injectProps}
-      />
-    ),
+    (injectProps: any) => {
+      return (
+        formProps.current.__misc.showLabel && (
+          <BaseLabel
+            className={cx(
+              classNames.label,
+              formProps.current.isPrimitiveType &&
+                formProps.current.isDirty &&
+                classNames.isDirty,
+              formProps.current.isPrimitiveType &&
+                formProps.current.isFocused &&
+                classNames.isFocused,
+              formProps.current.isPrimitiveType &&
+                formProps.current.isTouched &&
+                classNames.isTouched,
+            )}
+            {...formProps.current}
+            {...injectProps}
+          />
+        )
+      );
+    },
     [BaseLabel],
   );
 

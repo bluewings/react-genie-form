@@ -6,14 +6,18 @@ import { get } from 'lodash-es';
 import styles from './TypeObject.module.scss';
 import formGroupStyles from '../components/FormGroup/FormGroup.module.scss';
 
-const getMaxWidth = (grid: any) => {
-  const maxWidth =
+const getFlexStyle = (grid: any) => {
+  if (grid === 'initial') {
+    return { flex: 'initial' };
+  }
+  let maxWidth: any =
     typeof grid === 'number'
       ? (grid / 12) * 100
       : typeof grid === 'string' && grid.match(/^[0-9]+%$/)
       ? ~~grid.replace(/%/, '')
       : 100;
-  return `${Math.min(100, maxWidth)}%`;
+  maxWidth = `${Math.min(100, maxWidth)}%`;
+  return { flex: `0 0 ${maxWidth}`, maxWidth };
 };
 
 const identity = (e: any) => e;
@@ -50,128 +54,132 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
         }),
         {},
       );
-      items = form
-        .reduce((items: any, e: any) => {
-          const { name, reactElement, type, fields } = e;
-          if (dict[name]) {
-            return [
-              ...items,
-              {
-                ...dict[name],
-                ...e,
-                schema: { ...dict[name].schema, ...e.schema },
+      items = form.reduce((items: any, e: any) => {
+        const { name, reactElement, type, fields } = e;
+        if (dict[name]) {
+          return [
+            ...items,
+            {
+              ...dict[name],
+              ...e,
+              schema: { ...dict[name].schema, ...e.schema },
+            },
+          ];
+        } else if (name === '__reactElement' && isValidElement(reactElement)) {
+          return [...items, { ...e, reactElement }];
+        } else if (
+          type === '__virtual' &&
+          Array.isArray(fields) &&
+          fields.length === fields.filter((name) => dict[name]).length
+        ) {
+          return [
+            ...items,
+            {
+              ...e,
+              schema: {
+                type: '__virtual',
+                __fields: fields.map((e) => dict[e]),
+                __dataPaths: fields
+                  .map((e: any) => get(dict, [e, 'dataPath']))
+                  .filter(identity),
+                __schema: { ...e, type: 'array' },
               },
-            ];
-          } else if (
-            name === '__reactElement' &&
-            isValidElement(reactElement)
-          ) {
-            return [...items, { ...e, reactElement }];
-          } else if (
-            type === '__virtual' &&
-            Array.isArray(fields) &&
-            fields.length === fields.filter((name) => dict[name]).length
-          ) {
-            return [
-              ...items,
-              {
-                ...e,
-                schema: {
-                  type: '__virtual',
-                  __fields: fields.map((e) => dict[e]),
-                  __dataPaths: fields
-                    .map((e: any) => get(dict, [e, 'dataPath']))
-                    .filter(identity),
-                  __schema: { ...e, type: 'array' },
-                },
-                isRequired:
-                  fields.filter((e) => dict[e] && dict[e].isRequired).length >
-                  0,
-                defaultValue: fields.map((name: string) =>
-                  get(defaultValue, [name]),
-                ),
-                onChange: (values: any, batch: boolean) => {
-                  if (
-                    Array.isArray(values) &&
-                    values.length === fields.length
-                  ) {
-                    handleChange(
-                      values.reduce(
-                        (accum: any, value: any, i: number) => ({
-                          ...accum,
-                          [fields[i]]: value,
-                        }),
-                        {},
-                      ),
-                      batch === true,
-                    );
-                  }
-                },
+              isRequired:
+                fields.filter((e) => dict[e] && dict[e].isRequired).length > 0,
+              defaultValue: fields.map((name: string) =>
+                get(defaultValue, [name]),
+              ),
+              onChange: (values: any, batch: boolean) => {
+                if (Array.isArray(values) && values.length === fields.length) {
+                  handleChange(
+                    values.reduce(
+                      (accum: any, value: any, i: number) => ({
+                        ...accum,
+                        [fields[i]]: value,
+                      }),
+                      {},
+                    ),
+                    batch === true,
+                  );
+                }
               },
-            ];
-          }
-          const Found = (
-            formTypes.find(({ test }: any) => test({ type: name })) || {}
-          ).component;
-          return Found ? [...items, { ...e, reactElement: <Found /> }] : items;
-        }, [])
-        .map((e: any) => {
-          const maxWidth = getMaxWidth(e.grid);
-          return { style: { flex: `0 0 ${maxWidth}`, maxWidth }, ...e };
-        });
+            },
+          ];
+        }
+        const Found = (
+          formTypes.find(({ test }: any) => test({ type: name })) || {}
+        ).component;
+        return Found ? [...items, { ...e, reactElement: <Found /> }] : items;
+      }, []);
     } else {
       items = properties;
     }
-    return items.map((item: any) => {
-      const {
-        defaultValue,
-        name,
-        onChange,
-        reactElement,
-        schema,
-        isRequired,
-        FormComponent,
-        Label,
-        Description,
-        ErrorMessage,
-      } = item;
-      return {
-        ...item,
-        reactElement: reactElement ? (
-          reactElement
-        ) : (
-          <FormGroup
-            defaultValue={defaultValue}
-            name={name}
-            onChange={onChange}
-            parentDataPath={dataPath}
-            schema={schema}
-            isRequired={isRequired}
-            FormComponent={FormComponent}
-            Label={Label}
-            Description={Description}
-            ErrorMessage={ErrorMessage}
-          />
-        ),
-      };
-    });
+    return items
+      .map((e: any) => {
+        const grid =
+          e.grid || (e.schema && e.schema.options && e.schema.options.grid);
+        const showLabel = !(
+          e.label === false ||
+          (e.schema && e.schema.options && e.schema.options.label === false)
+        );
+        return {
+          style: getFlexStyle(grid),
+          ...e,
+          __misc: { grid, showLabel },
+        };
+      })
+      .map((item: any) => {
+        const {
+          defaultValue,
+          name,
+          onChange,
+          reactElement,
+          schema,
+          isRequired,
+          FormComponent,
+          Label,
+          Description,
+          ErrorMessage,
+          __misc,
+        } = item;
+        return {
+          ...item,
+          reactElement: reactElement ? (
+            reactElement
+          ) : (
+            <FormGroup
+              defaultValue={defaultValue}
+              name={name}
+              onChange={onChange}
+              parentDataPath={dataPath}
+              schema={schema}
+              isRequired={isRequired}
+              FormComponent={FormComponent}
+              Label={Label}
+              Description={Description}
+              ErrorMessage={ErrorMessage}
+              __misc={__misc}
+            />
+          ),
+        };
+      });
   }, [properties, dataPath, form]);
 
-  if (dataPath === '') {
-    return (
-      <div className={styles.root}>
-        {childNodes.map(({ style, reactElement }: any, i: number) => (
-          <div
-            className={`${styles.inner} ${formGroupStyles.grid}`}
-            key={i}
-            style={style}
-          >
-            {reactElement}
-          </div>
-        ))}
-      </div>
-    );
-  }
+  // if (dataPath === '') {
+  return (
+    <div className={styles.root}>
+      {childNodes.map(({ style, reactElement }: any, i: number) => (
+        <div
+          className={`${styles.inner} ${formGroupStyles.grid}`}
+          key={i}
+          style={style}
+        >
+          {reactElement}
+        </div>
+      ))}
+    </div>
+  );
+  // }
 
   return (
     <>
