@@ -1,5 +1,4 @@
 import { get } from 'lodash-es';
-import { deflateSync } from 'zlib';
 import { format as dateFormat } from 'date-fns';
 
 // https://json-schema.org/understanding-json-schema/reference/string.html

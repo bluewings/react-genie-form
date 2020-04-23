@@ -1,4 +1,5 @@
 import * as React from 'react';
+import TypeArray from './TypeArray';
 import TypeBoolean from './TypeBoolean';
 import TypeDate from './TypeDate';
 import TypeNumber from './TypeNumber';
@@ -7,6 +8,10 @@ import TypeString from './TypeString';
 import TypeVirtual from './TypeVirtual';
 
 const formTypes: FormType[] = [
+  {
+    component: TypeArray,
+    test: { type: 'array' },
+  },
   {
     component: TypeDate,
     test: { type: 'string', format: ['date', 'date-time', 'time', 'month'] },

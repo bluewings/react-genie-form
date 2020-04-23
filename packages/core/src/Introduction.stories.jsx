@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import { Provider } from '@flyer/core-client';
 // import Flyer from './Flyer';
 // import { flyer } from '../../data';
@@ -42,6 +42,24 @@ const schema = {
         // label: false,
       },
     },
+    testArray: {
+      type: 'array',
+      minItems: 2,
+      maxItems: 3,
+      items: {
+        type: 'string',
+        default: 'abc',
+        // type: 'object',
+        // properties: {
+        //   name: {
+        //     type: 'string',
+        //   },
+        //   age: {
+        //     type: 'number',
+        //   },
+        // },
+      },
+    },
     console: {
       type: 'object',
       properties: {
@@ -72,22 +90,44 @@ const schema = {
 
 const _form = [
   // <h1>Name & Schedule</h1>,
-  { name: 'name' },
+  // { name: 'name' },
 
-  '__divider',
-  { name: 'console' },
+  // '__divider',
+  'testArray',
+  // { name: 'console' },
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,
-  '__divider',
-  { name: 'schedule', label: true },
-  '__divider',
-  { name: 'age', grid: 6 },
-  '*',
+  // '__divider',
+  // { name: 'schedule', label: true },
+  // '__divider',
+  // { name: 'age', grid: 6 },
+  // '*',
 ];
 
-export const usage = () => (
-  <Form schema={schema} plugin={plugin} form={_form} />
-);
+export const usage = () => {
+  const [value, setValue] = useState({});
+  return (
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <Form
+              schema={schema}
+              defaultValue={value}
+              onChange={setValue}
+              plugin={plugin}
+              form={_form}
+              layout="horizontal"
+            />
+          </td>
+          <td style={{ verticalAlign: 'top' }}>
+            <pre>{JSON.stringify(value, null, 2)}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  );
+};
 
 export const form = () => {
   return (

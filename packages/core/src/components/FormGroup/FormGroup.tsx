@@ -154,30 +154,27 @@ function FormGroupInner({
   ]);
 
   const Label = useCallback(
-    (injectProps: any) => {
-      return (
-        formProps.current.__misc.showLabel && (
-          <BaseLabel
-            className={cx(
-              classNames.label,
-              formProps.current.isPrimitiveType &&
-                formProps.current.isDirty &&
-                classNames.isDirty,
-              formProps.current.isPrimitiveType &&
-                formProps.current.isFocused &&
-                classNames.isFocused,
-              formProps.current.isPrimitiveType &&
-                formProps.current.isTouched &&
-                classNames.isTouched,
-              formProps.current.__misc.grid === 'initial' &&
-                classNames.flexInitial,
-            )}
-            {...formProps.current}
-            {...injectProps}
-          />
-        )
-      );
-    },
+    (injectProps: any) =>
+      formProps.current.__misc.showLabel ? (
+        <BaseLabel
+          className={cx(
+            classNames.label,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isDirty &&
+              classNames.isDirty,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isFocused &&
+              classNames.isFocused,
+            formProps.current.isPrimitiveType &&
+              formProps.current.isTouched &&
+              classNames.isTouched,
+            formProps.current.__misc.grid === 'initial' &&
+              classNames.flexInitial,
+          )}
+          {...formProps.current}
+          {...injectProps}
+        />
+      ) : null,
     [BaseLabel],
   );
 
