@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useMemo, useState, useRef } from 'react';
 import { get } from 'lodash-es';
 import FormGroup from '../components/FormGroup';
-import { useFormProps, useHandle } from '../hooks';
+import { useHandle } from '../hooks';
 
 function TypeArray({
   dataPath,
@@ -15,10 +15,24 @@ function TypeArray({
   Label,
   Description,
   ErrorMessage,
+  ButtonAdd,
+  ButtonRemove,
 }: any) {
-  const { form, formTypes }: any = useFormProps();
-
   const [tick, setTick] = useState('initial');
+
+  console.log('>>> wow');
+
+  const BtnAdd = useMemo(() => {
+    return ButtonAdd
+      ? ButtonAdd
+      : (props: any) => <button {...props}>add</button>;
+  }, [ButtonAdd]);
+
+  const BtnRemove = useMemo(() => {
+    return ButtonRemove
+      ? ButtonRemove
+      : (props: any) => <button {...props}>remove</button>;
+  }, [ButtonRemove]);
 
   // console.log(form, formTypes);
   const type = useMemo(
@@ -131,19 +145,6 @@ function TypeArray({
         // return e.reactElement;
         return (
           <div key={i} style={{ display: 'flex', flex: '1 1 auto' }}>
-            {/* <pre>
-              {JSON.stringify(
-                {
-                  defaultValue: e,
-                  name,
-                  parentDataPath: `${dataPath}.${i}`,
-                  itemsSchema,
-                },
-                null,
-                2,
-              )}
-            </pre> */}
-
             <FormGroup
               defaultValue={e.value}
               name={`${i}`}
@@ -151,30 +152,26 @@ function TypeArray({
               parentDataPath={dataPath}
               schema={itemsSchema}
             />
-            {/* <h2>[{JSON.stringify(e.value)}]</h2> */}
             {minItems < maxItems && (
-              <button
+              <BtnRemove
                 onClick={e.handleRemove}
                 disabled={_value.length < minItems + 1}
               >
                 del
-              </button>
+              </BtnRemove>
             )}
           </div>
         );
-        // return (
-
-        // );
       })}
-      <hr />
+      {/* <hr /> */}
       {minItems < maxItems && (
-        <button onClick={handleAddClick} disabled={maxItems <= _value.length}>
+        <BtnAdd onClick={handleAddClick} disabled={maxItems <= _value.length}>
           add
-        </button>
+        </BtnAdd>
       )}
 
       {/* <pre> {JSON.stringify({ _value, defaultValue }, null, 2)}</pre> */}
-      <pre> {JSON.stringify(schema, null, 2)}</pre>
+      {/* <pre> {JSON.stringify(schema, null, 2)}</pre> */}
     </div>
   );
 }

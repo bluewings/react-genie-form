@@ -6,7 +6,7 @@ module.exports = {
   ],
   addons: [
     '@storybook/addon-docs',
-    '@storybook/preset-typescript',
+    '@storybook/preset-create-react-app',
   ],
   webpackFinal,
 };

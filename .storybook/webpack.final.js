@@ -1,40 +1,26 @@
+const path = require('path')
+const glob = require('glob');
+
+const packages = glob.sync(path.join(__dirname, '..', 'packages', '*'));
+
+const overrideRule = (rule) => {
+  if (rule.test && rule.test.toString().match(/jsx/) && rule.enforce !== 'pre' && Array.isArray(rule.include)) {
+    rule.include = [...rule.include, ...packages];
+  }
+  if (Array.isArray(rule.oneOf)) {
+    rule.oneOf.forEach(overrideRule);
+  }
+};
+
 module.exports = (config) => {
-  config.module.rules = [
-    // process scss files
-    {
-      test: /\.(css|scss)$/,
-      exclude: /\/(node_modules)\//,
-      use: [
-        require.resolve('style-loader'),
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-            modules: {
-              getLocalIdent: require('react-dev-utils/getCSSModuleLocalIdent'),
-            },
-          },
-        },
-        {
-          loader: require.resolve('postcss-loader'),
-          options: {
-            ident: 'postcss',
-            plugins: () => [
-              require('postcss-flexbugs-fixes'),
-              require('postcss-preset-env')({
-                autoprefixer: {
-                  flexbox: 'no-2009',
-                },
-                stage: 3,
-              }),
-              require('postcss-normalize')(),
-            ],
-          },
-        },
-        require.resolve('sass-loader'),
-      ],
-    },
-    ...config.module.rules,
-  ];
+  config.module.rules.forEach(overrideRule);
+  console.log(config)
+  config.resolve = {
+    ...config.resolve,
+    alias: {
+      ...config.resolve.alias,
+      '@react-genie-form/core': path.join(__dirname, '..', 'packages', 'core', 'src'),
+    }
+  }
   return config;
 };

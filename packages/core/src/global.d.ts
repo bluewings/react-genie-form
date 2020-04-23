@@ -14,6 +14,7 @@ declare interface Hint {
 }
 
 declare type FormType = {
+  name?: string;
   component: Component<any> | FunctionComponent<any>;
   test:
     | {

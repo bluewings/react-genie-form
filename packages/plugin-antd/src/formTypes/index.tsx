@@ -11,6 +11,7 @@ import FormTypeSlider from './FormTypeSlider';
 import FormTypeSwitch from './FormTypeSwitch';
 import FormTypeTextarea from './FormTypeTextarea';
 import FormTypeURI from './FormTypeURI';
+import TypeArray from './TypeArray';
 import TypeBoolean from './TypeBoolean';
 import TypeNumber from './TypeNumber';
 import TypeString from './TypeString';
@@ -74,6 +75,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeURI,
     test: { type: 'string', formType: 'uri' },
+  },
+  {
+    component: TypeArray,
+    test: { type: 'array' },
   },
   {
     component: TypeBoolean,

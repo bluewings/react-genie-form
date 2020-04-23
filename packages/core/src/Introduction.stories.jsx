@@ -44,20 +44,32 @@ const schema = {
     },
     testArray: {
       type: 'array',
-      minItems: 2,
-      maxItems: 3,
+      minItems: 1,
+      maxItems: 5,
       items: {
-        type: 'string',
-        default: 'abc',
-        // type: 'object',
-        // properties: {
-        //   name: {
-        //     type: 'string',
-        //   },
-        //   age: {
-        //     type: 'number',
-        //   },
-        // },
+        // type: 'string',
+        // default: 'abc',
+        type: 'object',
+        options: {
+          grid: 'initial',
+        },
+        properties: {
+          age: {
+            type: 'boolean',
+            formType: 'switch',
+            options: {
+              grid: 'initial',
+              label: false,
+            },
+          },
+          name: {
+            type: 'string',
+            options: {
+              grid: 'initial',
+              label: false,
+            },
+          },
+        },
       },
     },
     console: {
@@ -107,25 +119,35 @@ const _form = [
 export const usage = () => {
   const [value, setValue] = useState({});
   return (
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <Form
-              schema={schema}
-              defaultValue={value}
-              onChange={setValue}
-              plugin={plugin}
-              form={_form}
-              layout="horizontal"
-            />
-          </td>
-          <td style={{ verticalAlign: 'top' }}>
-            <pre>{JSON.stringify(value, null, 2)}</pre>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div>
+      <Form
+        schema={schema}
+        defaultValue={value}
+        onChange={setValue}
+        plugin={plugin}
+        form={_form}
+        layout="horizontal"
+      />
+      {/* <table>
+        <tbody>
+          <tr>
+            <td style={{ verticalAlign: 'top' }}>
+              <Form
+                schema={schema}
+                defaultValue={value}
+                onChange={setValue}
+                plugin={plugin}
+                form={_form}
+                layout="horizontal"
+              />
+            </td>
+            <td style={{ verticalAlign: 'top' }}>
+              <pre>{JSON.stringify(value, null, 2)}</pre>
+            </td>
+          </tr>
+        </tbody>
+      </table> */}
+    </div>
   );
 };
 
