@@ -36,7 +36,7 @@ function FormGroupInner({
   dataPath,
   errors,
   showError,
-  __misc,
+  __ui,
 }: any) {
   const [_defaultValue, isSchemaDefault] = useMemo(
     () =>
@@ -105,7 +105,7 @@ function FormGroupInner({
       isDirty: formState.isDirty,
       isFocused: formState.isFocused,
       isTouched: formState.isTouched,
-      __misc: __misc || {},
+      __ui: __ui || {},
     };
     if (Array.isArray(schema.enum)) {
       props = {
@@ -150,12 +150,12 @@ function FormGroupInner({
     formatLabel,
     formatErrorMessage,
     formatEnum,
-    __misc,
+    __ui,
   ]);
 
   const Label = useCallback(
     (injectProps: any) =>
-      formProps.current.__misc.showLabel ? (
+      formProps.current.__ui.showLabel ? (
         <BaseLabel
           className={cx(
             classNames.label,
@@ -168,8 +168,7 @@ function FormGroupInner({
             formProps.current.isPrimitiveType &&
               formProps.current.isTouched &&
               classNames.isTouched,
-            formProps.current.__misc.grid === 'initial' &&
-              classNames.flexInitial,
+            formProps.current.__ui.grid === 'initial' && classNames.flexInitial,
           )}
           {...formProps.current}
           {...injectProps}

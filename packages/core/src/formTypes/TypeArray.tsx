@@ -123,7 +123,7 @@ function TypeArray({
         //     // Label={Label}
         //     // Description={Description}
         //     // ErrorMessage={ErrorMessage}
-        //     // __misc={__misc}
+        //     // __ui={__ui}
         //   />
         // ),
       };

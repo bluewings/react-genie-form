@@ -117,15 +117,19 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
     return items
       .map((e: any) => {
         const grid =
-          e.grid || (e.schema && e.schema.options && e.schema.options.grid);
+          e.grid ||
+          // e['ui:grid'] ||
+          (e.schema && e.schema.options && e.schema.options['ui:grid']);
         const showLabel = !(
           e.label === false ||
-          (e.schema && e.schema.options && e.schema.options.label === false)
+          (e.schema &&
+            e.schema.options &&
+            e.schema.options['ui:label'] === false)
         );
         return {
           style: getFlexStyle(grid),
           ...e,
-          __misc: { grid, showLabel },
+          __ui: { grid, showLabel },
         };
       })
       .map((item: any) => {
@@ -140,7 +144,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
           Label,
           Description,
           ErrorMessage,
-          __misc,
+          __ui,
         } = item;
         return {
           ...item,
@@ -158,7 +162,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
               Label={Label}
               Description={Description}
               ErrorMessage={ErrorMessage}
-              __misc={__misc}
+              __ui={__ui}
             />
           ),
         };

@@ -38,8 +38,8 @@ const schema = {
     name: {
       type: 'string',
       options: {
-        // grid: 3,
-        // label: false,
+        // 'ui:grid': 3,
+        // 'ui:label': false,
       },
     },
     testArray: {
@@ -51,22 +51,22 @@ const schema = {
         // default: 'abc',
         type: 'object',
         options: {
-          grid: 'initial',
+          'ui:grid': 'initial',
         },
         properties: {
           age: {
             type: 'boolean',
             formType: 'switch',
             options: {
-              grid: 'initial',
-              label: false,
+              'ui:grid': 'initial',
+              'ui:label': false,
             },
           },
           name: {
             type: 'string',
             options: {
-              grid: 'initial',
-              label: false,
+              'ui:grid': 'initial',
+              'ui:label': false,
             },
           },
         },
@@ -79,8 +79,8 @@ const schema = {
           type: 'string',
           enum: ['xbox', 'playstation', 'switch'],
           options: {
-            grid: 'initial',
-            // label: false,
+            'ui:grid': 'initial',
+            // 'ui:label': false,
           },
         },
         available: {
@@ -88,8 +88,8 @@ const schema = {
           formType: 'switch',
           default: false,
           options: {
-            grid: 'initial',
-            // label: false,
+            'ui:grid': 'initial',
+            // 'ui:label': false,
           },
         },
       },
@@ -110,9 +110,9 @@ const _form = [
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,
   // '__divider',
-  // { name: 'schedule', label: true },
+  // { name: 'schedule', 'ui:label': true },
   // '__divider',
-  // { name: 'age', grid: 6 },
+  // { name: 'age', 'ui:grid': 6 },
   // '*',
 ];
 
