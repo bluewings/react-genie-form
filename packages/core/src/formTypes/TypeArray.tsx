@@ -15,24 +15,18 @@ function TypeArray({
   Label,
   Description,
   ErrorMessage,
-  ButtonAdd,
-  ButtonRemove,
+  Add,
+  Remove,
 }: any) {
   const [tick, setTick] = useState('initial');
 
-  console.log('>>> wow');
-
   const BtnAdd = useMemo(() => {
-    return ButtonAdd
-      ? ButtonAdd
-      : (props: any) => <button {...props}>add</button>;
-  }, [ButtonAdd]);
+    return Add ? Add : (props: any) => <button {...props}>add</button>;
+  }, [Add]);
 
   const BtnRemove = useMemo(() => {
-    return ButtonRemove
-      ? ButtonRemove
-      : (props: any) => <button {...props}>remove</button>;
-  }, [ButtonRemove]);
+    return Remove ? Remove : (props: any) => <button {...props}>remove</button>;
+  }, [Remove]);
 
   // console.log(form, formTypes);
   const type = useMemo(

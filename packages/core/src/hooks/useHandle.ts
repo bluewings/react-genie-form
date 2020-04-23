@@ -5,7 +5,7 @@ function useHandle(callback?: Function) {
   handle.current = callback;
   return useCallback((...args: any[]) => {
     if (typeof handle.current === 'function') {
-      handle.current(...args);
+      return handle.current(...args);
     }
   }, []);
 }

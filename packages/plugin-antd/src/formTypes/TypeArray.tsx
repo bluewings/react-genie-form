@@ -5,7 +5,7 @@ import { Button } from 'antd';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { TypeArray as BaseTypeArray } from '@react-genie-form/core';
 
-const ButtonAdd = (props: any) => {
+const Add = (props: any) => {
   return (
     <Button type="dashed" icon={<PlusOutlined />} {...props}>
       Add item
@@ -13,7 +13,7 @@ const ButtonAdd = (props: any) => {
   );
 };
 
-const ButtonRemove = ({ disabled, onClick }: any) => {
+const Remove = ({ disabled, onClick }: any) => {
   // return <MinusCircleOutlined />;
 
   return (
@@ -38,13 +38,7 @@ function TypeArray(props: any) {
   //       : BaseInput,
   //   [schema],
   // );
-  return (
-    <BaseTypeArray
-      {...props}
-      ButtonAdd={ButtonAdd}
-      ButtonRemove={ButtonRemove}
-    />
-  );
+  return <BaseTypeArray {...props} Add={Add} Remove={Remove} />;
 }
 
 export default TypeArray;

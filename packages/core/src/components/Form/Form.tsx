@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {
   Component,
   FunctionComponent,
@@ -33,6 +33,7 @@ export interface FormProps extends ContainerProps {
   showError?: Boolean | 'always' | 'dirty' | 'touched' | 'dirty+touched';
   required?: string[];
   onChangeWithErrors?: (value: any, errors: any) => void;
+  onSubmit?: (value: any) => void;
 }
 
 const enums = {
@@ -72,6 +73,7 @@ function FormInner(
     formatEnum,
     onChange,
     onChangeWithErrors,
+    onSubmit,
     ...restProps
   }: FormProps,
   ref: any,
@@ -142,27 +144,47 @@ function FormInner(
     showError,
   });
 
+  const getValue = useHandle(async () => {
+    const value = currValue.current;
+    const errors: any[] = await validate(value);
+    return { value, errors };
+  });
+
   useImperativeHandle(ref, () => ({
-    getValue: async () => {
-      const value = currValue.current;
-      const errors: any[] = await validate(value);
-      return { value, errors };
-    },
+    getValue,
+    // getValue: async () => {
+    //   const value = currValue.current;
+    //   const errors: any[] = await validate(value);
+    //   return { value, errors };
+    // },
   }));
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    // console.log('get value');
+
+    if (typeof onSubmit === 'function') {
+      const { value, errors } = await getValue();
+      console.log(value, errors);
+      onSubmit(value);
+    }
+  };
 
   return (
     <Provider value={value}>
-      <Container
-        {...restProps}
-        schema={_schema}
-        defaultValue={defaultValue}
-        layout={_layout}
-        labelAlign={_labelAlign}
-        size={_size}
-        plugin={plugin}
-        onChange={handleChange}
-        showErrorSummary={showErrorSummary}
-      />
+      <form onSubmit={handleSubmit}>
+        <Container
+          {...restProps}
+          schema={_schema}
+          defaultValue={defaultValue}
+          layout={_layout}
+          labelAlign={_labelAlign}
+          size={_size}
+          plugin={plugin}
+          onChange={handleChange}
+          showErrorSummary={showErrorSummary}
+        />
+      </form>
     </Provider>
   );
 }
