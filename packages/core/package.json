@@ -41,7 +41,9 @@
   },
   "scripts": {
     "prestart": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
-    "start": "rollup -c --watch"
+    "start": "rollup -c --watch",
+    "build": "rollup -c",
+    "postbuild": "cp -r dist/core/src/* dist && rm -rf dist/core"
   },
   "files": [
     "dist",

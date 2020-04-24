@@ -19,6 +19,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
+    "@react-genie-form/core": "^0.1.51",
     "antd": "^4.1.4",
     "classnames": "^2.2.6",
     "lodash-es": "^4.17.15"
@@ -39,7 +40,8 @@
   },
   "scripts": {
     "prestart": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",
-    "start": "rollup -c --watch"
+    "start": "rollup -c --watch",
+    "build": "rollup -c"
   },
   "files": [
     "dist",
