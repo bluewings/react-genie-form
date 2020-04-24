@@ -13,7 +13,9 @@ function BaseFormGroup({
   classNames,
   onFocus,
   onBlur,
+  __ui,
 }: any) {
+  // const isHidden = !__ui.show;
   return (
     <div className={className} onFocus={onFocus} onBlur={onBlur}>
       {/* <Counter> </Counter> */}

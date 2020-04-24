@@ -116,6 +116,17 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
     }
     return items
       .map((e: any) => {
+        const __ui: any = [
+          ...Object.entries(e.schema || {}),
+          ...Object.entries((e.schema && e.schema.options) || {}),
+          ...Object.entries(e),
+        ]
+          .filter(([k]) => k.match(/^ui:/))
+          .reduce(
+            (accum, [k, v]) => ({ ...accum, [k.replace(/^ui:/, '')]: v }),
+            { show: true, label: true },
+          );
+        console.log('ui', __ui);
         const grid =
           e.grid ||
           // e['ui:grid'] ||
@@ -126,11 +137,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
             e.schema.options &&
             e.schema.options['ui:label'] === false)
         );
-        return {
-          style: getFlexStyle(grid),
-          ...e,
-          __ui: { grid, showLabel },
-        };
+        return { style: getFlexStyle(__ui.grid), ...e, __ui };
       })
       .map((item: any) => {
         const {

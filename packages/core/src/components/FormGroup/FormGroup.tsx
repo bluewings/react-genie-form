@@ -155,7 +155,7 @@ function FormGroupInner({
 
   const Label = useCallback(
     (injectProps: any) =>
-      formProps.current.__ui.showLabel ? (
+      formProps.current.__ui.label ? (
         <BaseLabel
           className={cx(
             classNames.label,

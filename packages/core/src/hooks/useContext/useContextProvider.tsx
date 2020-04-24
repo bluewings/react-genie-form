@@ -119,12 +119,17 @@ function useFormProps({
     );
     let virtualFields: string[] = [];
     let merged = (form || ['*'])
-      .map((name: any) =>
-        typeof name === 'string'
-          ? { name }
-          : typeof name === 'object' && isValidElement(name)
-          ? { name: '__reactElement', reactElement: name }
-          : name,
+      .map((name: any) => (typeof name === 'string' ? { name } : name))
+      .map((e: any) =>
+        isValidElement(e)
+          ? { name: '__reactElement', reactElement: e }
+          : Object.entries(e).reduce(
+              (accum: any, [k, v]) => ({
+                ...accum,
+                [k === 'name' ? k : `ui:${k.replace(/^ui:/, '')}`]: v,
+              }),
+              {},
+            ),
       )
       .map((e: any) => {
         let next = e;
