@@ -11,6 +11,7 @@
     "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^5.3.18",
     "babel-loader": "^8.1.0",
+    "js-yaml": "^3.13.1",
     "lerna": "^3.20.2",
     "node-sass": "^4.13.1",
     "prettier": "^2.0.4",

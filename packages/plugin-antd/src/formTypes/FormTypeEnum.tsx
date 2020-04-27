@@ -1,14 +1,20 @@
 import * as React from 'react';
 import { useMemo } from 'react';
-import { get } from 'lodash-es';
 import { Select } from 'antd';
 
 const { Option } = Select;
 
-function FormTypeEnum({ size, schema, defaultValue, onChange }: any) {
+function FormTypeEnum({ size, schema: _schema, defaultValue, onChange }: any) {
+  const [schema, mode]: any[] = useMemo(
+    () =>
+      _schema?.type === 'array'
+        ? [_schema?.items, 'multiple']
+        : [_schema, undefined],
+    [_schema],
+  );
   const options = useMemo(() => {
-    const alias = get(schema, ['options', 'alias'], {});
-    return get(schema, ['enum'], []).map((s: string, i: number) => (
+    const alias = schema?.options?.alias || {};
+    return (schema?.enum || []).map((s: string, i: number) => (
       <Option key={i} value={s}>
         {alias[s] || s}
       </Option>
@@ -16,6 +22,7 @@ function FormTypeEnum({ size, schema, defaultValue, onChange }: any) {
   }, [schema]);
   return (
     <Select
+      mode={mode}
       size={size}
       defaultValue={defaultValue}
       onChange={onChange}

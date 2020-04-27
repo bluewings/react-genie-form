@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Divider } from 'antd';
+import FormTypeCode from './FormTypeCode';
 import FormTypeDate from './FormTypeDate';
 import FormTypeDateRange from './FormTypeDateRange';
 import FormTypeDateTimeRange from './FormTypeDateTimeRange';
@@ -50,6 +51,13 @@ const formTypes: FormType[] = [
   {
     component: FormTypeEnum,
     test: ({ type, schema }: any) =>
+      type === 'array' &&
+      schema?.items?.type === 'string' &&
+      Array.isArray(schema?.items?.enum),
+  },
+  {
+    component: FormTypeEnum,
+    test: ({ type, schema }: any) =>
       ['string', 'number'].indexOf(type) !== -1 && Array.isArray(schema.enum),
   },
   {
@@ -75,6 +83,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeURI,
     test: { type: 'string', formType: 'uri' },
+  },
+  {
+    component: FormTypeCode,
+    test: { type: 'string', formType: 'code' },
   },
   {
     component: TypeArray,
