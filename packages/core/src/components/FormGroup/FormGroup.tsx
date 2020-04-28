@@ -113,14 +113,16 @@ function FormGroupInner({
         schema: {
           ...schema,
           options: {
-            ...schema.options,
-            alias: schema.enum.reduce(
-              (accum: any, value: string) => ({
-                ...accum,
-                [value]: formatEnum(value, props),
-              }),
-              {},
-            ),
+            ...schema?.options,
+            alias:
+              schema?.options?.alias ||
+              schema.enum.reduce(
+                (accum: any, value: string) => ({
+                  ...accum,
+                  [value]: formatEnum(value, props),
+                }),
+                {},
+              ),
           },
         },
       };

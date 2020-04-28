@@ -49,6 +49,15 @@ const formTypes: FormType[] = [
     test: { type: 'string', format: 'month' },
   },
   {
+    component: FormTypeSwitch,
+    test: ({ type, schema, formType }: any) =>
+      type === 'string' && formType === 'switch' && Array.isArray(schema?.enum),
+  },
+  {
+    component: FormTypeSwitch,
+    test: { type: 'boolean', formType: 'switch' },
+  },
+  {
     component: FormTypeEnum,
     test: ({ type, schema }: any) =>
       type === 'array' &&
@@ -63,10 +72,6 @@ const formTypes: FormType[] = [
   {
     component: FormTypeSlider,
     test: { type: 'number', formType: 'slider' },
-  },
-  {
-    component: FormTypeSwitch,
-    test: { type: 'boolean', formType: 'switch' },
   },
   {
     component: FormTypeTextarea,
