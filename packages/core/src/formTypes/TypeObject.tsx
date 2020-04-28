@@ -126,7 +126,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
             (accum, [k, v]) => ({ ...accum, [k.replace(/^ui:/, '')]: v }),
             { show: true, label: true },
           );
-        console.log('ui', __ui);
+        // console.log('ui', __ui);
         const grid =
           e.grid ||
           // e['ui:grid'] ||

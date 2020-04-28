@@ -17,9 +17,9 @@ function BaseFormGroup({
 }: any) {
   // const isHidden = !__ui.show;
   return (
-    <div className={className} onFocus={onFocus} onBlur={onBlur}>
+    <span className={className} onFocus={onFocus} onBlur={onBlur}>
       {/* <Counter> </Counter> */}
-      {isHidden && (
+      {/* {isHidden && (
         <>
           {isHidden && (
             <pre style={{ border: 'red 1px dashed', color: 'red' }}>
@@ -27,7 +27,7 @@ function BaseFormGroup({
             </pre>
           )}
         </>
-      )}
+      )} */}
 
       <div
         style={{ display: isHidden ? 'none' : '' }}
@@ -40,7 +40,7 @@ function BaseFormGroup({
           <ErrorMessage />
         </div>
       </div>
-    </div>
+    </span>
   );
 }
 

@@ -10,6 +10,7 @@ import {
 import { get } from 'lodash-es';
 import cx from 'classnames';
 import { useHandle, useErrors } from '../../hooks';
+import useContext from '../../hooks/useContext';
 import useIngredients from './useIngredients';
 import classNames from './FormGroup.module.scss';
 
@@ -37,6 +38,7 @@ function FormGroupInner({
   errors,
   showError,
   __ui,
+  __show,
 }: any) {
   const [_defaultValue, isSchemaDefault] = useMemo(
     () =>
@@ -135,6 +137,7 @@ function FormGroupInner({
         formattedMessage:
           props.error.message && formatErrorMessage(props.error, props),
       },
+      isHidden: !__show,
     };
   }, [
     _defaultValue,
@@ -153,6 +156,7 @@ function FormGroupInner({
     formatErrorMessage,
     formatEnum,
     __ui,
+    __show,
   ]);
 
   const Label = useCallback(
@@ -306,7 +310,7 @@ function FormGroupInner({
 
 const FC = React.memo(FormGroupInner);
 
-function FormGroupOuter(props: any) {
+function FormGroupOuter({ __ui, ...props }: any) {
   const {
     schema,
     isRoot,
@@ -337,6 +341,31 @@ function FormGroupOuter(props: any) {
     [isRoot, parentDataPath, name],
   );
   const errors = useErrors(dataPath, schema);
+
+  const ui: any = useMemo(() => {
+    const uiProps = __ui || {};
+    const dependencies: any = [];
+    let showFunc: Function = () => uiProps.show;
+    if (typeof uiProps.show === 'string') {
+      showFunc = Function(
+        'deps',
+        `return !!(${uiProps.show
+          .replace(/\$\.[a-zA-Z0-9.]+/g, (whole: string) => {
+            if (dependencies.indexOf(whole) === -1) {
+              dependencies.push(whole);
+            }
+            return `deps[${dependencies.indexOf(whole)}]`;
+          })
+          .trim()
+          .replace(/;$/, '')})`,
+      );
+    }
+    return { ...uiProps, dependencies, showFunc };
+  }, [__ui]);
+
+  const deps = useDeps(ui.dependencies);
+  const show = useMemo(() => ui.showFunc(deps), [ui.showFunc, deps]);
+
   return (
     <FC
       {...props}
@@ -354,8 +383,21 @@ function FormGroupOuter(props: any) {
       parseValue={parseValue}
       size={size}
       showError={showError}
+      __ui={ui}
+      __show={show}
     />
   );
 }
 
 export default FormGroupOuter;
+
+const emptyArr: any[] = [];
+
+function useDeps(deps: string[]) {
+  const flattened = useContext('flattened');
+  return useMemo(
+    () =>
+      deps.length === 0 ? emptyArr : deps.map((e) => flattened && flattened[e]),
+    [flattened, deps],
+  );
+}

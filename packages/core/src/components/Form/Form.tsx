@@ -13,7 +13,7 @@ import Container from '../Container';
 import { ContainerProps } from '../Container/Container';
 import useContextProvider from '../../hooks/useContext/useContextProvider';
 import { useHandle, useSchema, useValidate } from '../../hooks';
-import { hashCode } from '../../helpers/util';
+import { hashCode, flattenMessages } from '../../helpers/util';
 
 export interface FormProps extends ContainerProps {
   form?: any[];
@@ -121,6 +121,7 @@ function FormInner(
   );
   const _size = useMemo(() => getPreferredValue('size', size), [size]);
 
+  const flattened = useMemo(() => flattenMessages(asyncValue), [asyncValue]);
   const [Provider, value] = useContextProvider({
     form,
     formTypes,
@@ -142,6 +143,7 @@ function FormInner(
     errors,
     errorsReceived,
     showError,
+    flattened,
   });
 
   const getValue = useHandle(async () => {
