@@ -132,7 +132,10 @@ function useFormProps({
           : Object.entries(e).reduce(
               (accum: any, [k, v]) => ({
                 ...accum,
-                [k === 'name' ? k : `ui:${k.replace(/^ui:/, '')}`]: v,
+                // form 정의시 일부 예약된 항목은 키값을 변환하지 않는다.
+                [['name', 'type', 'fields', 'formType'].indexOf(k) !== -1
+                  ? k
+                  : `ui:${k.replace(/^ui:/, '')}`]: v,
               }),
               {},
             ),
