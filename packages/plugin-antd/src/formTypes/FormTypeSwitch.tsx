@@ -12,19 +12,17 @@ function FormTypeSwitch({ value, size, onChange, schema }: any) {
   const dict = useMemo(
     () =>
       schema?.type === 'string'
-        ? Object.entries(schema?.options?.alias || {}).reduce(
-            (accum: any, [k, v]: any) => {
-              if (presets.on.indexOf(v.toString().toLowerCase()) !== -1) {
-                return { ...accum, true: k };
-              } else if (
-                presets.off.indexOf(v.toString().toLowerCase()) !== -1
-              ) {
-                return { ...accum, false: k };
-              }
-              return accum;
-            },
-            {},
-          )
+        ? [
+            ...Object.entries(schema?.options?.alias || {}),
+            ...(schema?.enum || []).map((e: string) => [e, e]),
+          ].reduce((accum: any, [k, v]: any) => {
+            if (presets.on.indexOf(v.toString().toLowerCase()) !== -1) {
+              return { ...accum, true: k };
+            } else if (presets.off.indexOf(v.toString().toLowerCase()) !== -1) {
+              return { ...accum, false: k };
+            }
+            return accum;
+          }, {})
         : { true: true, false: false },
     [schema],
   );
