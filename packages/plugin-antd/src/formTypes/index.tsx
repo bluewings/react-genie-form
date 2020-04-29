@@ -51,7 +51,10 @@ const formTypes: FormType[] = [
   {
     component: FormTypeSwitch,
     test: ({ type, schema, formType }: any) =>
-      type === 'string' && formType === 'switch' && Array.isArray(schema?.enum),
+      type === 'string' &&
+      formType === 'switch' &&
+      Array.isArray(schema?.enum) &&
+      schema?.enum.length === 2,
   },
   {
     component: FormTypeSwitch,

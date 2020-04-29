@@ -3,24 +3,38 @@ import { Switch } from 'antd';
 import cx from 'classnames';
 import styles from './FormTypeSwitch.module.scss';
 
-function FormTypeSwitch({ name, value, size, onChange, schema }: any) {
-  const { on, off } = useMemo(
+const presets = {
+  on: ['on', 'true', 'yes', 'active', 'y', 't'],
+  off: ['off', 'false', 'no', 'paused', 'n', 'f'],
+};
+
+function FormTypeSwitch({ value, size, onChange, schema }: any) {
+  const dict = useMemo(
     () =>
       schema?.type === 'string'
         ? Object.entries(schema?.options?.alias || {}).reduce(
-            (accum: any, [k, v]: any) => ({ ...accum, [v]: k }),
+            (accum: any, [k, v]: any) => {
+              if (presets.on.indexOf(v.toString().toLowerCase()) !== -1) {
+                return { ...accum, true: k };
+              } else if (
+                presets.off.indexOf(v.toString().toLowerCase()) !== -1
+              ) {
+                return { ...accum, false: k };
+              }
+              return accum;
+            },
             {},
           )
-        : { on: true, off: false },
+        : { true: true, false: false },
     [schema],
   );
 
-  const checked = useMemo(() => on === value, [on, value]);
+  const checked = useMemo(() => dict.true === value, [dict, value]);
 
-  const handleChange = useCallback(
-    (checked: boolean) => onChange(checked ? on : off),
-    [on, off, onChange],
-  );
+  const handleChange = useCallback((checked: any) => onChange(dict[checked]), [
+    dict,
+    onChange,
+  ]);
 
   return (
     <div className={cx(styles.root, size === 'small' && styles.small)}>
