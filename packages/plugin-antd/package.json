@@ -25,6 +25,7 @@
     "classnames": "^2.2.6",
     "codemirror": "^5.53.2",
     "lodash-es": "^4.17.15",
+    "moment": "2.24.0",
     "react-codemirror": "^1.0.0"
   },
   "peerDependencies": {
@@ -40,6 +41,9 @@
     "rollup-plugin-postcss": "^2.6.4",
     "rollup-plugin-typescript2": "^0.27.0",
     "typescript": "^3.8.3"
+  },
+  "resolutions": {
+    "moment": "2.24.0"
   },
   "scripts": {
     "prestart": "rm -rf ./dist && rm -rf tsconfig.tsbuildinfo",

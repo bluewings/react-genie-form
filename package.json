@@ -14,9 +14,13 @@
     "js-yaml": "^3.13.1",
     "lerna": "^3.20.2",
     "node-sass": "^4.13.1",
+    "moment": "2.24.0",
     "prettier": "^2.0.4",
     "sass-loader": "^8.0.2",
     "typescript": "^3.8.3"
+  },
+  "resolutions": {
+    "moment": "2.24.0"
   },
   "scripts": {
     "start": "lerna run start --parallel",

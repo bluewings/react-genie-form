@@ -55,7 +55,7 @@ function FormInner(
     plugin,
     schema,
     customValidate,
-    defaultValue,
+    defaultValue = {},
     layout,
     labelAlign,
     size,
