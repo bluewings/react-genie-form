@@ -7,7 +7,14 @@ import { get } from 'lodash-es';
 
 const style = { minWidth: 171 };
 
-function TypeNumber({ schema, name, size, defaultValue, onChange }: any) {
+function TypeNumber({
+  schema,
+  name,
+  size,
+  defaultValue,
+  onChange,
+  readOnly,
+}: any) {
   const [formatter, parser] = useMemo(
     () => [
       get(schema, ['options', 'formatter']),
@@ -27,6 +34,7 @@ function TypeNumber({ schema, name, size, defaultValue, onChange }: any) {
       parser={parser}
       min={schema.minimum}
       max={schema.maximum}
+      readOnly={readOnly}
     />
   );
 }

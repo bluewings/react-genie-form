@@ -107,6 +107,7 @@ function FormGroupInner({
       isDirty: formState.isDirty,
       isFocused: formState.isFocused,
       isTouched: formState.isTouched,
+      readOnly: !!(__ui?.readOnly || schema?.readOnly),
       __ui: __ui || {},
     };
     if (Array.isArray(schema.enum)) {

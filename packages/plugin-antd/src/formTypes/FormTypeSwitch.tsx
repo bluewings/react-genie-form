@@ -8,7 +8,7 @@ const presets = {
   off: ['off', 'false', 'no', 'paused', 'n', 'f'],
 };
 
-function FormTypeSwitch({ value, size, onChange, schema }: any) {
+function FormTypeSwitch({ value, size, onChange, schema, readOnly }: any) {
   const dict = useMemo(
     () =>
       schema?.type === 'string'
@@ -36,7 +36,12 @@ function FormTypeSwitch({ value, size, onChange, schema }: any) {
 
   return (
     <div className={cx(styles.root, size === 'small' && styles.small)}>
-      <Switch size={size} checked={checked} onChange={handleChange} />
+      <Switch
+        size={size}
+        checked={checked}
+        onChange={handleChange}
+        disabled={readOnly}
+      />
     </div>
   );
 }

@@ -13,6 +13,7 @@ function FormTypeDateRange({
   name,
   defaultValue,
   onChange,
+  readOnly,
 }: any) {
   const handleChange = useHandle(([start, end]: [Moment, Moment]) => {
     onChange([
@@ -31,14 +32,13 @@ function FormTypeDateRange({
     [defaultValue],
   );
   const disabled = useMemo(() => {
-    const readOnly = get(schema, ['readOnly'], false);
     const readOnly1 = get(schema, ['fieldsSchema', 0, 'readOnly'], false);
     const readOnly2 = get(schema, ['fieldsSchema', 1, 'readOnly'], false);
     if (readOnly || (readOnly1 && readOnly2)) {
       return true;
     }
     return [readOnly1, readOnly2] as [boolean, boolean];
-  }, [schema]);
+  }, [readOnly, schema]);
   return (
     <DatePicker.RangePicker
       size={size}

@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { useHandle } from '../hooks';
 import styles from './TypeBoolean.module.scss';
 
-function TypeBoolean({ name, value, size, onChange, schema }: any) {
+function TypeBoolean({ name, value, size, onChange, schema, readOnly }: any) {
   const handleChange = useHandle((event: CheckboxChangeEvent) =>
     onChange(!!event.target.checked),
   );
@@ -23,6 +23,7 @@ function TypeBoolean({ name, value, size, onChange, schema }: any) {
         indeterminate={indeterminate}
         checked={checked}
         onChange={handleChange}
+        disabled={readOnly}
       />
     </div>
   );

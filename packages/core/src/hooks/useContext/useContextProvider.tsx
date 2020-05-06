@@ -133,7 +133,13 @@ function useFormProps({
               (accum: any, [k, v]) => ({
                 ...accum,
                 // form 정의시 일부 예약된 항목은 키값을 변환하지 않는다.
-                [['name', 'type', 'fields', 'formType'].indexOf(k) !== -1
+                [[
+                  'name',
+                  'type',
+                  'fields',
+                  'formType',
+                  'FormComponent',
+                ].indexOf(k) !== -1
                   ? k
                   : `ui:${k.replace(/^ui:/, '')}`]: v,
               }),

@@ -7,7 +7,14 @@ import { useHandle } from '../hooks';
 
 const dateTimeFormat = 'YYYY-MM-DD HH:mm';
 
-function FormTypeDateTimeRange({ schema, size, name, value, onChange }: any) {
+function FormTypeDateTimeRange({
+  schema,
+  size,
+  name,
+  value,
+  onChange,
+  readOnly,
+}: any) {
   const handleChange = useHandle((values: any) => {
     const [start, end]: [Moment, Moment] = values || [];
     onChange([
@@ -27,14 +34,13 @@ function FormTypeDateTimeRange({ schema, size, name, value, onChange }: any) {
     [value],
   );
   const disabled = useMemo(() => {
-    const readOnly = get(schema, ['readOnly'], false);
     const readOnly1 = get(schema, ['fieldsSchema', 0, 'readOnly'], false);
     const readOnly2 = get(schema, ['fieldsSchema', 1, 'readOnly'], false);
     if (readOnly || (readOnly1 && readOnly2)) {
       return true;
     }
     return [readOnly1, readOnly2] as [boolean, boolean];
-  }, [schema]);
+  }, [readOnly, schema]);
   return (
     <DatePicker.RangePicker
       size={size}

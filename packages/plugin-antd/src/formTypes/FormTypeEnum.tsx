@@ -4,7 +4,13 @@ import { Select } from 'antd';
 
 const { Option } = Select;
 
-function FormTypeEnum({ size, schema: _schema, defaultValue, onChange }: any) {
+function FormTypeEnum({
+  size,
+  schema: _schema,
+  defaultValue,
+  onChange,
+  readOnly,
+}: any) {
   const [schema, mode]: any[] = useMemo(
     () =>
       _schema?.type === 'array'
@@ -26,6 +32,7 @@ function FormTypeEnum({ size, schema: _schema, defaultValue, onChange }: any) {
       size={size}
       defaultValue={defaultValue}
       onChange={onChange}
+      disabled={readOnly}
       style={{ minWidth: 171 }}
     >
       {options}

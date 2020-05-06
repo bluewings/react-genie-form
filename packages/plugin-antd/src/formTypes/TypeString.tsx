@@ -3,7 +3,14 @@ import { useMemo } from 'react';
 import { get } from 'lodash-es';
 import { Input as BaseInput } from 'antd';
 
-function TypeString({ name, size, schema, defaultValue, onChange }: any) {
+function TypeString({
+  name,
+  size,
+  schema,
+  defaultValue,
+  onChange,
+  readOnly,
+}: any) {
   const Input = useMemo(
     () =>
       get(schema, ['format'], get(schema, ['formType'])) === 'password'
@@ -16,6 +23,7 @@ function TypeString({ name, size, schema, defaultValue, onChange }: any) {
       name={name}
       size={size}
       defaultValue={defaultValue}
+      readOnly={readOnly}
       onChange={onChange}
     />
   );
