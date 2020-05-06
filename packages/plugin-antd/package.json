@@ -1,6 +1,6 @@
 {
   "name": "@react-genie-form/plugin-antd",
-  "version": "0.1.58",
+  "version": "0.1.59",
   "author": {
     "name": "Sung Won Cha",
     "email": "mygenie3@naver.com"
@@ -19,7 +19,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@react-genie-form/core": "^0.1.58",
+    "@react-genie-form/core": "^0.1.59",
     "@types/react-codemirror": "^1.0.3",
     "antd": "^4.1.4",
     "classnames": "^2.2.6",
