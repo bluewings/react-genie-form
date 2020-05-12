@@ -25,6 +25,7 @@ function useIngredients(schema: any) {
     formatErrorMessage,
     formatEnum,
     showError,
+    portal,
   }: any = useFormProps();
 
   const [hint, preParser]: [Hint, Function] = useMemo(
@@ -63,6 +64,7 @@ function useIngredients(schema: any) {
     formatErrorMessage: formatErrorMessage || getMessage,
     formatEnum: formatEnum || identity,
     showError,
+    portal,
   };
 }
 

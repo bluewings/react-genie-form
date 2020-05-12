@@ -79,16 +79,20 @@ const schema = {
           type: 'string',
           enum: ['xbox', 'playstation', 'switch'],
           options: {
-            'ui:grid': 'initial',
+            // 'ui:grid': 'initial',
             // 'ui:label': false,
           },
+        },
+        grade: {
+          type: 'number',
+          default: 5,
         },
         available: {
           type: 'boolean',
           formType: 'switch',
           default: false,
           options: {
-            'ui:grid': 'initial',
+            // 'ui:grid': 'initial',
             // 'ui:label': false,
           },
         },
@@ -105,7 +109,10 @@ const _form = [
   // { name: 'name' },
 
   // '__divider',
+  { portal: '$.console.name' },
   'testArray',
+  'console',
+  { portal: '$.console.grade' },
   // { name: 'console' },
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,

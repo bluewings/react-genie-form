@@ -1,4 +1,5 @@
-import { useMemo, isValidElement } from 'react';
+import React, { useMemo, useRef, useLayoutEffect, isValidElement } from 'react';
+import ReactDOM from 'react-dom';
 import { get } from 'lodash-es';
 import Context from './Context';
 import defaultFormTypes from '../../formTypes';
@@ -18,6 +19,19 @@ function useContextProvider(params: any) {
   ]);
 
   return [Context.Provider, value] as any[];
+}
+
+const getPortalEntry = (domNode: Element) => ({ children }: any) =>
+  ReactDOM.createPortal(children, domNode);
+
+function PortalExit({ domNode }: any) {
+  const ref = useRef<any>();
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.appendChild(domNode);
+    }
+  }, []);
+  return <div ref={ref} />;
 }
 
 export default useContextProvider;
@@ -126,26 +140,31 @@ function useFormProps({
     let virtualFields: string[] = [];
     let merged = (form || ['*'])
       .map((name: any) => (typeof name === 'string' ? { name } : name))
-      .map((e: any) =>
-        isValidElement(e)
-          ? { name: '__reactElement', reactElement: e }
-          : Object.entries(e).reduce(
-              (accum: any, [k, v]) => ({
-                ...accum,
-                // form 정의시 일부 예약된 항목은 키값을 변환하지 않는다.
-                [[
-                  'name',
-                  'type',
-                  'fields',
-                  'formType',
-                  'FormComponent',
-                ].indexOf(k) !== -1
-                  ? k
-                  : `ui:${k.replace(/^ui:/, '')}`]: v,
-              }),
-              {},
-            ),
-      )
+      .map((e: any) => {
+        if (isValidElement(e)) {
+          return { name: '__reactElement', reactElement: e };
+        } else if (e.portal || e['ui:portal']) {
+          const domNode = document.createElement('div');
+          return {
+            name: '__reactElement',
+            reactElement: <PortalExit domNode={domNode}>hello</PortalExit>,
+            portal: e.portal || e['ui:portal'],
+            domNode,
+          };
+        }
+        return Object.entries(e).reduce(
+          (accum: any, [k, v]) => ({
+            ...accum,
+            // form 정의시 일부 예약된 항목은 키값을 변환하지 않는다.
+            [['name', 'type', 'fields', 'formType', 'FormComponent'].indexOf(
+              k,
+            ) !== -1
+              ? k
+              : `ui:${k.replace(/^ui:/, '')}`]: v,
+          }),
+          {},
+        );
+      })
       .map((e: any) => {
         let next = e;
         if (virtual[e.name] && Array.isArray(virtual[e.name].fields)) {
@@ -194,6 +213,21 @@ function useFormProps({
       )
       .map((e: any) => ({ ...(dict[e.name] || {}), ...e }));
   }, [schema, form]);
+
+  const portal = useMemo(
+    () =>
+      mergedForm.reduce((accum: any, { name, portal, domNode }: any) => {
+        if (
+          name === '__reactElement' &&
+          typeof portal === 'string' &&
+          domNode
+        ) {
+          return { ...accum, [portal]: getPortalEntry(domNode) };
+        }
+        return accum;
+      }, {}),
+    [mergedForm],
+  );
 
   const mergedFormTypes = useMemo(
     () =>
@@ -250,6 +284,7 @@ function useFormProps({
         formatErrorMessage || get(plugin, ['formatErrorMessage']),
       formatEnum: formatEnum || get(plugin, ['formatEnum']),
       showError: showError || false,
+      portal,
     }),
     [
       plugin,
@@ -266,6 +301,7 @@ function useFormProps({
       formatErrorMessage,
       formatEnum,
       showError,
+      portal,
     ],
   );
 

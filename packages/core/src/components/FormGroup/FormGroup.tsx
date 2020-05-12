@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  Fragment,
 } from 'react';
 import { get } from 'lodash-es';
 import cx from 'classnames';
@@ -37,6 +38,7 @@ function FormGroupInner({
   dataPath,
   errors,
   showError,
+  Portal,
   __ui,
   __show,
 }: any) {
@@ -138,7 +140,7 @@ function FormGroupInner({
         formattedMessage:
           props.error.message && formatErrorMessage(props.error, props),
       },
-      isHidden: !__show,
+      isHidden: __show === false,
     };
   }, [
     _defaultValue,
@@ -290,22 +292,24 @@ function FormGroupInner({
   return isRoot ? (
     <FormComponent />
   ) : (
-    <BaseFormGroup
-      {...formProps.current}
-      className={cx(
-        classNames.root,
-        isPrimitiveType && isDirty && classNames.isDirty,
-        isPrimitiveType && isFocused && classNames.isFocused,
-        isPrimitiveType && isTouched && classNames.isTouched,
-      )}
-      classNames={classNames}
-      Label={Label}
-      FormComponent={FormComponent}
-      Description={Description}
-      ErrorMessage={ErrorMessage}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-    />
+    <Portal>
+      <BaseFormGroup
+        {...formProps.current}
+        className={cx(
+          classNames.root,
+          isPrimitiveType && isDirty && classNames.isDirty,
+          isPrimitiveType && isFocused && classNames.isFocused,
+          isPrimitiveType && isTouched && classNames.isTouched,
+        )}
+        classNames={classNames}
+        Label={Label}
+        FormComponent={FormComponent}
+        Description={Description}
+        ErrorMessage={ErrorMessage}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+      />
+    </Portal>
   );
 }
 
@@ -335,6 +339,7 @@ function FormGroupOuter({ __ui, ...props }: any) {
     formatLabel,
     formatErrorMessage,
     formatEnum,
+    portal,
   } = useIngredients(schema);
 
   const dataPath = useMemo(
@@ -366,6 +371,10 @@ function FormGroupOuter({ __ui, ...props }: any) {
 
   const deps = useDeps(ui.dependencies);
   const show = useMemo(() => ui.showFunc(deps), [ui.showFunc, deps]);
+  const Portal = useMemo(() => portal[`$${dataPath}`] || Fragment, [
+    portal,
+    dataPath,
+  ]);
 
   return (
     <FC
@@ -384,6 +393,7 @@ function FormGroupOuter({ __ui, ...props }: any) {
       parseValue={parseValue}
       size={size}
       showError={showError}
+      Portal={Portal}
       __ui={ui}
       __show={show}
     />
