@@ -148,7 +148,9 @@ function useFormProps({
           return {
             name: '__reactElement',
             reactElement: <PortalExit domNode={domNode}>hello</PortalExit>,
-            portal: e.portal || e['ui:portal'],
+            portal: `$.${(e.portal || e['ui:portal'])
+              .replace(/^\$/, '')
+              .replace(/^\./, '')}`,
             domNode,
           };
         }
