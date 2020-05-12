@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Fragment, isValidElement, useMemo } from 'react';
+import { isValidElement, useMemo, useRef } from 'react';
 import FormGroup from '../components/FormGroup';
 import { useFormProps, useHandle } from '../hooks';
 import { get } from 'lodash-es';
@@ -22,7 +22,7 @@ const getFlexStyle = (grid: any) => {
 
 const identity = (e: any) => e;
 
-function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
+function TypeObject({ dataPath, schema, defaultValue, value, onChange }: any) {
   const { form, formTypes }: any = useFormProps();
 
   const handleChange = useHandle(onChange);
@@ -55,7 +55,7 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
         {},
       );
       items = form.reduce((items: any, e: any) => {
-        const { name, reactElement, type, fields } = e;
+        const { name, reactElement, renderFunc, type, fields } = e;
         if (dict[name]) {
           return [
             ...items,
@@ -65,6 +65,11 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
               schema: { ...dict[name].schema, ...e.schema },
             },
           ];
+        } else if (
+          name === '__renderFunc' &&
+          typeof renderFunc === 'function'
+        ) {
+          return [...items, e];
         } else if (name === '__reactElement' && isValidElement(reactElement)) {
           return [...items, { ...e, reactElement }];
         } else if (
@@ -179,13 +184,15 @@ function TypeObject({ dataPath, schema, defaultValue, onChange }: any) {
   // if (dataPath === '') {
   return (
     <div className={styles.root} style={{ marginBottom: '-1.5rem' }}>
-      {childNodes.map(({ style, reactElement }: any, i: number) => (
+      {childNodes.map(({ style, reactElement, renderFunc }: any, i: number) => (
         <div
           className={`${styles.inner} ${formGroupStyles.grid}`}
           key={i}
           style={style}
         >
-          {reactElement}
+          {typeof renderFunc === 'function'
+            ? renderFunc({ data: value })
+            : reactElement}
         </div>
       ))}
     </div>

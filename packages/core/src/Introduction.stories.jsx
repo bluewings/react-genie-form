@@ -112,6 +112,10 @@ const _form = [
   { portal: '$.console.name' },
   'testArray',
   'console',
+
+  (data) => {
+    return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  },
   { portal: '$.console.grade' },
   // { name: 'console' },
   // <h1>Target company</h1>,

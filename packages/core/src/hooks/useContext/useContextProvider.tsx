@@ -141,7 +141,9 @@ function useFormProps({
     let merged = (form || ['*'])
       .map((name: any) => (typeof name === 'string' ? { name } : name))
       .map((e: any) => {
-        if (isValidElement(e)) {
+        if (typeof e === 'function') {
+          return { name: '__renderFunc', renderFunc: e };
+        } else if (isValidElement(e)) {
           return { name: '__reactElement', reactElement: e };
         } else if (e.portal || e['ui:portal']) {
           const domNode = document.createElement('div');
