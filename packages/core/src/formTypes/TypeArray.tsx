@@ -59,7 +59,7 @@ function TypeArray({
     };
   }, [schema, readOnly]);
   const handleAddClick = () => {
-    console.log('add');
+    // console.log('add');
     const prev = value || [];
     onChange([...prev, undefined]);
   };
