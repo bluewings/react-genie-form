@@ -41,6 +41,8 @@ const schema = {
         // 'ui:grid': 3,
         // 'ui:label': false,
       },
+      formType: 'textarea',
+      // readOnly: true,
     },
     testArray: {
       type: 'array',
