@@ -22,7 +22,14 @@ const getFlexStyle = (grid: any) => {
 
 const identity = (e: any) => e;
 
-function TypeObject({ dataPath, schema, defaultValue, value, onChange }: any) {
+function TypeObject({
+  dataPath,
+  schema,
+  defaultValue,
+  value,
+  readOnly,
+  onChange,
+}: any) {
   const { form, formTypes }: any = useFormProps();
 
   const handleChange = useHandle(onChange);
@@ -32,14 +39,17 @@ function TypeObject({ dataPath, schema, defaultValue, value, onChange }: any) {
     return Object.entries(get(schema, ['properties'], {})).map(
       ([name, schema]: [string, any]) => ({
         name,
-        schema,
+        schema: {
+          ...schema,
+          readOnly: readOnly || schema.readOnly,
+        },
         defaultValue: get(defaultValue, [name]),
         isRequired: required.indexOf(name) !== -1,
         onChange: (value: any, batch: boolean) =>
           handleChange({ [name]: value }, batch === true),
       }),
     );
-  }, [schema]);
+  }, [schema, readOnly]);
 
   const childNodes = useMemo(() => {
     let items;

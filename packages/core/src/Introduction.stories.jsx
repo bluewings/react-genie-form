@@ -46,6 +46,7 @@ const schema = {
       type: 'array',
       minItems: 1,
       maxItems: 5,
+      readOnly: true,
       items: {
         // type: 'string',
         // default: 'abc',
@@ -74,10 +75,12 @@ const schema = {
     },
     console: {
       type: 'object',
+      readOnly: true,
       properties: {
         name: {
           type: 'string',
           enum: ['xbox', 'playstation', 'switch'],
+          // readOnly: true,
           options: {
             // 'ui:grid': 'initial',
             // 'ui:label': false,
@@ -91,6 +94,7 @@ const schema = {
           type: 'boolean',
           formType: 'switch',
           default: false,
+          // readOnly: true,
           options: {
             // 'ui:grid': 'initial',
             // 'ui:label': false,
@@ -106,17 +110,17 @@ const schema = {
 
 const _form = [
   // <h1>Name & Schedule</h1>,
-  // { name: 'name' },
+  { name: 'name' },
 
   // '__divider',
-  { portal: '$.console.name' },
-  'testArray',
-  'console',
+  // { portal: '$.console.name' },
+  { name: 'testArray' },
+  { name: 'console' },
 
   (data) => {
     return <pre>{JSON.stringify(data, null, 2)}</pre>;
   },
-  { portal: '$.console.grade' },
+  // { portal: '$.console.grade' },
   // { name: 'console' },
   // <h1>Target company</h1>,
   // <h1>EventId</h1>,

@@ -15,6 +15,7 @@ function TypeArray({
   Label,
   Description,
   ErrorMessage,
+  readOnly,
   Add,
   Remove,
 }: any) {
@@ -50,7 +51,13 @@ function TypeArray({
   //   ErrorMessage,
   // });
 
-  const itemsSchema = useMemo(() => get(schema, ['items']), [schema]);
+  const itemsSchema = useMemo(() => {
+    const childSchema = get(schema, ['items'], {});
+    return {
+      ...childSchema,
+      readOnly: readOnly || childSchema.readOnly,
+    };
+  }, [schema, readOnly]);
   const handleAddClick = () => {
     console.log('add');
     const prev = value || [];
@@ -146,7 +153,7 @@ function TypeArray({
               parentDataPath={dataPath}
               schema={itemsSchema}
             />
-            {minItems < maxItems && (
+            {!readOnly && minItems < maxItems && (
               <BtnRemove
                 onClick={e.handleRemove}
                 disabled={_value.length < minItems + 1}
@@ -158,7 +165,7 @@ function TypeArray({
         );
       })}
       {/* <hr /> */}
-      {minItems < maxItems && (
+      {!readOnly && minItems < maxItems && (
         <BtnAdd onClick={handleAddClick} disabled={maxItems <= _value.length}>
           add
         </BtnAdd>
