@@ -12,18 +12,22 @@ function FormTypeSlider({
   onChange,
   __ui: { style },
 }: any) {
-  const [min, max] = useMemo(
-    () => [get(schema, 'minimum', 0), get(schema, 'maximum', 100)],
-    [schema],
+  const sliderProps = useMemo(
+    () => ({
+      min: get(schema, 'minimum', 0),
+      max: get(schema, 'maximum', 100),
+      [schema?.options?.lazy === false
+        ? 'onChange'
+        : 'onAfterChange']: onChange,
+    }),
+    [schema, onChange],
   );
   return (
     <div style={{ minWidth: 171, ...style }}>
       <Slider
         className={cx(styles.root, size === 'small' && styles.small)}
         defaultValue={defaultValue}
-        onAfterChange={onChange}
-        min={min}
-        max={max}
+        {...sliderProps}
       />
     </div>
   );
