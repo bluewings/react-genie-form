@@ -8,6 +8,7 @@ import FormTypeTime from './FormTypeTime';
 import FormTypeMonth from './FormTypeMonth';
 import FormTypeMonthRange from './FormTypeMonthRange';
 import FormTypeEnum from './FormTypeEnum';
+import FormTypeRadioGroup from './FormTypeRadioGroup';
 import FormTypeSlider from './FormTypeSlider';
 import FormTypeSwitch from './FormTypeSwitch';
 import FormTypeTextarea from './FormTypeTextarea';
@@ -59,6 +60,15 @@ const formTypes: FormType[] = [
   {
     component: FormTypeSwitch,
     test: { type: 'boolean', formType: 'switch' },
+  },
+  {
+    component: FormTypeRadioGroup,
+    test: ({ type, schema, formType }: any) =>
+      ['string', 'number'].indexOf(type) !== -1 &&
+      Array.isArray(schema.enum) &&
+      ['radio', 'radiogroup'].includes(
+        (formType || '').toLowerCase().replace(/[^a-z]/g, ''),
+      ),
   },
   {
     component: FormTypeEnum,

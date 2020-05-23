@@ -366,7 +366,7 @@ function FormGroupOuter({ __ui, ...props }: any) {
           .replace(/;$/, '')})`,
       );
     }
-    return { ...uiProps, dependencies, showFunc };
+    return { style: {}, ...uiProps, dependencies, showFunc };
   }, [__ui]);
 
   const deps = useDeps(ui.dependencies);
