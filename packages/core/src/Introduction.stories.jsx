@@ -44,6 +44,13 @@ const schema = {
       formType: 'textarea',
       // readOnly: true,
     },
+    uri: {
+      type: 'string',
+      options: {
+        protocols: ['http://', 'https://', 'tel:', 'market://'],
+      },
+      format: 'uri',
+    },
     testArray: {
       type: 'array',
       minItems: 1,
@@ -113,6 +120,7 @@ const schema = {
 const _form = [
   // <h1>Name & Schedule</h1>,
   { name: 'name' },
+  { name: 'uri' },
 
   // '__divider',
   // { portal: '$.console.name' },
@@ -134,7 +142,9 @@ const _form = [
 ];
 
 export const usage = () => {
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState({
+    uri: 'https://www.google.com',
+  });
   return (
     <div>
       <Form
