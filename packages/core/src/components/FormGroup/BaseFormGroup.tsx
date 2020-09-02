@@ -13,6 +13,7 @@ function BaseFormGroup({
   classNames,
   onFocus,
   onBlur,
+  style,
   __ui,
 }: any) {
   // const isHidden = !__ui.show;
@@ -30,7 +31,7 @@ function BaseFormGroup({
       )} */}
 
       <div
-        style={{ display: isHidden ? 'none' : '' }}
+        style={{ display: isHidden ? 'none' : '', ...style }}
         className={classNames.formGroup}
       >
         <Label />

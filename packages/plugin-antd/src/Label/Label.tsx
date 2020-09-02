@@ -1,9 +1,11 @@
 import * as React from 'react';
 import styles from './Label.module.scss';
 
-function Label({ className, formattedLabel }: any) {
+function Label({ className, formattedLabel, style }: any) {
   return (
-    <label className={`${styles.root} ${className}`}>{formattedLabel}</label>
+    <label className={`${styles.root} ${className}`} style={style}>
+      {formattedLabel}
+    </label>
   );
 }
 

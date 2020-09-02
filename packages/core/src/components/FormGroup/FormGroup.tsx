@@ -179,6 +179,7 @@ function FormGroupInner({
               classNames.isTouched,
             formProps.current.__ui.grid === 'initial' && classNames.flexInitial,
           )}
+          style={formProps.current.__ui.labelStyle}
           {...formProps.current}
           {...injectProps}
         />
@@ -308,6 +309,7 @@ function FormGroupInner({
         ErrorMessage={ErrorMessage}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        style={formProps.current.__ui.formGroupStyle}
       />
     </Portal>
   );
@@ -391,7 +393,7 @@ function FormGroupOuter({ __ui, ...props }: any) {
       formatEnum={formatEnum}
       preParser={preParser}
       parseValue={parseValue}
-      size={size}
+      size={ui.size || size}
       showError={showError}
       Portal={Portal}
       __ui={ui}

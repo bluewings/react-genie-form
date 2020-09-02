@@ -7,8 +7,8 @@ import styles from './TypeObject.module.scss';
 import formGroupStyles from '../components/FormGroup/FormGroup.module.scss';
 
 const getFlexStyle = (grid: any) => {
-  if (grid === 'initial') {
-    return { flex: 'initial' };
+  if (['initial', 'auto'].includes(grid)) {
+    return { flex: grid };
   }
   let maxWidth: any =
     typeof grid === 'number'

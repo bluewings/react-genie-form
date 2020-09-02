@@ -174,7 +174,21 @@ function FormInner(
 
   return (
     <Provider value={value}>
-      <form onSubmit={handleSubmit}>
+      {onSubmit ? (
+        <form onSubmit={handleSubmit}>
+          <Container
+            {...restProps}
+            schema={_schema}
+            defaultValue={defaultValue}
+            layout={_layout}
+            labelAlign={_labelAlign}
+            size={_size}
+            plugin={plugin}
+            onChange={handleChange}
+            showErrorSummary={showErrorSummary}
+          />
+        </form>
+      ) : (
         <Container
           {...restProps}
           schema={_schema}
@@ -186,7 +200,7 @@ function FormInner(
           onChange={handleChange}
           showErrorSummary={showErrorSummary}
         />
-      </form>
+      )}
     </Provider>
   );
 }
