@@ -31,7 +31,7 @@ function BaseFormGroup({
       )} */}
 
       <div
-        style={{ display: isHidden ? 'none' : '', ...style }}
+        style={{ ...style, display: isHidden ? 'none' : style?.display || '' }}
         className={classNames.formGroup}
       >
         <Label />
