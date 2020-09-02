@@ -154,6 +154,11 @@ export const usage = () => {
         plugin={plugin}
         form={_form}
         layout="horizontal"
+        styles={{
+          formGroup: {
+            marginBottom: '2px',
+          },
+        }}
       />
       {/* <table>
         <tbody>
