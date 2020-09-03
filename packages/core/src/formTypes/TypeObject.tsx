@@ -193,7 +193,7 @@ function TypeObject({
 
   // if (dataPath === '') {
   return (
-    <div className={styles.root} style={{ marginBottom: '-1.5rem' }}>
+    <div className={styles.root}>
       {childNodes.map(({ style, reactElement, renderFunc }: any, i: number) => (
         <div
           className={`${styles.inner} ${formGroupStyles.grid}`}

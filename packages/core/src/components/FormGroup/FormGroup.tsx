@@ -17,6 +17,8 @@ import classNames from './FormGroup.module.scss';
 
 const primitives = ['string', 'number', 'boolean'];
 
+const Noop = () => null;
+
 function FormGroupInner({
   defaultValue,
   isRoot,
@@ -30,6 +32,7 @@ function FormGroupInner({
   BaseLabel,
   BaseDescription,
   BaseErrorMessage,
+  ArrayRemoveHandle,
   formatLabel,
   formatErrorMessage,
   formatEnum,
@@ -110,6 +113,7 @@ function FormGroupInner({
       isFocused: formState.isFocused,
       isTouched: formState.isTouched,
       readOnly: !!(__ui?.readOnly || schema?.readOnly),
+      ArrayRemoveHandle: ArrayRemoveHandle || Noop,
       __ui: __ui || {},
     };
     if (Array.isArray(schema.enum)) {

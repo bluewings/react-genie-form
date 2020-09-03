@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 // import { Fragment } from 'react';
 // import styles from './FormGroup.module.scss';
 // import { checkPropTypes } from 'prop-types';
@@ -14,9 +14,20 @@ function BaseFormGroup({
   onFocus,
   onBlur,
   style,
-  __ui,
+  schema,
 }: any) {
   // const isHidden = !__ui.show;
+  const type = schema?.type;
+  const _style = useMemo(() => {
+    const _style = {
+      ...style,
+      display: isHidden ? 'none' : style?.display || '',
+    };
+    if (type === 'object') {
+      _style.marginBottom = 0;
+    }
+    return _style;
+  }, [style, isHidden, type]);
   return (
     <span className={className} onFocus={onFocus} onBlur={onBlur}>
       {/* <Counter> </Counter> */}
@@ -30,10 +41,7 @@ function BaseFormGroup({
         </>
       )} */}
 
-      <div
-        style={{ ...style, display: isHidden ? 'none' : style?.display || '' }}
-        className={classNames.formGroup}
-      >
+      <div style={_style} className={classNames.formGroup}>
         <Label />
         <div className={classNames.control}>
           <FormComponent />

@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useMemo, useState, useRef } from 'react';
+import React, { useCallback, useMemo, useState, useRef } from 'react';
 import { get } from 'lodash-es';
 import FormGroup from '../components/FormGroup';
 import { useHandle } from '../hooks';
@@ -18,8 +17,11 @@ function TypeArray({
   readOnly,
   Add,
   Remove,
+  __ui,
 }: any) {
   const [tick, setTick] = useState('initial');
+
+  const wrapId = useMemo(() => Math.random().toString(36).substr(-4), []);
 
   const BtnAdd = useMemo(() => {
     return Add ? Add : (props: any) => <button {...props}>add</button>;
@@ -131,10 +133,43 @@ function TypeArray({
     });
   }, [_prevVal, itemsSchema, dataPath, minItems]);
 
-  // const handleChange = () => {};
+  const handleItemRemove = useHandle((event: any) => {
+    const target = event.target.closest(`[data-array-wrap-id="${wrapId}"]`);
+    if (target) {
+      const i = ~~target.getAttribute('data-array-index');
+      if (minItems < _prevVal.length) {
+        handleChange([..._prevVal.slice(0, i), ..._prevVal.slice(i + 1)]);
+        setTick(Math.random().toString(36).substr(-6));
+      } else {
+        alert('cannot remove');
+      }
+    }
+  });
+
+  const cannotRemoveMore = _value.length < minItems + 1;
+
+  const RemoveHandle = useCallback(
+    ({ children }) => {
+      return children ? (
+        <span onClick={handleItemRemove}>{children}</span>
+      ) : (
+        <BtnRemove onClick={handleItemRemove} disabled={cannotRemoveMore}>
+          del
+        </BtnRemove>
+      );
+    },
+    [wrapId, _prevVal, minItems, cannotRemoveMore],
+  );
+
+  const { hideRemoveHandle } = __ui;
+
+  const itemStyle = useMemo(
+    () => (hideRemoveHandle ? {} : { display: 'flex', flex: '1 1 auto' }),
+    [hideRemoveHandle],
+  );
 
   return (
-    <div key={tick}>
+    <div key={`${tick}_${cannotRemoveMore}`}>
       {/* <input
         type={type}
         name={name}
@@ -145,19 +180,22 @@ function TypeArray({
       {_value.map((e, i) => {
         // return e.reactElement;
         return (
-          <div key={i} style={{ display: 'flex', flex: '1 1 auto' }}>
+          <div
+            key={i}
+            style={itemStyle}
+            data-array-wrap-id={wrapId}
+            data-array-index={i}
+          >
             <FormGroup
               defaultValue={e.value}
               name={`${i}`}
               onChange={e.onChange}
               parentDataPath={dataPath}
               schema={itemsSchema}
+              ArrayRemoveHandle={RemoveHandle}
             />
-            {!readOnly && minItems < maxItems && (
-              <BtnRemove
-                onClick={e.handleRemove}
-                disabled={_value.length < minItems + 1}
-              >
+            {!hideRemoveHandle && !readOnly && minItems < maxItems && (
+              <BtnRemove onClick={handleItemRemove} disabled={cannotRemoveMore}>
                 del
               </BtnRemove>
             )}

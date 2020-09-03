@@ -51,11 +51,20 @@ const schema = {
       },
       format: 'uri',
     },
+    testArray1: {
+      type: 'array',
+      minItems: 1,
+      maxItems: 5,
+      // readOnly: true,
+      items: {
+        type: 'string',
+      },
+    },
     testArray: {
       type: 'array',
       minItems: 1,
       maxItems: 5,
-      readOnly: true,
+      // readOnly: true,
       items: {
         // type: 'string',
         // default: 'abc',
@@ -119,17 +128,21 @@ const schema = {
 
 const _form = [
   // <h1>Name & Schedule</h1>,
-  { name: 'name' },
+
   { name: 'uri' },
 
   // '__divider',
   // { portal: '$.console.name' },
+  {
+    name: 'testArray1',
+    'ui:hideRemoveHandle': true,
+  },
   { name: 'testArray' },
   { name: 'console' },
-
-  (data) => {
-    return <pre>{JSON.stringify(data, null, 2)}</pre>;
-  },
+  { name: 'name' },
+  // (data) => {
+  //   return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  // },
   // { portal: '$.console.grade' },
   // { name: 'console' },
   // <h1>Target company</h1>,
@@ -146,7 +159,7 @@ export const usage = () => {
     uri: 'https://www.google.com',
   });
   return (
-    <div>
+    <div style={{ border: '1px solid red' }}>
       <Form
         schema={schema}
         defaultValue={value}
@@ -156,7 +169,7 @@ export const usage = () => {
         layout="horizontal"
         styles={{
           formGroup: {
-            marginBottom: '2px',
+            marginBottom: '0.25rem',
           },
         }}
       />
