@@ -135,7 +135,8 @@ const _form = [
   // { portal: '$.console.name' },
   {
     name: 'testArray1',
-    'ui:hideRemoveHandle': true,
+    'ui:flex': 'auto',
+    // 'ui:hideRemoveHandle': true,
   },
   { name: 'testArray' },
   { name: 'console' },

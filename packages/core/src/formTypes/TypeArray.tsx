@@ -161,12 +161,20 @@ function TypeArray({
     [wrapId, _prevVal, minItems, cannotRemoveMore],
   );
 
-  const { hideRemoveHandle } = __ui;
+  const { hideRemoveHandle, flex } = __ui;
 
   const itemStyle = useMemo(
     () => (hideRemoveHandle ? {} : { display: 'flex', flex: '1 1 auto' }),
     [hideRemoveHandle],
   );
+
+  const WrapItem = useMemo(() => {
+    return flex == 'auto'
+      ? ({ children }: any) => (
+          <div style={{ display: 'flex', flex: 'auto' }}>{children}</div>
+        )
+      : ({ children }: any) => <>{children}</>;
+  }, [flex]);
 
   return (
     <div key={`${tick}_${cannotRemoveMore}`}>
@@ -186,14 +194,16 @@ function TypeArray({
             data-array-wrap-id={wrapId}
             data-array-index={i}
           >
-            <FormGroup
-              defaultValue={e.value}
-              name={`${i}`}
-              onChange={e.onChange}
-              parentDataPath={dataPath}
-              schema={itemsSchema}
-              ArrayRemoveHandle={RemoveHandle}
-            />
+            <WrapItem>
+              <FormGroup
+                defaultValue={e.value}
+                name={`${i}`}
+                onChange={e.onChange}
+                parentDataPath={dataPath}
+                schema={itemsSchema}
+                ArrayRemoveHandle={RemoveHandle}
+              />
+            </WrapItem>
             {!hideRemoveHandle && !readOnly && minItems < maxItems && (
               <BtnRemove onClick={handleItemRemove} disabled={cannotRemoveMore}>
                 del
