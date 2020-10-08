@@ -10,12 +10,13 @@ function useContextProvider(params: any) {
 
   const errors = useErrors(params);
 
-  const { flattened } = params;
+  const { flattened, getContext } = params;
 
-  const value = useMemo(() => ({ formProps, errors, flattened }), [
+  const value = useMemo(() => ({ formProps, errors, flattened, getContext }), [
     formProps,
     errors,
     flattened,
+    getContext,
   ]);
 
   return [Context.Provider, value] as any[];

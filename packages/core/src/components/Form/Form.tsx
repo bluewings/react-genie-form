@@ -34,6 +34,7 @@ export interface FormProps extends ContainerProps {
   required?: string[];
   onChangeWithErrors?: (value: any, errors: any) => void;
   onSubmit?: (value: any) => void;
+  context?: any;
 }
 
 const enums = {
@@ -74,6 +75,7 @@ function FormInner(
     onChange,
     onChangeWithErrors,
     onSubmit,
+    context,
     ...restProps
   }: FormProps,
   ref: any,
@@ -122,6 +124,7 @@ function FormInner(
   const _size = useMemo(() => getPreferredValue('size', size), [size]);
 
   const flattened = useMemo(() => flattenMessages(asyncValue), [asyncValue]);
+  const getContext = useHandle(() => context || {});
   const [Provider, value] = useContextProvider({
     form,
     formTypes,
@@ -144,6 +147,7 @@ function FormInner(
     errorsReceived,
     showError,
     flattened,
+    getContext,
   });
 
   const getValue = useHandle(async () => {

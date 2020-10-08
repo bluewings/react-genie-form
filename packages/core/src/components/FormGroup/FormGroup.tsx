@@ -42,6 +42,7 @@ function FormGroupInner({
   errors,
   showError,
   Portal,
+  getContext,
   __ui,
   __show,
 }: any) {
@@ -114,6 +115,7 @@ function FormGroupInner({
       isTouched: formState.isTouched,
       readOnly: !!(__ui?.readOnly || schema?.readOnly),
       ArrayRemoveHandle: ArrayRemoveHandle || Noop,
+      getContext,
       __ui: __ui || {},
     };
     if (Array.isArray(schema.enum)) {
@@ -162,6 +164,7 @@ function FormGroupInner({
     formatLabel,
     formatErrorMessage,
     formatEnum,
+    getContext,
     __ui,
     __show,
   ]);
@@ -382,6 +385,10 @@ function FormGroupOuter({ __ui, ...props }: any) {
     dataPath,
   ]);
 
+  const getContext = useContext('getContext');
+
+  // console.log(getContext);
+
   return (
     <FC
       {...props}
@@ -400,6 +407,7 @@ function FormGroupOuter({ __ui, ...props }: any) {
       size={ui.size || size}
       showError={showError}
       Portal={Portal}
+      getContext={getContext}
       __ui={ui}
       __show={show}
     />
