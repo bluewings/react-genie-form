@@ -171,7 +171,7 @@ function FormInner(
 
     if (typeof onSubmit === 'function') {
       const { value, errors } = await getValue();
-      console.log(value, errors);
+      // console.log(value, errors);
       onSubmit(value);
     }
   };
@@ -193,18 +193,18 @@ function FormInner(
           />
         </form>
       ) : (
-        <Container
-          {...restProps}
-          schema={_schema}
-          defaultValue={defaultValue}
-          layout={_layout}
-          labelAlign={_labelAlign}
-          size={_size}
-          plugin={plugin}
-          onChange={handleChange}
-          showErrorSummary={showErrorSummary}
-        />
-      )}
+          <Container
+            {...restProps}
+            schema={_schema}
+            defaultValue={defaultValue}
+            layout={_layout}
+            labelAlign={_labelAlign}
+            size={_size}
+            plugin={plugin}
+            onChange={handleChange}
+            showErrorSummary={showErrorSummary}
+          />
+        )}
     </Provider>
   );
 }
