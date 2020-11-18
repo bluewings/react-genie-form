@@ -49,7 +49,7 @@ function TypeObject({
           handleChange({ [name]: value }, batch === true),
       }),
     );
-  }, [schema, readOnly]);
+  }, [schema, readOnly, defaultValue]);
 
   const childNodes = useMemo(() => {
     let items;

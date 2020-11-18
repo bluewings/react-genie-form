@@ -51,7 +51,7 @@ function FormGroupInner({
       typeof defaultValue !== 'undefined'
         ? [defaultValue, false]
         : [get(schema, ['default']), true],
-    [],
+    [defaultValue],
   );
   const batch = useRef<boolean>(isSchemaDefault);
   const [value, setValue] = useState(_defaultValue);
