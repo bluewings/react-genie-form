@@ -123,8 +123,8 @@ export const usage = () => {
         onChange={setValue}
         plugin={plugin}
         form={_form}
-        // size="small"
-        // layout="horizontal"
+      // size="small"
+      // layout="horizontal"
       />
       {/* <table>
         <tbody>
@@ -152,5 +152,56 @@ export const usage = () => {
 export const form = () => {
   return (
     <Form schema={schema} plugin={plugin} form={_form} layout="horizontal" />
+  );
+};
+
+
+const testSchema = {
+  type: 'object',
+  properties: {
+    name: {
+      type: 'string',
+    },
+    photo: {
+      type: 'object',
+      formType: 'custom',
+    },
+  }
+}
+
+
+function CustomForm({ onChange }) {
+  const set = () => {
+    onChange({ test: 'aaa' })
+  }
+  const unset = () => {
+
+    onChange()
+  }
+  return (
+    <div style={{ border: '5px solid red' }}>
+      <button onClick={set}>set</button>
+      <button onClick={unset}>unset</button>
+    </div>
+  )
+}
+
+const formTypes = [
+  {
+    test: { type: 'object', formType: 'custom' },
+    component: CustomForm,
+  }
+]
+
+
+export const form2 = () => {
+  const [value, setValue] = useState();
+  console.log({ value });
+  return (
+    <div style={{ padding: 50 }}>
+      <Form schema={testSchema} plugin={plugin} formTypes={formTypes} onChange={setValue} />
+      <hr />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
   );
 };
