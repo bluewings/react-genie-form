@@ -1,4 +1,4 @@
-import formTypes from './formTypes';
+import formTypes, { formType } from './formTypes';
 import Label from './Label';
 import ErrorMessage from './ErrorMessage';
 import './styles/common.scss';
@@ -22,4 +22,4 @@ const styles = ({ size }: any) =>
 
 const plugin: any = { formTypes, Label, ErrorMessage, styles };
 
-export { plugin, formTypes, Label, ErrorMessage, styles };
+export { plugin, formTypes, formType, Label, ErrorMessage, styles };

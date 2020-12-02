@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Divider } from 'antd';
 import FormTypeCode from './FormTypeCode';
 import FormTypeDate from './FormTypeDate';
@@ -129,3 +129,23 @@ const formTypes: FormType[] = [
 ];
 
 export default formTypes;
+
+export const formType = {
+  FormTypeCode,
+  FormTypeDate,
+  FormTypeDateRange,
+  FormTypeDateTimeRange,
+  FormTypeTime,
+  FormTypeMonth,
+  FormTypeMonthRange,
+  FormTypeEnum,
+  FormTypeRadioGroup,
+  FormTypeSlider,
+  FormTypeSwitch,
+  FormTypeTextarea,
+  FormTypeURI,
+  TypeArray,
+  TypeBoolean,
+  TypeNumber,
+  TypeString,
+};
