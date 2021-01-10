@@ -78,3 +78,49 @@ export const grid = () => {
   );
 };
 
+export const anyOf = () => {
+  const schema = {
+    type: 'object',
+    anyOf: [
+      {
+        properties: { category: { enum: ['movie'] } },
+        required: ['title', 'openingDate'],
+      },
+      {
+        properties: { category: { enum: ['game'] } },
+        required: ['title', 'releaseDate', 'numOfPlayers'],
+      },
+    ],
+    // 각각 개별 필드의 기준으로 조건을 풀어내어야한다.
+    // title
+    // - ['movie'].includes(category)
+    // - ['game'].includes(category)
+    // openingDate
+    // - ['movie'].includes(category
+    // releaseDate
+    // - ['game'].includes(category)
+    // numOfPlayers
+    // - ['game'].includes(category)
+    properties: {
+      category: { type: 'string', enum: ['game', 'movie'], default: 'game' },
+      title: { type: 'string' },
+
+      openingDate: {
+        type: 'string',
+        format: 'date',
+        // 'ui:show': '@.title === "wow"',
+      },
+      releaseDate: {
+        type: 'string',
+        format: 'date',
+        // 'ui:show': '@.title === "wow"',
+      },
+      numOfPlayers: { type: 'number' },
+    },
+  };
+  return (
+    <div>
+      <Form schema={schema} />
+    </div>
+  );
+};

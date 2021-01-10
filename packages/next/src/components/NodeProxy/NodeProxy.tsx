@@ -23,6 +23,7 @@ interface INodeProxyProps {
   restProps?: any;
   renderNode?: Function;
   form?: any[];
+  Wrapper?: any;
 }
 
 interface INodeProxyPropsAlt {
@@ -31,6 +32,7 @@ interface INodeProxyPropsAlt {
   restProps?: any;
   renderNode?: Function;
   form?: any[];
+  Wrapper?: any;
 }
 
 function NodeProxy({
@@ -39,6 +41,7 @@ function NodeProxy({
   restProps: rest,
   renderNode: _renderNode,
   form,
+  Wrapper,
 }: INodeProxyProps | INodeProxyPropsAlt) {
   const restProps = useRef<any>({});
   restProps.current = useObjectSnapshot(rest);
@@ -76,19 +79,23 @@ function NodeProxy({
   const count = useRef(0);
   count.current++;
 
+  const Wrap = Wrapper || Fragment
+
   return (
     node &&
     show && (
-      <Renderer
-        isArrayItem={node.isArrayItem}
-        depth={node.depth}
-        path={node.path}
-        name={node.name}
-        value={node.getValue()}
-        errors={node.getErrors()}
-        schema={node.schema}
-        Input={Input}
-      />
+      <Wrap>
+        <Renderer
+          isArrayItem={node.isArrayItem}
+          depth={node.depth}
+          path={node.path}
+          name={node.name}
+          value={node.getValue()}
+          errors={node.getErrors()}
+          schema={node.schema}
+          Input={Input}
+        />
+      </Wrap>
     )
   );
 }
@@ -292,11 +299,27 @@ const Row = ({ node, childItems: children, restProps }: any) => {
               }
               return weakMap.current.get(element);
             } else if (!dict.current[node.path]) {
-              dict.current[node.path] = React.memo((props: any) => (
-                <div className={styles.column} style={styleProps}>
-                  <NodeProxy node={node} restProps={props} />
-                </div>
-              ));
+
+              const Wrapper = ({ children }: any) => {
+                return (
+                  <div className={styles.column} style={styleProps}>
+                    {children}
+                  </div>
+                )
+              }
+              dict.current[node.path] = React.memo((props: any) => {
+
+
+                return (
+                  (
+
+
+
+                    <NodeProxy node={node} restProps={props} Wrapper={Wrapper} />
+
+                  )
+                )
+              });
               dict.current[node.path].key = node.path;
             }
             return dict.current[node.path];
