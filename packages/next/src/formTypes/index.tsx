@@ -1,3 +1,4 @@
+import React from 'react';
 import TypeArray from './TypeArray';
 import TypeBoolean from './TypeBoolean';
 import TypeDate from './TypeDate';
