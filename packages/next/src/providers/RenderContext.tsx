@@ -23,10 +23,10 @@ const DefaultRender = ({ isArrayItem, depth, name, errors, Input }: any) => {
   return depth === 0 ? (
     <Input />
   ) : (
-    <div>
-      <label className="form-label">{name}</label>
-      <Input className="form-control" />
-      <pre>{JSON.stringify(errors, null, 2)}</pre>
-    </div>
-  );
+      <div>
+        <label className="form-label">{name}</label>
+        <Input className="form-control" />
+        {/* <pre>{JSON.stringify(errors, null, 2)}</pre> */}
+      </div>
+    );
 };

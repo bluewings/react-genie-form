@@ -374,22 +374,15 @@ const AdapterCore = React.memo(
     const { dirty, touched } = node.getState();
 
     return FormComponent ? (
-      <div
-        style={{
-          border: touched ? '1px solid green' : '0px solid transparent',
-          background: dirty ? 'lightyellow' : 'transparent',
-        }}
-      >
-        <FormComponent
-          {...restProps}
-          schema={schema}
-          defaultValue={_defaultValue}
-          value={getValue()}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          {...formComponentProps}
-        />
-      </div>
+      <FormComponent
+        {...restProps}
+        schema={schema}
+        defaultValue={_defaultValue}
+        value={getValue()}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        {...formComponentProps}
+      />
     ) : null;
   },
 );
