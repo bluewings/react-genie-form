@@ -9,12 +9,8 @@ import React, {
 } from 'react';
 
 import useFormComponent from './useFormComponent';
-import {
-  useConstant,
-  useObjectSnapshot,
-  useTargetNode,
-  useTracker,
-} from '../../hooks';
+import useTargetNode from './useTargetNode';
+import { useConstant, useObjectSnapshot, useTracker } from '../../hooks';
 import { Node } from '../../nodes';
 import { FormTypesContext, RenderContext } from '../../providers';
 import styles from './NodeProxy.module.scss';
@@ -68,8 +64,8 @@ function NodeProxy({
         />
       )
     ) : (
-      <Fragment />
-    );
+        <Fragment />
+      );
   }, [node, restProps, renderNode]);
 
   const Renderer = useMemo(
@@ -262,49 +258,49 @@ const Row = ({ node, childItems: children, restProps }: any) => {
     () =>
       ['object', 'array', 'virtual'].includes(type)
         ? children
-            .filter(
-              ({ node, isVirtualized, element }: any) =>
-                (node && isVirtualized !== true) || element,
-            )
-            .map(({ node, element, grid }: any) => {
-              let styleProps: any = {
-                display: 'block',
-                // flex: '1 1 auto',
+          .filter(
+            ({ node, isVirtualized, element }: any) =>
+              (node && isVirtualized !== true) || element,
+          )
+          .map(({ node, element, grid }: any) => {
+            let styleProps: any = {
+              display: 'block',
+              // flex: '1 1 auto',
+              flexGrow: 1,
+              flexShrink: 1,
+              flexBasis: '100%',
+              paddingLeft: 5,
+              paddingRight: 5,
+            };
+            if (typeof grid === 'number') {
+              styleProps = {
+                ...styleProps,
+                // flex: '1 0 ',
                 flexGrow: 1,
-                flexShrink: 1,
-                flexBasis: '100%',
-                paddingLeft: 5,
-                paddingRight: 5,
+                flexShrink: 0,
+                flexBasis: `${(100 / 12) * grid}%`,
+                width: `${(100 / 12) * grid}%`,
               };
-              if (typeof grid === 'number') {
-                styleProps = {
-                  ...styleProps,
-                  // flex: '1 0 ',
-                  flexGrow: 1,
-                  flexShrink: 0,
-                  flexBasis: `${(100 / 12) * grid}%`,
-                  width: `${(100 / 12) * grid}%`,
+            }
+            if (element) {
+              if (!weakMap.current.has(element)) {
+                const Element = () => {
+                  return <div style={styleProps}>{element}</div>;
                 };
+                Element.key = `element_${seq.current++}`;
+                weakMap.current.set(element, Element);
               }
-              if (element) {
-                if (!weakMap.current.has(element)) {
-                  const Element = () => {
-                    return <div style={styleProps}>{element}</div>;
-                  };
-                  Element.key = `element_${seq.current++}`;
-                  weakMap.current.set(element, Element);
-                }
-                return weakMap.current.get(element);
-              } else if (!dict.current[node.path]) {
-                dict.current[node.path] = React.memo((props: any) => (
-                  <div className={styles.column} style={styleProps}>
-                    <NodeProxy node={node} restProps={props} />
-                  </div>
-                ));
-                dict.current[node.path].key = node.path;
-              }
-              return dict.current[node.path];
-            })
+              return weakMap.current.get(element);
+            } else if (!dict.current[node.path]) {
+              dict.current[node.path] = React.memo((props: any) => (
+                <div className={styles.column} style={styleProps}>
+                  <NodeProxy node={node} restProps={props} />
+                </div>
+              ));
+              dict.current[node.path].key = node.path;
+            }
+            return dict.current[node.path];
+          })
         : undefined,
     [type, children, dict, weakMap],
   );

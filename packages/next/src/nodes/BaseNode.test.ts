@@ -1,6 +1,14 @@
-import { waitFor } from '@testing-library/react';
+// import { waitFor } from '@testing-library/react';
 import Ajv from 'ajv';
 import { nodeFromSchema } from './nodeFactory';
+
+const wait = (delay = 0) => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(true);
+    }, delay);
+  })
+}
 
 test('node.findNode', () => {
   const node = nodeFromSchema({
@@ -48,17 +56,17 @@ test('validate', async () => {
     },
   });
   const name = node?.findNode('name');
-  await waitFor(() => null, { timeout: 0 });
+  await wait();
   expect(
     (name?.getErrors() || []).map(({ keyword }: any) => keyword),
   ).toMatchObject(['maxLength', 'pattern']);
   name?.setValue && name.setValue('ron weasley');
-  await waitFor(() => null, { timeout: 0 });
+  await wait();
   expect(
     (name?.getErrors() || []).map(({ keyword }: any) => keyword),
   ).toMatchObject(['maxLength']);
   name?.setValue && name.setValue('ron');
-  await waitFor(() => null, { timeout: 0 });
+  await wait();
   expect(name?.getErrors()).toBe(null);
 });
 
@@ -85,10 +93,10 @@ test('validate with provided ajv', async () => {
     { ajv },
   );
   const num = node?.findNode('num');
-  await waitFor(() => null, { timeout: 0 });
+  await wait();
   expect(num?.getErrors()?.[0]?.keyword).toBe('isEven');
   num?.setValue && num.setValue(2);
-  await waitFor(() => null, { timeout: 0 });
+  await wait();
   expect(num?.getErrors()).toBe(null);
 });
 

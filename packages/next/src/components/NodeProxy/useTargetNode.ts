@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react';
-import useTracker from './useTracker';
-import { NodeContext } from '../providers';
+import useTracker from '../../hooks/useTracker';
+import { NodeContext } from '../../providers';
 
 function useTargetNode(path: string | undefined, __node?: any) {
   const rootNode = useContext(NodeContext);
