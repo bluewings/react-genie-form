@@ -10,8 +10,9 @@ function FormTypeEnum({
   defaultValue,
   onChange,
   readOnly,
-  __ui: { style },
+  __ui,
 }: any) {
+  const { style } = __ui || {};
   const [schema, mode]: any[] = useMemo(
     () =>
       _schema?.type === 'array'
@@ -34,6 +35,7 @@ function FormTypeEnum({
       defaultValue={defaultValue}
       onChange={onChange}
       disabled={readOnly}
+      // style={{ width: '100%' }}
       style={{ minWidth: 171, ...style }}
     >
       {options}

@@ -10,6 +10,9 @@ import React, { useState, useMemo, useEffect } from 'react';
 // import { isUndefined } from 'lodash-es';
 // import flyers from '../../data/flyers.json';
 import Form from './components/Form';
+import 'antd/dist/antd.css';
+// @ts-ignore
+import { formTypes } from '../../plugin-antd/src';
 
 export default {
   title: 'next',
@@ -26,7 +29,7 @@ export const usage = () => {
   };
   return (
     <div>
-      <Form schema={schema} />
+      <Form schema={schema} formTypes={formTypes} />
     </div>
   );
 };
@@ -73,7 +76,7 @@ export const grid = () => {
   ];
   return (
     <div>
-      <Form schema={schema} form={grid} />
+      <Form schema={schema} form={grid} formTypes={formTypes} />
     </div>
   );
 };
@@ -120,7 +123,7 @@ export const anyOf = () => {
   };
   return (
     <div>
-      <Form schema={schema} />
+      <Form schema={schema} formTypes={formTypes} />
     </div>
   );
 };

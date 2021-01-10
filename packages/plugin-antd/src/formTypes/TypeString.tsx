@@ -10,8 +10,9 @@ function TypeString({
   defaultValue,
   onChange,
   readOnly,
-  __ui: { style },
+  __ui,
 }: any) {
+  const { style } = __ui || {};
   const Input = useMemo(
     () =>
       get(schema, ['format'], get(schema, ['formType'])) === 'password'
