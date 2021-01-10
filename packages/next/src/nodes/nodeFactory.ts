@@ -24,6 +24,7 @@ function nodeFactory({
         parentNode,
         onChange,
         ajv,
+        nodeFactory,
       });
     case 'number':
       return new NumberNode({
@@ -42,6 +43,7 @@ function nodeFactory({
         parentNode,
         onChange,
         ajv,
+        nodeFactory,
       });
     case 'string':
       return new StringNode({

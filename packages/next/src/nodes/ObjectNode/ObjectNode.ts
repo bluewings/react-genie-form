@@ -1,5 +1,5 @@
 import BaseNode, { IConstructorProps } from '../BaseNode';
-import nodeFactory from '../nodeFactory';
+// import nodeFactory from '../nodeFactory';
 
 class ObjectNode extends BaseNode {
   public children = () => this._children;
@@ -20,6 +20,7 @@ class ObjectNode extends BaseNode {
     onChange,
     parentNode,
     ajv,
+    nodeFactory,
   }: IConstructorProps) {
     super({ name, schema, defaultValue, onChange, parentNode, ajv });
 
@@ -90,15 +91,15 @@ class ObjectNode extends BaseNode {
             name,
             schema: invertedAnyOf[name]
               ? {
-                  ...schema,
-                  'ui:show': combineConditions(
-                    [
-                      schema['ui:show'],
-                      combineConditions(invertedAnyOf[name], '||'),
-                    ],
-                    '&&',
-                  ),
-                }
+                ...schema,
+                'ui:show': combineConditions(
+                  [
+                    schema['ui:show'],
+                    combineConditions(invertedAnyOf[name], '||'),
+                  ],
+                  '&&',
+                ),
+              }
               : schema,
             parentNode: this,
             defaultValue: defaultValue?.[name],
@@ -136,7 +137,8 @@ class ObjectNode extends BaseNode {
                 defaultValue: refNodes.map(
                   (refNode: any) => refNode?.defaultValue,
                 ),
-                onChange: (value: any) => {},
+                onChange: (value: any) => { },
+                nodeFactory,
               }),
             });
           }

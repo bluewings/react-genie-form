@@ -19,6 +19,7 @@ export interface IConstructorProps {
   parentNode?: any;
   refNodes?: BaseNode[];
   ajv?: any;
+  nodeFactory?: any;
 }
 
 type Listener = (type: string, payload: any) => void;
@@ -91,9 +92,9 @@ abstract class BaseNode {
   subscribe = (callback: Listener) => {
     this._listeners.push(callback);
     return () =>
-      (this._listeners = this._listeners.filter(
-        (listener) => listener !== callback,
-      ));
+    (this._listeners = this._listeners.filter(
+      (listener) => listener !== callback,
+    ));
   };
   publish = (type: string, payload: any) => {
     this._listeners.forEach((listener) => listener(type, payload));

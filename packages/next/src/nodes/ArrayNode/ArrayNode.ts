@@ -1,6 +1,6 @@
 import parseArray from './parseArray';
 import BaseNode, { IConstructorProps } from '../BaseNode';
-import nodeFactory from '../nodeFactory';
+// import nodeFactory from '../nodeFactory';
 
 class ArrayNode extends BaseNode {
   public children = () => this._edges().map(({ source }) => source);
@@ -30,6 +30,7 @@ class ArrayNode extends BaseNode {
   //     this._subscribers = this._subscribers.filter((e) => e !== callback);
   //   };
   // };
+  private _nodeFactory: any;
 
   constructor({
     name,
@@ -38,8 +39,11 @@ class ArrayNode extends BaseNode {
     onChange,
     parentNode,
     ajv,
+    nodeFactory,
   }: IConstructorProps) {
     super({ name, schema, defaultValue, onChange, parentNode, ajv });
+
+    this._nodeFactory = nodeFactory;
 
     this._emitChange = () => {
       if (this._ready) {
@@ -88,12 +92,13 @@ class ArrayNode extends BaseNode {
       data: data,
     };
 
-    this._sourceMap[id].node = nodeFactory({
+    this._sourceMap[id].node = this._nodeFactory({
       name: id,
       schema: this.schema.items,
       defaultValue: data,
       parentNode: this,
       onChange: handleChange,
+      nodeFactory: this._nodeFactory,
     });
 
     this.hasChanged = true;
