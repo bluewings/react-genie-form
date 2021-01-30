@@ -52,5 +52,6 @@
     "presets": [
       "react-app"
     ]
-  }
+  },
+  "gitHead": "cf8b064b524251fb9008ecb609567e1251a2fce4"
 }
