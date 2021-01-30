@@ -14,6 +14,10 @@
     "url": "https://github.com/bluewings/react-genie-form.git",
     "directory": "packages/next"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "ajv": "^6.12.2",
     "date-fns": "^2.16.1"
