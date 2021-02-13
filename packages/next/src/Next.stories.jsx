@@ -171,3 +171,52 @@ export const watch = () => {
     </div>
   );
 };
+
+
+export const form_types = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        objectNode: {
+          type: 'object',
+        },
+        textNode: {
+          type: 'string',
+        },
+      },
+    }
+  }, []);
+  const formTypeMap = useMemo(() => {
+    return {
+      '$.objectNode': ({ value, watchvalues, onChange }) => {
+        const handleClick = () => {
+          onChange({ test: 'wow' })
+        }
+        return (
+          <button onClick={handleClick}>object set</button>
+        )
+      },
+      '$.textNode': ({ value, watchvalues, onChange }) => {
+        const handleClick = () => {
+          onChange('wow')
+        }
+        return (
+          <button onClick={handleClick}>text set</button>
+        )
+      },
+    }
+  }, []);
+
+  const handleChange = (val) => {
+    setValue(val);
+  }
+  return (
+    <div>
+      <Form schema={schema} formTypeMap={formTypeMap} onChange={handleChange}/>
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
+  );
+};

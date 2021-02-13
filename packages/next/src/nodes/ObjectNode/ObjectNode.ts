@@ -4,7 +4,11 @@ import BaseNode, { IConstructorProps } from '../BaseNode';
 class ObjectNode extends BaseNode {
   public children = () => this._children;
   public getValue = (): any => this._value;
-  public setValue = (value?: any) => undefined;
+  // public setValue = (value?: any) => undefined;
+  public setValue = (value?: any) => {
+    this._draft = { ...value };
+    this._emitChange();
+  };
   public parseValue = (value: any) => value;
 
   private _children: any[] = [];
