@@ -153,15 +153,15 @@ function TypeArray({
       return children ? (
         <span onClick={handleItemRemove}>{children}</span>
       ) : (
-        <BtnRemove onClick={handleItemRemove} disabled={cannotRemoveMore}>
-          del
-        </BtnRemove>
-      );
+          <BtnRemove onClick={handleItemRemove} disabled={cannotRemoveMore}>
+            del
+          </BtnRemove>
+        );
     },
     [wrapId, _prevVal, minItems, cannotRemoveMore],
   );
 
-  const { hideRemoveHandle, flex } = __ui;
+  const { hideRemoveHandle, flex } = __ui || {};
 
   const itemStyle = useMemo(
     () => (hideRemoveHandle ? {} : { display: 'flex', flex: '1 1 auto' }),
@@ -171,8 +171,8 @@ function TypeArray({
   const WrapItem = useMemo(() => {
     return flex == 'auto'
       ? ({ children }: any) => (
-          <div style={{ display: 'flex', flex: 'auto' }}>{children}</div>
-        )
+        <div style={{ display: 'flex', flex: 'auto' }}>{children}</div>
+      )
       : ({ children }: any) => <>{children}</>;
   }, [flex]);
 

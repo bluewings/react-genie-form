@@ -17,16 +17,17 @@ function FormTypeURI({
   defaultValue,
   onChange,
   readOnly,
-  __ui: { style },
+  __ui,
 }: any) {
+  const { style } = __ui || {};
   const protocols: string[] = useMemo(
     () =>
       Object.keys(
         (Array.isArray(schema.options?.protocols)
           ? schema.options?.protocols
           : Array.isArray(schema.protocols)
-          ? schema.protocols
-          : defaultProtocols
+            ? schema.protocols
+            : defaultProtocols
         ).reduce((accum: any, key: string) => ({ ...accum, [key]: true }), {}),
       ),
     [schema],
