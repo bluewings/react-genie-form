@@ -17,7 +17,9 @@ function useTargetNode(path: string | undefined, __node?: any) {
   const { dependencies: _dependencies, showFunc, getWatchValues } = useMemo(() => {
     const dependencies: string[] = [];
     let showFunc;
-    if (typeof uiShow === 'string') {
+    if (uiShow === false) {
+      showFunc = () => false;
+    } else if (typeof uiShow === 'string') {
       const funcStr = `return !!(${uiShow
         .replace(/[$@].[a-zA-Z0-9.]+/g, (whole: string) => {
           if (dependencies.indexOf(whole) === -1) {

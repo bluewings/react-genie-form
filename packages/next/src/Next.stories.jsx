@@ -195,8 +195,14 @@ export const form_types = () => {
         const handleClick = () => {
           onChange({ test: 'wow' })
         }
+        const handleUnsetClick = () => {
+          onChange(undefined)
+        }
         return (
-          <button onClick={handleClick}>object set</button>
+          <div>
+            <button onClick={handleClick}>object set</button>
+            <button onClick={handleUnsetClick}>object unset</button>
+          </div>
         )
       },
       '$.textNode': ({ value, watchvalues, onChange }) => {

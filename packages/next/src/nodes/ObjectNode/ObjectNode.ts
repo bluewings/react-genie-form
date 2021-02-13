@@ -6,13 +6,13 @@ class ObjectNode extends BaseNode {
   public getValue = (): any => this._value;
   // public setValue = (value?: any) => undefined;
   public setValue = (value?: any) => {
-    this._draft = { ...value };
+    this._draft = value;
     this._emitChange();
   };
   public parseValue = (value: any) => value;
 
   private _children: any[] = [];
-  private _value: { [key: string]: any };
+  private _value: { [key: string]: any } | undefined;
   private _draft: { [key: string]: any };
   private _emitChange: () => void;
   private _ready: boolean = false;
@@ -32,8 +32,12 @@ class ObjectNode extends BaseNode {
     this._draft = {};
 
     this._emitChange = () => {
-      if (this._ready && Object.keys(this._draft).length > 0) {
-        this._value = { ...this._value, ...this._draft };
+      if (this._ready && (this._draft === undefined || Object.keys(this._draft).length > 0)) {
+        if (this._draft === undefined) {
+          this._value = undefined;
+        } else {
+          this._value = { ...this._value, ...this._draft };
+        }
         this._draft = {};
         if (typeof onChange === 'function') {
           onChange(this._value);
@@ -108,7 +112,7 @@ class ObjectNode extends BaseNode {
             parentNode: this,
             defaultValue: defaultValue?.[name],
             onChange: (value: any) => {
-              if (this._draft[name] !== value) {
+              if (this._draft[name] !== value || value === undefined) {
                 this._draft[name] = value;
                 this._emitChange();
               }
