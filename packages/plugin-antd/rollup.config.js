@@ -3,6 +3,7 @@ import postcss from 'rollup-plugin-postcss';
 
 const pkg = require('./package.json');
 
+
 const rollupConfig = {
   input: 'src/index.ts',
   plugins: [
