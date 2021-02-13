@@ -43,10 +43,10 @@ function NodeProxy({
   form,
   Wrapper,
 }: INodeProxyProps | INodeProxyPropsAlt) {
-  const restProps = useRef<any>({});
-  restProps.current = useObjectSnapshot(rest);
+  const { node, show, watchvalues } = useTargetNode(path, _node);
 
-  const { node, show } = useTargetNode(path, _node);
+  const restProps = useRef<any>({});
+  restProps.current = useObjectSnapshot({ ...rest, watchvalues });
 
   const __renderNode = useContext(RenderContext);
 

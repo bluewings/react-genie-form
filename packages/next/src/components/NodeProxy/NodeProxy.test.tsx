@@ -76,3 +76,33 @@ test('conditional rendering by "anyOf"', async () => {
     ),
   ).toMatchObject(['category', 'title', 'releaseDate', 'numOfPlayers']);
 });
+
+test('watch props', async () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      profile: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', default: 'harry' },
+          age: { type: 'number', default: 10 },
+        },
+      },
+      greeting: {
+        type: 'string',
+        formType: 'greeting',
+        options: {
+          watch: '$.profile.name',
+        },
+      },
+    },
+  };
+  const formTypes = [
+    {
+      test: { type: 'string', formType: 'greeting' },
+      component: ({ watchvalues }: any) => <div data-testid="message">hello "{watchvalues[0]}"</div>,
+    },
+  ];
+  render(<Form schema={schema} formTypes={formTypes} />);
+  expect(screen.getByTestId('message').innerHTML).toBe('hello "harry"');
+});

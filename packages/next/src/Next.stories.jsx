@@ -127,3 +127,47 @@ export const anyOf = () => {
     </div>
   );
 };
+
+
+export const watch = () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      profile: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', default: 'harry' },
+          age: { type: 'number', default: 10 },
+        },
+      },
+      greeting: {
+        type: 'string',
+        formType: 'greeting',
+        options: {
+          watch: '$.profile.name',
+        },
+      },
+    },
+  };
+  const _formTypes = [
+    {
+      test: {
+        type: 'string',
+        formType: 'greeting',
+      },
+      component: ({ value, watchvalues, onChange }) => {
+        return (
+          <strong>
+            hello '{watchvalues[0]}'
+          </strong>
+        )
+      }
+    },
+    // ...formTypes,
+  ]
+  return (
+    <div>
+      <Form schema={schema} formTypes={_formTypes} />
+    </div>
+  );
+};

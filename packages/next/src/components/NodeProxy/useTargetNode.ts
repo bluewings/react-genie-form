@@ -12,8 +12,9 @@ function useTargetNode(path: string | undefined, __node?: any) {
   );
 
   const uiShow = node?.schema?.['ui:show'];
+  const _watch = node?.schema?.options?.watch;
 
-  const { dependencies: _dependencies, showFunc } = useMemo(() => {
+  const { dependencies: _dependencies, showFunc, getWatchValues } = useMemo(() => {
     const dependencies: string[] = [];
     let showFunc;
     if (typeof uiShow === 'string') {
@@ -29,9 +30,21 @@ function useTargetNode(path: string | undefined, __node?: any) {
 
       showFunc = new Function('deps', funcStr);
     }
-
-    return { dependencies, showFunc };
-  }, [uiShow]);
+    let getWatchValues;
+    if (Array.isArray(_watch) || typeof _watch === 'string') {
+      const indexes = (Array.isArray(_watch) ? _watch : [_watch]).map(dep => {
+        if (dependencies.indexOf(dep) === -1) {
+          dependencies.push(dep);
+        }
+        return dependencies.indexOf(dep)
+      });
+      const funcStr = `return [${indexes.join(',')}].map(function(i) {
+        return deps[i];
+      })`;
+      getWatchValues = new Function('deps', funcStr);
+    }
+    return { dependencies, showFunc, getWatchValues };
+  }, [_watch, uiShow]);
 
   const deps = useMemo(() => {
     if (_dependencies.length > 0 && node) {
@@ -51,6 +64,13 @@ function useTargetNode(path: string | undefined, __node?: any) {
     }
     return true;
   }, [showFunc, _deps]);
+
+  const watchvalues = useMemo(() => {
+    if (typeof getWatchValues === 'function') {
+      return getWatchValues(_deps);
+    }
+    return [];
+  }, [getWatchValues, _deps]);
 
   useEffect(() => {
     if (_dependencies.length > 0 && node.rootNode) {
@@ -83,7 +103,7 @@ function useTargetNode(path: string | undefined, __node?: any) {
 
   useTracker(node);
 
-  return { node, show: !!returnValue };
+  return { node, show: !!returnValue, watchvalues };
 }
 
 export default useTargetNode;
