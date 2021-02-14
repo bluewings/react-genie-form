@@ -346,7 +346,7 @@ interface IAdapterCoreProps {
 
 const AdapterCore = React.memo(
   ({ node, childNodes, restProps }: IAdapterCoreProps) => {
-    const { schema, setValue, getValue } = node;
+    const { schema, setValue, getValue, getErrors } = node;
 
     const formTypes = useContext(FormTypesContext);
     const FormComponent = useFormComponent(node, formTypes);
@@ -402,6 +402,7 @@ const AdapterCore = React.memo(
         schema={schema}
         defaultValue={_defaultValue}
         value={getValue()}
+        errors={getErrors()}
         onChange={handleChange}
         onBlur={handleBlur}
         {...formComponentProps}
