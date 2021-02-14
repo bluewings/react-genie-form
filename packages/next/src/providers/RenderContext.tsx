@@ -26,6 +26,9 @@ const DefaultRender = ({ isArrayItem, depth, name, errors, Input }: any) => {
       <div>
         <label className="form-label">{name}</label>
         <Input className="form-control" />
+        {errors?.length > 0 && (
+          <em>{errors[0].message}</em>
+        )}
         {/* <pre>{JSON.stringify(errors, null, 2)}</pre> */}
       </div>
     );

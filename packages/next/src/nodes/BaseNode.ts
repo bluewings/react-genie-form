@@ -40,18 +40,32 @@ abstract class BaseNode {
   abstract setValue?: (value: any) => void;
   abstract parseValue: (value: any) => any;
 
-  getErrors = (): any[] | null =>
-    this._errors?.length > 0 ? this._errors : null;
+  getErrors = (): any[] | null => {
+    const errors = [...this._errors, ...this._receivedErrors];
+    return errors.length > 0 ? errors : null;
+  };
   setErrors = (errors: any[]) => {
     const serialized = JSON.stringify(errors);
     if (this._errorHash !== serialized) {
       this._errorHash = serialized;
       this._errors = errors;
-      this.publish('validate', errors);
+      this.publish('validate', [...this._errors, ...this._receivedErrors]);
     }
   };
   clearErrors = () => {
     this.setErrors([]);
+  };
+
+  setReceivedErrors = (errors: any[]) => {
+    const serialized = JSON.stringify(errors);
+    if (this._receivedErrorHash !== serialized) {
+      this._receivedErrorHash = serialized;
+      this._receivedErrors = errors;
+      this.publish('validate', [...this._errors, ...this._receivedErrors]);
+    }
+  };
+  clearReceivedErrorsrErrors = () => {
+    this.setReceivedErrors([]);
   };
 
   getState = () => this._state;
@@ -103,9 +117,12 @@ abstract class BaseNode {
   protected _listeners: Listener[] = [];
   protected _validate?: Function;
 
-  private _errors: any;
+  private _errors: any = [];
   private _errorHash?: string;
   private _errorDataPaths: string[] = [];
+
+  private _receivedErrors: any = [];
+  private _receivedErrorHash?: string;
 
   private _state: { [key: string]: any } = {};
 

@@ -16,6 +16,7 @@ interface INodeContextProvider {
   defaultValue?: any;
   onChange?: (value: any) => void;
   children: ReactNode;
+  errors?: any[];
 }
 
 const Provider = ({
@@ -23,6 +24,7 @@ const Provider = ({
   defaultValue,
   onChange,
   children,
+  errors,
 }: INodeContextProvider) => {
   const initialValue = useConstant(defaultValue);
 
@@ -52,6 +54,23 @@ const Provider = ({
       }),
     [schema, initialValue, handleChange],
   );
+
+  const lastErrors = useRef<any>({});
+  useEffect(() => {
+    const currErrors = (errors || []).reduce((accum: any, e) => {
+      if (!accum[e.dataPath]) {
+        accum[e.dataPath] = [];
+      }
+      accum[e.dataPath].push(e);
+      return accum
+    }, {});
+    [...Object.keys(lastErrors.current), ...Object.keys(currErrors),]
+      .filter((e, i, arr) => arr.indexOf(e) === i)
+      .forEach(dataPath => {
+        rootNode?.findNode(dataPath)?.setReceivedErrors(currErrors[dataPath] || []);
+      });
+    lastErrors.current = currErrors;
+  }, [rootNode, errors]);
 
   return (
     <NodeContext.Provider value={rootNode}>

@@ -19,6 +19,7 @@ interface IFormProps {
   customRender?: Function;
   form?: Form[];
   children?: ReactNode;
+  errors?: any[];
 }
 
 type Form = string | any;
@@ -32,6 +33,7 @@ function Form({
   customRender,
   form,
   children,
+  errors,
 }: IFormProps) {
   const [value, setValue] = React.useState<any>({});
   const handleChange = (value: any) => {
@@ -45,6 +47,7 @@ function Form({
       schema={schema}
       defaultValue={defaultValue}
       onChange={handleChange}
+      errors={errors}
     >
       <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
         <RenderContextProvider render={customRender}>

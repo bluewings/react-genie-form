@@ -226,3 +226,45 @@ export const form_types = () => {
     </div>
   );
 };
+
+export const errors = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: { type: 'string', maxLength: 3, default: 'exceed max length' },
+        message: { type: 'string', minLength: 3, default: '1' },
+      },
+    }
+  }, []);
+
+
+  const handleChange = (val) => {
+    setValue(val);
+  }
+
+  const [errors, setErrors] = useState([
+    {
+      "keyword": "maxLength",
+      "dataPath": ".message",
+      "schemaPath": "#/properties/slogan/maxLength",
+      "params": {
+        "limit": 20
+      },
+      "message": "should NOT be longer than 20 characters"
+    }
+  ]);
+
+  const clearErrors = () => {
+    setErrors([]);
+  }
+
+  return (
+    <div>
+      <Form schema={schema} onChange={handleChange} errors={errors} />
+      <button onClick={clearErrors}>clear received errors</button>
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};
