@@ -87,12 +87,14 @@ function NodeProxy({
       <Wrap>
         <Renderer
           isArrayItem={node.isArrayItem}
+          isRoot={node.isRoot}
           depth={node.depth}
           path={node.path}
           name={node.name}
           value={node.getValue()}
           errors={node.getErrors()}
           schema={node.schema}
+          node={node}
           Input={Input}
         />
       </Wrap>
