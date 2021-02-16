@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, forwardRef, useImperativeHandle } from 'react';
 import FormGroup from '../FormGroup';
 import FormInput from '../FormInput';
 import FormRender from '../FormRender';
@@ -34,7 +34,7 @@ function Form({
   form,
   children,
   errors,
-}: IFormProps) {
+}: IFormProps, ref: any) {
   const [value, setValue] = React.useState<any>({});
   const handleChange = (value: any) => {
     setValue(value);
@@ -42,11 +42,22 @@ function Form({
       onChange(value);
     }
   };
+
+  const [rootNode, setRootNode] = React.useState<any>();
+  const handleReady = (data: any) => {
+    setRootNode(data?.rootNode);
+  }
+
+  useImperativeHandle(ref, () => ({
+    node: rootNode,
+  }), [rootNode]);
+
   return (
     <NodeContextProvider
       schema={schema}
       defaultValue={defaultValue}
       onChange={handleChange}
+      onReady={handleReady}
       errors={errors}
     >
       <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
@@ -70,8 +81,10 @@ function Form({
   );
 }
 
-Form.Input = FormInput;
-Form.Group = FormGroup;
-Form.Render = FormRender;
+const enhanced = forwardRef(Form) as Form;
 
-export default Form;
+enhanced.Input = FormInput;
+enhanced.Group = FormGroup;
+enhanced.Render = FormRender;
+
+export default enhanced;

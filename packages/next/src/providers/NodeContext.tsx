@@ -15,6 +15,7 @@ interface INodeContextProvider {
   schema: Schema;
   defaultValue?: any;
   onChange?: (value: any) => void;
+  onReady?: (rootNode: any) => void;
   children: ReactNode;
   errors?: any[];
 }
@@ -23,6 +24,7 @@ const Provider = ({
   schema,
   defaultValue,
   onChange,
+  onReady,
   children,
   errors,
 }: INodeContextProvider) => {
@@ -54,6 +56,11 @@ const Provider = ({
       }),
     [schema, initialValue, handleChange],
   );
+  useEffect(() => {
+    if (typeof onReady === 'function') {
+      onReady({ rootNode });
+    }
+  }, [rootNode]);
 
   const lastErrors = useRef<any>({});
   useEffect(() => {
