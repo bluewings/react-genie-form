@@ -373,7 +373,7 @@ const AdapterCore = React.memo(
 
     const formComponentProps = useMemo(
       () => ({
-        ...(node?.schema?.type === 'array' ? { node } : {}),
+        // ...(node?.schema?.type === 'array' ? { node } : {}),
         ...(childNodes ? { childNodes } : {}),
       }),
       [node, childNodes],
@@ -407,6 +407,7 @@ const AdapterCore = React.memo(
         errors={getErrors()}
         onChange={handleChange}
         onBlur={handleBlur}
+        node={node}
         {...formComponentProps}
       />
     ) : null;
