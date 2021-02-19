@@ -13,6 +13,7 @@ import Form from './components/Form';
 import 'antd/dist/antd.css';
 // @ts-ignore
 import { formTypes } from '../../plugin-antd/src';
+import TypeArray from './_etc/TypeArray';
 
 export default {
   title: 'next',
@@ -265,6 +266,44 @@ export const errors = () => {
       <Form schema={schema} onChange={handleChange} errors={errors} />
       <button onClick={clearErrors}>clear received errors</button>
       {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};
+
+const _formTypes = [
+  {
+    test: { type: 'array' },
+    component: TypeArray,
+  },
+  ...formTypes,
+];
+
+export const arrayItems = () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      name: {
+        type: 'string',
+      },
+      descriptions: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+        // minItems: 2,
+      },
+    },
+  };
+  const value = {
+    name: 'albert',
+    descriptions: [
+      'description 1',
+      'description 2',
+    ],
+  };
+  return (
+    <div>
+      <Form schema={schema} formTypes={_formTypes} defaultValue={value} />
     </div>
   );
 };
