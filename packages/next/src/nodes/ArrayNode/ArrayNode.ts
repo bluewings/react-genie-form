@@ -33,6 +33,7 @@ class ArrayNode extends BaseNode {
   private _nodeFactory: any;
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -41,7 +42,7 @@ class ArrayNode extends BaseNode {
     ajv,
     nodeFactory,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
 
     this._nodeFactory = nodeFactory;
 
@@ -78,6 +79,8 @@ class ArrayNode extends BaseNode {
 
     const id = `[${this._seq++}]`;
 
+    const name = `${this._ids.length}`;
+
     this._ids.push(id);
 
     const handleChange = (value: any) => {
@@ -93,7 +96,8 @@ class ArrayNode extends BaseNode {
     };
 
     this._sourceMap[id].node = this._nodeFactory({
-      name: id,
+      key: id,
+      name,
       schema: this.schema.items,
       defaultValue: data,
       parentNode: this,
@@ -121,12 +125,25 @@ class ArrayNode extends BaseNode {
     return this;
   };
 
+  private updateChildName = () => {
+    this._ids.forEach((id, i) => {
+      if (this._sourceMap[id]?.node) {
+        const node = this._sourceMap[id].node;
+        const newName = `${i}`
+        if (node.getName() !== newName) {
+          node.setName(newName);
+        }
+      }
+    });
+  }
+
   public remove = (idOrIndex: string | number) => {
     let id: any =
       typeof idOrIndex === 'number' ? this._ids[idOrIndex] : idOrIndex;
     this._ids = this._ids.filter((nodeId) => nodeId !== id);
     delete this._sourceMap[id];
     this.hasChanged = true;
+    this.updateChildName();
     this._emitChange();
     return this;
   };

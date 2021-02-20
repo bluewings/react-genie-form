@@ -7,6 +7,7 @@ import StringNode from './StringNode';
 import VirtualNode from './VirtualNode';
 
 function nodeFactory({
+  key,
   name,
   schema,
   defaultValue,
@@ -18,6 +19,7 @@ function nodeFactory({
   switch (schema.type) {
     case 'array':
       return new ArrayNode({
+        key,
         name,
         schema,
         defaultValue,
@@ -28,6 +30,7 @@ function nodeFactory({
       });
     case 'number':
       return new NumberNode({
+        key,
         name,
         schema,
         defaultValue,
@@ -37,6 +40,7 @@ function nodeFactory({
       });
     case 'object':
       return new ObjectNode({
+        key,
         name,
         schema,
         defaultValue,
@@ -47,6 +51,7 @@ function nodeFactory({
       });
     case 'string':
       return new StringNode({
+        key,
         name,
         schema,
         defaultValue,
@@ -56,6 +61,7 @@ function nodeFactory({
       });
     case 'virtual':
       return new VirtualNode({
+        key,
         name,
         schema,
         defaultValue,
@@ -66,6 +72,7 @@ function nodeFactory({
       });
     case 'boolean':
       return new BooleanNode({
+        key,
         name,
         schema,
         defaultValue,

@@ -12,6 +12,7 @@ export type Schema = {
 };
 
 export interface IConstructorProps {
+  key?: string;
   name: string;
   schema: Schema;
   defaultValue: any;
@@ -29,16 +30,45 @@ abstract class BaseNode {
   readonly depth: number;
   readonly isArrayItem: boolean;
   readonly isRoot: boolean;
-  readonly name: string;
+  private name: string;
   readonly rootNode: BaseNode;
   readonly parentNode: BaseNode;
-  readonly path: string;
+  private path: string;
+  private key?: string;
   readonly schema: any;
 
   abstract children: () => any[];
   abstract getValue: () => any;
   abstract setValue?: (value: any) => void;
   abstract parseValue: (value: any) => any;
+
+  // need refactoring
+  setName = (name: string, actor: any) => {
+    // 부모만 이름을 바꿔줄 수 있음
+    if (true || actor === this.parentNode) {
+      this.name = name;
+      this.updatePath();
+    }
+  }
+  updatePath = () => {
+    const newPath = this.parentNode?.getPath()
+      ? `${this.parentNode.getPath()}${JSONPath.Child}${this.getName()}`
+      : JSONPath.Root;
+    if (this.path !== newPath) {
+      this.path = newPath;
+      this.publish('pathChange', newPath);
+    }
+  }
+  getName = () => {
+    return this.name;
+  }
+  getPath = () => {
+    return this.path;
+  }
+  getKey = () => {
+    return this.key;
+  }
+  // //need refactoring
 
   getErrors = (): any[] | null => {
     const errors = [...this._errors, ...this._receivedErrors];
@@ -127,6 +157,7 @@ abstract class BaseNode {
   private _state: { [key: string]: any } = {};
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -138,12 +169,24 @@ abstract class BaseNode {
     this.isRoot = !this.parentNode;
     this.isArrayItem = this.parentNode?.schema?.type === 'array';
     this.name = name || '';
-    this.path = this.parentNode?.path
-      ? `${this.parentNode.path}${JSONPath.Child}${this.name}`
+    this.path = this.parentNode?.getPath()
+      ? `${this.parentNode.getPath()}${JSONPath.Child}${this.getName()}`
       : JSONPath.Root;
+    this.key = this.parentNode?.getPath()
+      ? `${this.parentNode.getPath()}${JSONPath.Child}${typeof key === 'undefined' ? this.getName() : key}`
+      : JSONPath.Root;
+
     this.depth = this.path.split(JSONPath.Child).filter(Boolean).length - 1;
     this.schema = schema;
     this.defaultValue = defaultValue;
+
+    if (this.parentNode) {
+      this.parentNode.subscribe((type, payload) => {
+        if (type === 'pathChange') {
+          this.updatePath();
+        }
+      });
+    }
 
     if (this.isRoot) {
       const ajvInstance =
@@ -219,7 +262,7 @@ function find(target: any, path: string): BaseNode | any {
     return find(target?.parentNode, rest.join(JSONPath.Child));
   } else if (target?.children) {
     const children = target.children();
-    const found = children.find((e: any) => e?.node?.name === currPath);
+    const found = children.find((e: any) => e?.node?.getName() === currPath);
     if (found && rest.length > 0) {
       return find(found.node, rest.join(JSONPath.Child));
     }

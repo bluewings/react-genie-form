@@ -14,6 +14,7 @@ class StringNode extends BaseNode {
   private _value: string | undefined;
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -21,7 +22,7 @@ class StringNode extends BaseNode {
     parentNode,
     ajv,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
     this.defaultValue = defaultValue;
     this._value = this.defaultValue;
 

@@ -18,6 +18,7 @@ class ObjectNode extends BaseNode {
   private _ready: boolean = false;
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -26,7 +27,7 @@ class ObjectNode extends BaseNode {
     ajv,
     nodeFactory,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
 
     this._value = this.defaultValue;
     this._draft = {};

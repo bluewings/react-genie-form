@@ -13,6 +13,7 @@ class BooleanNode extends BaseNode {
   public parseValue = (value: any) => value;
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -20,7 +21,7 @@ class BooleanNode extends BaseNode {
     parentNode,
     ajv,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
 
     this._value = defaultValue;
 

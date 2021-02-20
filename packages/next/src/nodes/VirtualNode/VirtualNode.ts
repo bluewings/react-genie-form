@@ -15,6 +15,7 @@ class VirtualNode extends BaseNode {
   private _refNodes: BaseNode[];
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -23,7 +24,7 @@ class VirtualNode extends BaseNode {
     refNodes,
     ajv,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
     this.defaultValue = defaultValue || [];
     this._value = this.defaultValue;
     this._refNodes = refNodes || [];

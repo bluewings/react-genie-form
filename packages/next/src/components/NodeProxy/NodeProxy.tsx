@@ -89,8 +89,8 @@ function NodeProxy({
           isArrayItem={node.isArrayItem}
           isRoot={node.isRoot}
           depth={node.depth}
-          path={node.path}
-          name={node.name}
+          path={node.getPath()}
+          name={node.getName()}
           value={node.getValue()}
           errors={node.getErrors()}
           schema={node.schema}
@@ -300,7 +300,7 @@ const Row = ({ node, childItems: children, restProps }: any) => {
                 weakMap.current.set(element, Element);
               }
               return weakMap.current.get(element);
-            } else if (!dict.current[node.path]) {
+            } else if (!dict.current[node.getKey()]) {
 
               const Wrapper = ({ children }: any) => {
                 return (
@@ -309,7 +309,7 @@ const Row = ({ node, childItems: children, restProps }: any) => {
                   </div>
                 )
               }
-              dict.current[node.path] = React.memo((props: any) => {
+              dict.current[node.getKey()] = React.memo((props: any) => {
 
 
                 return (
@@ -322,9 +322,9 @@ const Row = ({ node, childItems: children, restProps }: any) => {
                   )
                 )
               });
-              dict.current[node.path].key = node.path;
+              dict.current[node.getKey()].key = node.getKey();
             }
-            return dict.current[node.path];
+            return dict.current[node.getKey()];
           })
         : undefined,
     [type, children, dict, weakMap],
@@ -348,7 +348,7 @@ interface IAdapterCoreProps {
 
 const AdapterCore = React.memo(
   ({ node, childNodes, restProps }: IAdapterCoreProps) => {
-    const { schema, setValue, getValue, getErrors } = node;
+    const { schema, setValue, getPath, getValue, getErrors } = node;
 
     const formTypes = useContext(FormTypesContext);
     const FormComponent = useFormComponent(node, formTypes);
@@ -403,6 +403,7 @@ const AdapterCore = React.memo(
         {...restProps}
         schema={schema}
         defaultValue={_defaultValue}
+        path={getPath()}
         value={getValue()}
         errors={getErrors()}
         onChange={handleChange}

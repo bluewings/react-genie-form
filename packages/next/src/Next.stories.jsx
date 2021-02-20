@@ -278,32 +278,68 @@ const _formTypes = [
   ...formTypes,
 ];
 
+const customRender = ({ isArrayItem, path, depth, name, errors, Input, node }: any) => {
+  const isLeaf = node.children().length === 0;
+
+  return depth === 0 ? (
+    <Input />
+  ) : (
+      <div data-json-path={isLeaf ? path : ''}>
+        <label className="form-label">{name}</label>
+        <div data-input-wrap>
+          <Input className="form-control" />
+          {errors?.length > 0 && <em>{errors[0].message}</em>}
+        </div>
+      </div>
+    );
+};
+
 export const arrayItems = () => {
-  const schema = {
-    type: 'object',
-    properties: {
-      name: {
-        type: 'string',
-      },
-      descriptions: {
-        type: 'array',
-        items: {
-          type: 'string',
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        // name: {
+        //   type: 'string',
+        // },
+        descriptions: {
+          type: 'array',
+          items: {
+            // type: 'string',
+            type: 'object',
+            properties: {
+              name: {
+                type: 'string',
+              }
+            }
+          },
+          // minItems: 2,
         },
-        // minItems: 2,
       },
-    },
-  };
-  const value = {
-    name: 'albert',
+    }
+  }, []);
+
+  
+  const [value, setValue] = useState({
+    // name: 'albert',
     descriptions: [
-      'description 1',
-      'description 2',
+      { name: 'description 1' },
+      { name: 'description 2' },
+      { name: 'description 3' },
+      { name: 'description 4' },
     ],
-  };
+  });
+
+  
+
+  
   return (
     <div>
-      <Form schema={schema} formTypes={_formTypes} defaultValue={value} />
+      <Form schema={schema} formTypes={_formTypes} defaultValue={value}
+      onChange={setValue}
+      customRender={customRender}
+      />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
   );
 };

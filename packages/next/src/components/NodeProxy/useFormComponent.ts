@@ -31,8 +31,8 @@ interface Hint {
   [key: string]: any;
 }
 
-const getHint = ({ path, schema }: any): Hint => ({
-  path,
+const getHint = ({ getPath, schema }: any): Hint => ({
+  path: getPath(),
   type: schema?.type,
   schema,
   format: schema?.options?.format || schema?.format,
@@ -52,9 +52,9 @@ const useFormProps = (formTypes: any[]) => {
               Object.keys(test).reduce(
                 (prev, key) =>
                   prev &&
-                  ((Array.isArray(test[key]) &&
-                    test[key].indexOf(hint[key]) === -1) ||
-                    (!Array.isArray(test[key]) && test[key] !== hint[key]))
+                    ((Array.isArray(test[key]) &&
+                      test[key].indexOf(hint[key]) === -1) ||
+                      (!Array.isArray(test[key]) && test[key] !== hint[key]))
                     ? false
                     : prev,
                 true,

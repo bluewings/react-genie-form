@@ -14,6 +14,7 @@ class NumberNode extends BaseNode {
   public parseValue = (value: any) => parseNumber(value);
 
   constructor({
+    key,
     name,
     schema,
     defaultValue,
@@ -21,7 +22,7 @@ class NumberNode extends BaseNode {
     parentNode,
     ajv,
   }: IConstructorProps) {
-    super({ name, schema, defaultValue, onChange, parentNode, ajv });
+    super({ key, name, schema, defaultValue, onChange, parentNode, ajv });
     this.defaultValue = defaultValue;
     this._value = defaultValue;
 

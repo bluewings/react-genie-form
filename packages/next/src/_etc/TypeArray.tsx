@@ -35,10 +35,11 @@ function TypeArray(props: any) {
             <div key={Node.key}
             // style={{ border: '1px dashed red' }}
             >
+              <DeleteButton index={i} onClick={handleRemoveClick} />
               <Node
               // style={{ background: 'orange', fontSize: 20 }}
               />
-              <DeleteButton index={i} onClick={handleRemoveClick} />
+
             </div>
           );
         })}
