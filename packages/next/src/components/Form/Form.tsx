@@ -17,6 +17,7 @@ interface IFormProps {
   formTypes?: any[];
   formTypeMap?: { [key: string]: Function };
   customRender?: Function;
+  formatError?: Function;
   form?: Form[];
   children?: ReactNode;
   errors?: any[];
@@ -31,6 +32,7 @@ function Form({
   formTypes,
   formTypeMap,
   customRender,
+  formatError,
   form,
   children,
   errors,
@@ -61,7 +63,7 @@ function Form({
       errors={errors}
     >
       <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
-        <RenderContextProvider render={customRender}>
+        <RenderContextProvider renderNode={customRender} formatError={formatError}>
           {children ? children : <NodeProxy path="" form={form} />}
           {/* <table>
             <tbody>

@@ -343,3 +343,40 @@ export const arrayItems = () => {
     </div>
   );
 };
+
+
+export const customErrorMessage = () => {
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          maxLength: 2,
+          default: 'albert'
+        },
+      },
+    }
+  }, []);
+
+  
+  // const [value, setValue] = useState({
+  //   name: 'albert',
+  // });
+
+  
+
+  
+  return (
+    <div>
+      <Form schema={schema} formTypes={_formTypes}
+      // defaultValue={value}
+      
+      // showError={true}
+      // onChange={setValue}
+      // customRender={customRender}
+      />
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};

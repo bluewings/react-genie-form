@@ -48,7 +48,7 @@ function NodeProxy({
   const restProps = useRef<any>({});
   restProps.current = useObjectSnapshot({ ...rest, watchvalues });
 
-  const __renderNode = useContext(RenderContext);
+  const { renderNode: __renderNode, formatError } = useContext(RenderContext);
 
   const renderNode = _renderNode || __renderNode;
 
@@ -67,8 +67,8 @@ function NodeProxy({
         />
       )
     ) : (
-        <Fragment />
-      );
+      <Fragment />
+    );
   }, [node, restProps, renderNode]);
 
   const Renderer = useMemo(
@@ -79,7 +79,9 @@ function NodeProxy({
   const count = useRef(0);
   count.current++;
 
-  const Wrap = Wrapper || Fragment
+  const Wrap = Wrapper || Fragment;
+
+  // message
 
   return (
     node &&
@@ -96,6 +98,7 @@ function NodeProxy({
           schema={node.schema}
           node={node}
           Input={Input}
+          formatError={formatError}
         />
       </Wrap>
     )

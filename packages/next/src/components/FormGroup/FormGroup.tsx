@@ -7,7 +7,7 @@ interface IFormGroupProps {
 }
 
 function FormGroup({ path, ...rest }: IFormGroupProps) {
-  const renderNode = useContext(RenderContext);
+  const { renderNode } = useContext(RenderContext);
 
   return <FormInput path={path} {...rest} renderNode={renderNode} />;
 }
