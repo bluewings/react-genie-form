@@ -12,7 +12,7 @@ import useFormComponent from './useFormComponent';
 import useTargetNode from './useTargetNode';
 import { useConstant, useObjectSnapshot, useTracker } from '../../hooks';
 import { Node } from '../../nodes';
-import { FormTypesContext, RenderContext } from '../../providers';
+import { FormTypesContext, RenderContext, UserDefinedContext } from '../../providers';
 import styles from './NodeProxy.module.scss';
 
 NodeProxy.classNames = { ...styles };
@@ -82,6 +82,7 @@ function NodeProxy({
   const Wrap = Wrapper || Fragment;
 
   // message
+  const { context } = useContext(UserDefinedContext);
 
   return (
     node &&
@@ -98,6 +99,7 @@ function NodeProxy({
           schema={node.schema}
           node={node}
           Input={Input}
+          context={context}
           formatError={formatError}
         />
       </Wrap>
@@ -401,6 +403,9 @@ const AdapterCore = React.memo(
 
     const { dirty, touched } = node.getState();
 
+
+    const { context } = useContext(UserDefinedContext);
+
     return FormComponent ? (
       <FormComponent
         {...restProps}
@@ -413,6 +418,7 @@ const AdapterCore = React.memo(
         onBlur={handleBlur}
         node={node}
         {...formComponentProps}
+        context={context}
       />
     ) : null;
   },

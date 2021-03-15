@@ -345,6 +345,21 @@ export const arrayItems = () => {
 };
 
 
+const DefaultRender = ({ isArrayItem, depth, name, errors, Input, formatError }) => {
+  return depth === 0 ? (
+    <Input />
+  ) : (
+    <div>
+      <label className="form-label">{name}</label>
+      <Input className="form-control" />
+      <h2>
+      {errors?.length > 0 ? formatError(errors[0]) : null} 
+      </h2>
+    </div>
+  );
+};
+
+
 export const customErrorMessage = () => {
   const schema = useMemo(() => {
     return {
@@ -358,23 +373,71 @@ export const customErrorMessage = () => {
       },
     }
   }, []);
-
-  
-  // const [value, setValue] = useState({
-  //   name: 'albert',
-  // });
-
-  
-
   
   return (
     <div>
-      <Form schema={schema} formTypes={_formTypes}
+      <Form schema={schema} formTypes={_formTypes}   
       // defaultValue={value}
       
       // showError={true}
       // onChange={setValue}
-      // customRender={customRender}
+      customRender={DefaultRender}
+      />
+      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};
+
+export const usingContext = () => {
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+          maxLength: 2,
+          default: 'albert'
+        },
+      },
+    }
+  }, []);
+
+  const context = useMemo(() => {
+    return {
+      message: 'wow'
+    }
+  }, []);
+
+  const formTypeMap = useMemo(() => {
+    return {
+      '$.name': ({ value, watchvalues, onChange, context }) => {
+        // const handleClick = () => {
+        //   onChange({ test: 'wow' })
+        // }
+        // const handleUnsetClick = () => {
+        //   onChange(undefined)
+        // }
+        return (
+          <div>
+            <h4>name</h4>
+            <pre>{JSON.stringify(context, null, 2)}</pre>
+            {/* <button onClick={handleClick}>object set</button>
+            <button onClick={handleUnsetClick}>object unset</button> */}
+          </div>
+        )
+      },
+    }
+  }, []);
+  
+  return (
+    <div>
+      <Form schema={schema} formTypes={_formTypes}   
+      // defaultValue={value}
+      
+      // showError={true}
+      // onChange={setValue}
+      formTypeMap={formTypeMap}
+      context={context}
       />
       {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </div>

@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef, useImperativeHandle } from 'react';
+import React, { ReactNode, forwardRef, useImperativeHandle, useMemo } from 'react';
 import FormGroup from '../FormGroup';
 import FormInput from '../FormInput';
 import FormRender from '../FormRender';
@@ -8,6 +8,7 @@ import {
   FormTypesContextProvider,
   NodeContextProvider,
   RenderContextProvider,
+  UserDefinedContextProvider,
 } from '../../providers';
 
 interface IFormProps {
@@ -21,6 +22,7 @@ interface IFormProps {
   form?: Form[];
   children?: ReactNode;
   errors?: any[];
+  context?: { [key: string]: any };
 }
 
 type Form = string | any;
@@ -36,6 +38,7 @@ function Form({
   form,
   children,
   errors,
+  context,
 }: IFormProps, ref: any) {
   const [value, setValue] = React.useState<any>({});
   const handleChange = (value: any) => {
@@ -55,17 +58,18 @@ function Form({
   }), [rootNode]);
 
   return (
-    <NodeContextProvider
-      schema={schema}
-      defaultValue={defaultValue}
-      onChange={handleChange}
-      onReady={handleReady}
-      errors={errors}
-    >
-      <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
-        <RenderContextProvider renderNode={customRender} formatError={formatError}>
-          {children ? children : <NodeProxy path="" form={form} />}
-          {/* <table>
+    <UserDefinedContextProvider context={context}>
+      <NodeContextProvider
+        schema={schema}
+        defaultValue={defaultValue}
+        onChange={handleChange}
+        onReady={handleReady}
+        errors={errors}
+      >
+        <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
+          <RenderContextProvider renderNode={customRender} formatError={formatError}>
+            {children ? children : <NodeProxy path="" form={form} />}
+            {/* <table>
             <tbody>
               <tr>
                 <td valign="top">
@@ -77,9 +81,10 @@ function Form({
               </tr>
             </tbody>
           </table> */}
-        </RenderContextProvider>
-      </FormTypesContextProvider>
-    </NodeContextProvider>
+          </RenderContextProvider>
+        </FormTypesContextProvider>
+      </NodeContextProvider>
+    </UserDefinedContextProvider>
   );
 }
 
