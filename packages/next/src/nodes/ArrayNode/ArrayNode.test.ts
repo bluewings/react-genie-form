@@ -19,7 +19,7 @@ test('automatically add items up to minItems', () => {
   expect(node?.getValue()?.arr.length).toBe(MIN_ITEMS);
 });
 
-test('add / remove / cliear items', () => {
+test('add / remove / clear items', () => {
   const node = nodeFromSchema({
     type: 'object',
     properties: {
@@ -66,3 +66,26 @@ test('cannot exceed maxItems', () => {
     });
   expect(node?.getValue()?.arr.length).toBe(MAX_ITEMS);
 });
+
+test('array.getValue', () => {
+  const node = nodeFromSchema({
+    type: 'object',
+    properties: {
+      tags: {
+        type: 'array',
+        items: {
+          type: 'string',
+        },
+      },
+    },
+  }, {
+    defaultValue: {
+      tags: ['harry', 'ron'],
+    },
+  });
+  expect(node?.findNode('$.tags')?.getValue()).toMatchObject(['harry', 'ron']);
+  // @ts-ignore
+  node?.findNode('$.tags')?.setValue(['Hermione', 'ron', 'harry']);
+  expect(node?.findNode('$.tags')?.getValue()).toMatchObject(['Hermione', 'ron', 'harry']);
+});
+

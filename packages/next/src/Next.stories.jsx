@@ -145,7 +145,11 @@ export const watch = () => {
         type: 'string',
         formType: 'greeting',
         options: {
-          watch: '$.profile.name',
+          watch: [
+            '$.profile.name',
+            '$.profile.age',
+            '$.profile'
+          ],
         },
       },
     },
@@ -158,9 +162,14 @@ export const watch = () => {
       },
       component: ({ value, watchvalues, onChange }) => {
         return (
-          <strong>
-            hello '{watchvalues[0]}'
+          <>
+            <strong>
+              hello '{watchvalues[0]}'
           </strong>
+            <pre>
+              {JSON.stringify(watchvalues, null, 2)}
+            </pre>
+          </>
         )
       }
     },
@@ -222,7 +231,7 @@ export const form_types = () => {
   }
   return (
     <div>
-      <Form schema={schema} formTypeMap={formTypeMap} onChange={handleChange}/>
+      <Form schema={schema} formTypeMap={formTypeMap} onChange={handleChange} />
       <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
   );
@@ -284,14 +293,14 @@ const customRender = ({ isArrayItem, path, depth, name, errors, Input, node }: a
   return depth === 0 ? (
     <Input />
   ) : (
-      <div data-json-path={isLeaf ? path : ''}>
-        <label className="form-label">{name}</label>
-        <div data-input-wrap>
-          <Input className="form-control" />
-          {errors?.length > 0 && <em>{errors[0].message}</em>}
-        </div>
+    <div data-json-path={isLeaf ? path : ''}>
+      <label className="form-label">{name}</label>
+      <div data-input-wrap>
+        <Input className="form-control" />
+        {errors?.length > 0 && <em>{errors[0].message}</em>}
       </div>
-    );
+    </div>
+  );
 };
 
 export const arrayItems = () => {
@@ -319,7 +328,7 @@ export const arrayItems = () => {
     }
   }, []);
 
-  
+
   const [value, setValue] = useState({
     // name: 'albert',
     descriptions: [
@@ -330,14 +339,14 @@ export const arrayItems = () => {
     ],
   });
 
-  
 
-  
+
+
   return (
     <div>
       <Form schema={schema} formTypes={_formTypes} defaultValue={value}
-      onChange={setValue}
-      customRender={customRender}
+        onChange={setValue}
+        customRender={customRender}
       />
       <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
@@ -353,7 +362,7 @@ const DefaultRender = ({ isArrayItem, depth, name, errors, Input, formatError })
       <label className="form-label">{name}</label>
       <Input className="form-control" />
       <h2>
-      {errors?.length > 0 ? formatError(errors[0]) : null} 
+        {errors?.length > 0 ? formatError(errors[0]) : null}
       </h2>
     </div>
   );
@@ -373,15 +382,15 @@ export const customErrorMessage = () => {
       },
     }
   }, []);
-  
+
   return (
     <div>
-      <Form schema={schema} formTypes={_formTypes}   
-      // defaultValue={value}
-      
-      // showError={true}
-      // onChange={setValue}
-      customRender={DefaultRender}
+      <Form schema={schema} formTypes={_formTypes}
+        // defaultValue={value}
+
+        // showError={true}
+        // onChange={setValue}
+        customRender={DefaultRender}
       />
       {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </div>
@@ -428,16 +437,16 @@ export const usingContext = () => {
       },
     }
   }, []);
-  
+
   return (
     <div>
-      <Form schema={schema} formTypes={_formTypes}   
-      // defaultValue={value}
-      
-      // showError={true}
-      // onChange={setValue}
-      formTypeMap={formTypeMap}
-      context={context}
+      <Form schema={schema} formTypes={_formTypes}
+        // defaultValue={value}
+
+        // showError={true}
+        // onChange={setValue}
+        formTypeMap={formTypeMap}
+        context={context}
       />
       {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
     </div>

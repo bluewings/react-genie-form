@@ -4,8 +4,18 @@ import BaseNode, { IConstructorProps } from '../BaseNode';
 
 class ArrayNode extends BaseNode {
   public children = () => this._edges().map(({ source }) => source);
-  public getValue = () => this._value;
-  public setValue = (value: any) => this._emitChange(value);
+  public getValue = () => this.toArray();
+  public setValue = (value: any) => {
+    if (Array.isArray(value)) {
+      this._ready = false;
+      this.clear();
+      value.forEach((e: any) => {
+        this.push(e);
+      });
+      this._ready = true;
+      this._emitChange();
+    }
+  };
   public parseValue = (value: any) => parseArray(value);
 
   private _seq = 0;
