@@ -52,7 +52,7 @@ function useTargetNode(path: string | undefined, __node?: any) {
     if (_dependencies.length > 0 && node) {
       return _dependencies.map((e) => {
         const at = node.findNode(e);
-        return at.getValue();
+        return at ? at.getValue() : undefined;
       });
     }
     return [];
