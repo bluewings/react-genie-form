@@ -283,8 +283,8 @@ const Row = ({ node, childItems: children, restProps }: any) => {
               flexGrow: 1,
               flexShrink: 1,
               flexBasis: '100%',
-              paddingLeft: 5,
-              paddingRight: 5,
+              // paddingLeft: 5,
+              // paddingRight: 5,
             };
             if (typeof grid === 'number') {
               styleProps = {
