@@ -5,8 +5,9 @@ class ObjectNode extends BaseNode {
   public children = () => this._children;
   public getValue = (): any => this._value;
   // public setValue = (value?: any) => undefined;
-  public setValue = (value?: any) => {
+  public setValue = (value?: any, replace = false) => {
     this._draft = value;
+    this._replace = replace;
     this._emitChange();
   };
   public parseValue = (value: any) => value;
@@ -14,6 +15,7 @@ class ObjectNode extends BaseNode {
   private _children: any[] = [];
   private _value: { [key: string]: any } | undefined;
   private _draft: { [key: string]: any };
+  private _replace = false;
   private _emitChange: () => void;
   private _ready: boolean = false;
 
@@ -36,6 +38,9 @@ class ObjectNode extends BaseNode {
       if (this._ready && (this._draft === undefined || Object.keys(this._draft).length > 0)) {
         if (this._draft === undefined) {
           this._value = undefined;
+        } else if (this._replace) {
+          this._value = { ...this._draft };
+          this._replace = false;
         } else {
           this._value = { ...this._value, ...this._draft };
         }
