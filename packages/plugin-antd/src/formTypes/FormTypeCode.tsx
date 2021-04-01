@@ -37,7 +37,7 @@ const FormTypeCode = ({
     // const lineNumbers = schema.getIn(['options', 'lineNumbers'], true);
     // const lineWrapping = schema.getIn(['options', 'lineWrapping'], false);
     // const tabSize = schema.getIn(['options', 'tabSize'], 2);
-    const mode = getMode(__ui.language);
+    const mode = getMode(__ui?.language);
     // const theme = getMode(schema.getIn(['options', 'theme'], null));
     return {
       styleActiveLine: true,
