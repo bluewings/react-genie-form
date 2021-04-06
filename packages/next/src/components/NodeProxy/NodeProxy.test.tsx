@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, act } from '@testing-library/react';
 import Form from '../../components/Form';
 
 test('ui:show prop', () => {
@@ -103,6 +103,30 @@ test('watch props', async () => {
       component: ({ watchvalues }: any) => <div data-testid="message">hello "{watchvalues[0]}"</div>,
     },
   ];
-  render(<Form schema={schema} formTypes={formTypes} />);
+  render(<div data-testid="form1"><Form schema={schema} formTypes={formTypes} /></div>);
   expect(screen.getByTestId('message').innerHTML).toBe('hello "harry"');
+});
+
+test('redraw some node', async () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      profile: {
+        type: 'object',
+        properties: {
+          name: { type: 'string', default: 'harry' },
+        },
+      },
+    },
+  };
+  const ref: any = { current: null };
+  render(<div data-testid="form1"><Form schema={schema} ref={ref} /></div>);
+  expect(screen.getByTestId('form1')?.querySelector('input')?.value).toBe('harry');
+
+  act(() => {
+    const profileNameNode = ref.current.node.findNode('profile.name');
+    profileNameNode.setValue('ron');
+    profileNameNode.publish('redraw');
+  });
+  expect(screen.getByTestId('form1')?.querySelector('input')?.value).toBe('ron');
 });

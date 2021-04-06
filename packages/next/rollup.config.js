@@ -23,7 +23,7 @@ const cjs = {
   output: {
     file: pkg.main,
     format: 'cjs',
-    sourcemap: true,
+    sourcemap: false,
   },
 };
 
@@ -32,7 +32,7 @@ const esm = {
   output: {
     file: pkg.module,
     format: 'es',
-    sourcemap: true,
+    sourcemap: false,
   },
 };
 

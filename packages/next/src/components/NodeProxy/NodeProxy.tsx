@@ -4,8 +4,10 @@ import React, {
   isValidElement,
   useCallback,
   useContext,
+  useLayoutEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 
 import useFormComponent from './useFormComponent';
@@ -84,10 +86,13 @@ function NodeProxy({
   // message
   const { context } = useContext(UserDefinedContext);
 
+  // 특정 노드에 대한 redraw 요청이 왔을때 반응한다.
+  const tick = useTick(node);
+
   return (
     node &&
     show && (
-      <Wrap>
+      <Wrap key={tick}>
         <Renderer
           isArrayItem={node.isArrayItem}
           isRoot={node.isRoot}
@@ -423,3 +428,20 @@ const AdapterCore = React.memo(
     ) : null;
   },
 );
+
+function useTick(node: any) {
+  const [tick, setTick] = useState(0);
+  useLayoutEffect(() => {
+    if (typeof node?.subscribe === 'function') {
+      const unsubscribe = node.subscribe((type: string) => {
+        if (type === 'redraw') {
+          setTick((state) => state + 1);
+        }
+      });
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [node, setTick]);
+  return tick;
+}
