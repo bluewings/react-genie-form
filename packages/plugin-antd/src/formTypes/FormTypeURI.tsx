@@ -68,7 +68,7 @@ function FormTypeURI({
   );
 
   const protocolDropdown = (
-    <Select value={protocol} onChange={handleProtocolChange}>
+    <Select value={protocol} onChange={handleProtocolChange} disabled={readOnly}>
       {protocols.map((e, i) => (
         <Select.Option key={i} value={e}>
           {' '}

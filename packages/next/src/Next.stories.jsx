@@ -452,3 +452,30 @@ export const usingContext = () => {
     </div>
   );
 };
+
+export const readOnly = () => {
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        uri: {
+          type: 'string',
+          format: 'uri',
+          readOnly: true,
+          default: 'https://naver.com'
+        },
+      },
+    }
+  }, []);
+
+  const [value, setValue] = useState();
+
+  return (
+    <div>
+      <Form schema={schema} formTypes={_formTypes}
+        onChange={setValue}
+      />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
+  );
+};

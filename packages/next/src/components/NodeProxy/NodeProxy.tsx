@@ -359,6 +359,7 @@ interface IAdapterCoreProps {
 const AdapterCore = React.memo(
   ({ node, childNodes, restProps }: IAdapterCoreProps) => {
     const { schema, setValue, getPath, getValue, getErrors } = node;
+    const readOnly = !!(schema?.readOnly);
 
     const formTypes = useContext(FormTypesContext);
     const FormComponent = useFormComponent(node, formTypes);
@@ -391,12 +392,12 @@ const AdapterCore = React.memo(
 
     const handleChange = useCallback(
       (value: any) => {
-        if (typeof setValue === 'function') {
+        if (!readOnly && typeof setValue === 'function') {
           setValue(value);
         }
         node.setState({ dirty: true, touched: true });
       },
-      [setValue, node],
+      [setValue, node, readOnly],
     );
 
     const handleBlur = useCallback(
@@ -415,6 +416,7 @@ const AdapterCore = React.memo(
       <FormComponent
         {...restProps}
         schema={schema}
+        readOnly={readOnly}
         defaultValue={_defaultValue}
         path={getPath()}
         value={getValue()}
