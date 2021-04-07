@@ -36,7 +36,7 @@ class ObjectNode extends BaseNode {
 
     this._emitChange = () => {
       if (this._ready && (this._draft === undefined || Object.keys(this._draft).length >= 0)) {
-        if (Object.keys(this._draft).length === 0 && !this._replace) {
+        if (Object.keys(this._draft || {}).length === 0 && !this._replace) {
           return undefined;
         }
         if (this._draft === undefined) {
