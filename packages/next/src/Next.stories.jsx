@@ -479,3 +479,44 @@ export const readOnly = () => {
     </div>
   );
 };
+
+export const errorBoundary = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        nonrmal: { type: 'string' },
+        error: { type: 'string' },
+      },
+    }
+  }, []);
+  const formTypeMap = useMemo(() => {
+    return {
+      '$.error': ({ value, watchvalues, onChange }) => {
+        const handleClick = () => {
+          //  onChange({ test: 'wow' })
+          throw new Error('custom error');
+        }
+        var test;s
+        console.log(test.abc);
+        
+        return (
+          <div>
+            <button onClick={handleClick}>make error</button>
+          </div>
+        )
+      },
+    }
+  }, []);
+
+  const handleChange = (val) => {
+    setValue(val);
+  }
+  return (
+    <div>
+      <Form schema={schema} formTypeMap={formTypeMap} onChange={handleChange} />
+      {/* <pre>{/JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};
