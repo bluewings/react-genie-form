@@ -15,20 +15,21 @@ const Provider = ({ formTypes, formTypeMap, children }: any) => {
         })),
         ...(formTypes || []),
         ...baseFormTypes,
-      ].filter(Boolean).filter(e => e.component)
-      .map((e: any) => {
-        const Component: any = e.component
-        return {
-          ...e,
-          component: (props: any) => {
-            return (
-              <ErrorBoundary>
-                <Component {...props} />
-              </ErrorBoundary>
-            )
+      ]
+        .filter(Boolean).filter(e => e.component)
+        .map((e: any) => {
+          const Component: any = e.component;
+          return {
+            ...e,
+            component: (props: any) => {
+              return (
+                <ErrorBoundary>
+                  <Component {...props} />
+                </ErrorBoundary>
+              )
+            }
           }
-        }
-      }),
+        }),
     [formTypes, formTypeMap],
   );
 
