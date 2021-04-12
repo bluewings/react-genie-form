@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 function DeleteButton(props: any) {
   const { index, onClick } = props;
@@ -15,15 +15,13 @@ function DeleteButton(props: any) {
 
 function TypeArray(props: any) {
   const { node, childNodes } = props;
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     node.push();
-  };
+  }, [node]);
 
-  const handleRemoveClick = (index: number) => {
+  const handleRemoveClick = useCallback((index: number) => {
     node.remove(index);
-  };
-  const count = useRef(0);
-  count.current++;
+  }, [node]);
   return (
     <div style={{ padding: 20, background: 'lightYellow' }}>
       {/* <h1>{count.current}</h1> */}
@@ -46,4 +44,4 @@ function TypeArray(props: any) {
   );
 }
 
-export default TypeArray;
+export default React.memo(TypeArray);

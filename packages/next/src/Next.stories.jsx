@@ -498,9 +498,9 @@ export const errorBoundary = () => {
           //  onChange({ test: 'wow' })
           throw new Error('custom error');
         }
-        var test;s
+        var test; s
         console.log(test.abc);
-        
+
         return (
           <div>
             <button onClick={handleClick}>make error</button>
@@ -517,6 +517,59 @@ export const errorBoundary = () => {
     <div>
       <Form schema={schema} formTypeMap={formTypeMap} onChange={handleChange} />
       {/* <pre>{/JSON.stringify(value, null, 2)}</pre> */}
+    </div>
+  );
+};
+
+export const errorsInArray = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        link: {
+          type: 'string',
+          format: 'uri',
+        },
+        objectItems: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              link: {
+                type: 'string',
+                format: 'uri',
+              }
+            }
+          }
+        },
+        stringItems: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'uri',
+          }
+        }
+      },
+    }
+  }, []);
+
+  const defaultValue = {
+    link: 'google.com',
+    objectItems: [
+      { link: 'google.com' },
+      { link: 'http://google.com' },
+      { link: 'google.com' },
+    ],
+    stringItems: [
+      'google.com',
+      'http://google.com',
+      'google.com',
+    ]
+  }
+  return (
+    <div>
+      <Form schema={schema} defaultValue={defaultValue} showError={true} />
     </div>
   );
 };

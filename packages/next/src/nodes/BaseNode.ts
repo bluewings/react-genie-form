@@ -253,6 +253,8 @@ export default BaseNode;
 function find(target: any, path: string): BaseNode | any {
   const [currPath, ...rest] = path
     .replace(/^\.([^.])/, '$1')
+    // to access array items
+    .replace(/\[(\d+)\]/g, '.$1')
     .split(JSONPath.Child);
   if (path === '') {
     return target;

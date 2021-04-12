@@ -100,16 +100,19 @@ class ArrayNode extends BaseNode {
         this.onChange(this.toArray());
       }
     };
+
+    const defaultValue = typeof data === 'undefined' && this.schema.items?.type === 'object' ? {} : data;
+
     this._sourceMap[id] = {
       node: null,
-      data: data,
+      data: defaultValue,
     };
 
     this._sourceMap[id].node = this._nodeFactory({
       key: id,
       name,
       schema: this.schema.items,
-      defaultValue: data,
+      defaultValue,
       parentNode: this,
       onChange: handleChange,
       nodeFactory: this._nodeFactory,
