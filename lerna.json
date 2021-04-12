@@ -3,7 +3,7 @@
     "packages/*",
     "website"
   ],
-  "version": "0.2.24",
+  "version": "0.2.25",
   "npmClient": "yarn",
   "useWorkspaces": true
 }
