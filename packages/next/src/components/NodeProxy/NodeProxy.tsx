@@ -395,6 +395,7 @@ const AdapterCore = React.memo(
         if (!readOnly && typeof setValue === 'function') {
           setValue(value);
         }
+        node.clearReceivedErrors();
         node.setState({ dirty: true, touched: true });
       },
       [setValue, node, readOnly],

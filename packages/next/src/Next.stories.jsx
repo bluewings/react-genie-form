@@ -573,3 +573,38 @@ export const errorsInArray = () => {
     </div>
   );
 };
+
+export const clearReceivedErrorsOnChange = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+        },
+        email: {
+          type: 'string',
+          maxLength: 10,
+        },
+      },
+    }
+  }, []);
+
+  const defaultValue = {
+    name: 'google',
+    email: 'someone@gmail.eom'
+  }
+
+  const errors = [
+    {
+      dataPath: '.email2',
+      message: 'something wrong',
+    }
+  ]
+  return (
+    <div>
+      <Form schema={schema} defaultValue={defaultValue} showError={true} errors={errors} />
+    </div>
+  );
+};

@@ -94,8 +94,10 @@ abstract class BaseNode {
       this.publish('validate', [...this._errors, ...this._receivedErrors]);
     }
   };
-  clearReceivedErrorsrErrors = () => {
-    this.setReceivedErrors([]);
+  clearReceivedErrors = () => {
+    if (this._receivedErrors && this._receivedErrors.length > 0) {
+      this.setReceivedErrors([]);
+    }
   };
 
   getState = () => this._state;
@@ -244,6 +246,11 @@ abstract class BaseNode {
           validateOnChange();
         }
       });
+
+      // validate for initial value
+      setTimeout(() => {
+        validateOnChange();
+      }, 0);
     }
   }
 }
