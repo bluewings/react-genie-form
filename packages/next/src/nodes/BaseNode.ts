@@ -71,7 +71,7 @@ abstract class BaseNode {
   // //need refactoring
 
   getErrors = (): any[] | null => {
-    const errors = [...this._errors, ...this._receivedErrors];
+    const errors = [...this._receivedErrors, ...this._errors];
     return errors.length > 0 ? errors : null;
   };
   setErrors = (errors: any[]) => {
@@ -79,7 +79,7 @@ abstract class BaseNode {
     if (this._errorHash !== serialized) {
       this._errorHash = serialized;
       this._errors = errors;
-      this.publish('validate', [...this._errors, ...this._receivedErrors]);
+      this.publish('validate', [...this._receivedErrors, ...this._errors]);
     }
   };
   clearErrors = () => {
@@ -91,7 +91,7 @@ abstract class BaseNode {
     if (this._receivedErrorHash !== serialized) {
       this._receivedErrorHash = serialized;
       this._receivedErrors = errors;
-      this.publish('validate', [...this._errors, ...this._receivedErrors]);
+      this.publish('validate', [...this._receivedErrors, ...this._errors]);
     }
   };
   clearReceivedErrors = () => {
@@ -217,7 +217,7 @@ abstract class BaseNode {
       };
 
       const validateOnChange = async () => {
-        const errors = await validate(this.getValue());
+        const errors = transformErrors(await validate(this.getValue()));
         const errorsByDataPath = errors.reduce((accum: any, error: any) => {
           if (!accum[error.dataPath]) {
             accum[error.dataPath] = [];
@@ -279,3 +279,12 @@ function find(target: any, path: string): BaseNode | any {
   }
   return null;
 }
+
+export const transformErrors = (errors: any) => {
+  return (Array.isArray(errors) ? errors : []).map((error: any) => {
+    if (error.dataPath && error.keyword === 'required' && error.params?.missingProperty) {
+      return { ...error, dataPath: `${error.dataPath}.${error.params.missingProperty}` };
+    }
+    return error;
+  }, []);
+};

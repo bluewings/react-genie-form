@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { useConstant, useHandle } from '../hooks';
 import { Schema, nodeFromSchema } from '../nodes';
+import { transformErrors } from '../nodes/BaseNode';
 
 const NodeContext = createContext<any>({});
 
@@ -64,7 +65,7 @@ const Provider = ({
 
   const lastErrors = useRef<any>({});
   useEffect(() => {
-    const currErrors = (errors || []).reduce((accum: any, e) => {
+    const currErrors = transformErrors(errors || []).reduce((accum: any, e) => {
       if (!accum[e.dataPath]) {
         accum[e.dataPath] = [];
       }

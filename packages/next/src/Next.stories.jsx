@@ -608,3 +608,43 @@ export const clearReceivedErrorsOnChange = () => {
     </div>
   );
 };
+
+export const spreadRequiredErrorsForChildren = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        profile: {
+          type: 'object',
+          properties: {
+            name: {
+              type: 'string',
+            },
+            email: {
+              type: 'string',
+              maxLength: 10,
+            },
+          },
+          required: ['name', 'email'],
+        }
+      }
+    }
+  }, []);
+
+
+  const defaultValue = {
+    profile: {
+      name: 'google',
+      email: 'someone@gmail.eom'
+    }
+
+  }
+
+  const errors = [{ "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "name" }, "message": "should have required property 'name'" }, { "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "email" }, "message": "should have required property 'email'" }]
+  return (
+    <div>
+      <Form schema={schema} defaultValue={defaultValue} showError={true} errors={errors} />
+    </div>
+  );
+};
