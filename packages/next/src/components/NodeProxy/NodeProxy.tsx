@@ -117,8 +117,8 @@ function NodeProxy({
           name={node.getName()}
           value={node.getValue()}
           errors={node.getErrors()}
-          dirty={!!dirty}
-          touched={!!touched}
+          // dirty={!!dirty}
+          // touched={!!touched}
           schema={node.schema}
           node={node}
           Input={Input}
@@ -420,12 +420,18 @@ const AdapterCore = React.memo(
       [setValue, node, readOnly],
     );
 
-    const handleBlur = useCallback(
-      (value: any) => {
+    const blurTimer = useRef<number>();
+    const handleFocus = useCallback(() => {
+      if (blurTimer.current) {
+        clearTimeout(blurTimer.current);
+      }
+    }, []);
+
+    const handleBlur = useCallback(() => {
+      blurTimer.current = setTimeout(() => {
         node.setState({ touched: true });
-      },
-      [node],
-    );
+      })
+    }, [node]);
 
     const { dirty, touched } = node.getState();
 
@@ -433,7 +439,7 @@ const AdapterCore = React.memo(
     const { context } = useContext(UserDefinedContext);
 
     return FormComponent ? (
-      <span onBlur={handleBlur}>
+      <span onFocus={handleFocus} onBlur={handleBlur}>
         <FormComponent
           {...restProps}
           schema={schema}
@@ -445,8 +451,8 @@ const AdapterCore = React.memo(
           onChange={handleChange}
           // onBlur={handleBlur}
           node={node}
-          dirty={!!dirty}
-          touched={!!touched}
+          // dirty={!!dirty}
+          // touched={!!touched}
           {...formComponentProps}
           context={context}
         />
