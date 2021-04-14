@@ -20,7 +20,7 @@ const Provider = ({ renderNode: customRenderNode, formatError: customFormatError
     let checkTouched = false;
     if (_showError === true) {
       always = true;
-    } else if (_showError === true) {
+    } else if (_showError === false) {
       never = true;
     } else if (typeof _showError === 'string') {
       _showError.split(/[^a-z]+/).forEach(e => {

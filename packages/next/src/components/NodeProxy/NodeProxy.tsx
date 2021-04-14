@@ -99,6 +99,12 @@ function NodeProxy({
     return _formatError;
   }, [showError, _formatError]);
 
+  const errors = node.getErrors();
+
+  const errorMessage = useMemo(() => {
+    return (errors || []).map((error: any) => formatError(error)).filter(Boolean)[0];
+  }, [formatError, errors]);
+
   return (
     node &&
     show && (
@@ -117,6 +123,7 @@ function NodeProxy({
           node={node}
           Input={Input}
           context={context}
+          errorMessage={errorMessage}
           formatError={formatError}
         />
       </Wrap>
@@ -426,22 +433,24 @@ const AdapterCore = React.memo(
     const { context } = useContext(UserDefinedContext);
 
     return FormComponent ? (
-      <FormComponent
-        {...restProps}
-        schema={schema}
-        readOnly={readOnly}
-        defaultValue={_defaultValue}
-        path={getPath()}
-        value={getValue()}
-        errors={getErrors()}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        node={node}
-        dirty={!!dirty}
-        touched={!!touched}
-        {...formComponentProps}
-        context={context}
-      />
+      <span onBlur={handleBlur}>
+        <FormComponent
+          {...restProps}
+          schema={schema}
+          readOnly={readOnly}
+          defaultValue={_defaultValue}
+          path={getPath()}
+          value={getValue()}
+          errors={getErrors()}
+          onChange={handleChange}
+          // onBlur={handleBlur}
+          node={node}
+          dirty={!!dirty}
+          touched={!!touched}
+          {...formComponentProps}
+          context={context}
+        />
+      </span>
     ) : null;
   },
 );

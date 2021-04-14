@@ -655,6 +655,13 @@ export const dirtyAndTouched = () => {
     return {
       type: 'object',
       properties: {
+        type: {
+          type: 'string',
+          enum: [
+            'hello',
+            'good bye',
+          ]
+        },
         name: {
           type: 'string',
         },
@@ -671,7 +678,7 @@ export const dirtyAndTouched = () => {
 
   }
 
-  const DefaultRender = ({ isArrayItem, depth, name, errors, Input, formatError, dirty, touched, showError }) => {
+  const DefaultRender = ({ isArrayItem, depth, name, errors, Input, formatError, errorMessage, dirty, touched, showError }) => {
     // const count = useRef(0);
     // count.current++;
     return depth === 0 ? (
@@ -681,7 +688,8 @@ export const dirtyAndTouched = () => {
         <label className="form-label">{name}</label>
         <Input className="form-control" />
         <pre>{JSON.stringify({ dirty, touched, showError })}</pre>
-        {errors?.length > 0 ? formatError(errors[0]) : null}
+        {errorMessage}
+        {/* {errors?.length > 0 ? formatError(errors[0]) : null} */}
         {/* <pre>{JSON.stringify(errors, null, 2)}</pre> */}
       </div>
     );
@@ -690,7 +698,7 @@ export const dirtyAndTouched = () => {
   // const errors = [{ "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "name" }, "message": "should have required property 'name'" }, { "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "email" }, "message": "should have required property 'email'" }]
   return (
     <div>
-      <Form schema={schema} defaultValue={defaultValue} customRender={DefaultRender} />
+      <Form showError="dirty+touched" schema={schema} formTypes={formTypes} defaultValue={defaultValue} customRender={DefaultRender} />
     </div>
   );
 };
