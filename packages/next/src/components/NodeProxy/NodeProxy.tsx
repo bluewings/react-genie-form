@@ -50,7 +50,7 @@ function NodeProxy({
   const restProps = useRef<any>({});
   restProps.current = useObjectSnapshot({ ...rest, watchvalues });
 
-  const { renderNode: __renderNode, formatError } = useContext(RenderContext);
+  const { renderNode: __renderNode, formatError: _formatError, showError: _showError } = useContext(RenderContext);
 
   const renderNode = _renderNode || __renderNode;
 
@@ -89,6 +89,16 @@ function NodeProxy({
   // 특정 노드에 대한 redraw 요청이 왔을때 반응한다.
   const tick = useTick(node);
 
+  const { dirty, touched } = node.getState();
+
+  const showError = _showError({ dirty, touched });
+  const formatError = useMemo(() => {
+    if (showError === false) {
+      return () => null;
+    }
+    return _formatError;
+  }, [showError, _formatError]);
+
   return (
     node &&
     show && (
@@ -101,6 +111,8 @@ function NodeProxy({
           name={node.getName()}
           value={node.getValue()}
           errors={node.getErrors()}
+          dirty={!!dirty}
+          touched={!!touched}
           schema={node.schema}
           node={node}
           Input={Input}
@@ -396,7 +408,7 @@ const AdapterCore = React.memo(
           setValue(value);
         }
         node.clearReceivedErrors();
-        node.setState({ dirty: true, touched: true });
+        node.setState({ dirty: true });
       },
       [setValue, node, readOnly],
     );
@@ -425,6 +437,8 @@ const AdapterCore = React.memo(
         onChange={handleChange}
         onBlur={handleBlur}
         node={node}
+        dirty={!!dirty}
+        touched={!!touched}
         {...formComponentProps}
         context={context}
       />

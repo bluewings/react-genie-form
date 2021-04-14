@@ -648,3 +648,50 @@ export const spreadRequiredErrorsForChildren = () => {
     </div>
   );
 };
+
+export const dirtyAndTouched = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string',
+        },
+        email: {
+          type: 'string',
+          maxLength: 10,
+        },
+      },
+    }
+  }, []);
+
+
+  const defaultValue = {
+
+  }
+
+  const DefaultRender = ({ isArrayItem, depth, name, errors, Input, formatError, dirty, touched, showError }) => {
+    // const count = useRef(0);
+    // count.current++;
+    return depth === 0 ? (
+      <Input />
+    ) : (
+      <div>
+        <label className="form-label">{name}</label>
+        <Input className="form-control" />
+        <pre>{JSON.stringify({ dirty, touched, showError })}</pre>
+        {errors?.length > 0 ? formatError(errors[0]) : null}
+        {/* <pre>{JSON.stringify(errors, null, 2)}</pre> */}
+      </div>
+    );
+  };
+
+  // const errors = [{ "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "name" }, "message": "should have required property 'name'" }, { "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "email" }, "message": "should have required property 'email'" }]
+  return (
+    <div>
+      <Form schema={schema} defaultValue={defaultValue} customRender={DefaultRender} />
+    </div>
+  );
+};
+

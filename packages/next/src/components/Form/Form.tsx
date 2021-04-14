@@ -22,6 +22,7 @@ interface IFormProps {
   form?: Form[];
   children?: ReactNode;
   errors?: any[];
+  showError?: any;
   context?: { [key: string]: any };
 }
 
@@ -38,6 +39,7 @@ function Form({
   form,
   children,
   errors,
+  showError = 'dirty+touched',
   context,
 }: IFormProps, ref: any) {
   const [value, setValue] = React.useState<any>({});
@@ -67,7 +69,7 @@ function Form({
         errors={errors}
       >
         <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>
-          <RenderContextProvider renderNode={customRender} formatError={formatError}>
+          <RenderContextProvider renderNode={customRender} formatError={formatError} showError={showError}>
             {children ? children : <NodeProxy path="" form={form} />}
             {/* <table>
             <tbody>
