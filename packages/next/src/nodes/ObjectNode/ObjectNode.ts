@@ -41,7 +41,11 @@ class ObjectNode extends BaseNode {
     const keys = Object.keys(schema.properties || {});
     const sortObjectKeys = (obj: Dictionary) => {
       const newObj: Dictionary = {};
-      keys.forEach(key => {
+      const mergedKeys = [
+        ...keys,
+        ...Object.keys(obj || {}),
+      ].filter((e, i, arr) => arr.indexOf(e) === i);
+      mergedKeys.forEach(key => {
         if (key in obj) {
           newObj[key] = obj[key];
         }
@@ -56,7 +60,7 @@ class ObjectNode extends BaseNode {
         } else if (Object.keys(this._draft || {}).length === 0 && !this._replace) {
           return undefined;
         } else if (this._replace) {
-          this._value = sortObjectKeys(this._draft);
+          this._value = sortObjectKeys({ ...this._draft });
           this._replace = false;
         } else {
           this._value = sortObjectKeys({ ...this._value, ...this._draft });
