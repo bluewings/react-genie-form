@@ -53,3 +53,26 @@ test('anyOf', () => {
     '($.title === "multi") && ("game" === @.category)',
   );
 });
+
+test('sorted key order', () => {
+  const schema = {
+    type: 'object',
+    properties: {
+      category: { type: 'string' },
+      title: { type: 'string' },
+    },
+  };
+  const node = nodeFromSchema(schema);
+  expect(JSON.stringify(node?.getValue())).toBe(JSON.stringify({}));
+  // @ts-ignore
+  node?.findNode('title').setValue('Harry Potter');
+  expect(JSON.stringify(node?.getValue())).toBe(JSON.stringify({
+    title: 'Harry Potter',
+  }));
+  // @ts-ignore
+  node?.findNode('category').setValue('movie');
+  expect(JSON.stringify(node?.getValue())).toBe(JSON.stringify({
+    category: 'movie',
+    title: 'Harry Potter',
+  }));
+});

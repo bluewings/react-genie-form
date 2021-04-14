@@ -1,6 +1,10 @@
 import BaseNode, { IConstructorProps } from '../BaseNode';
 // import nodeFactory from '../nodeFactory';
 
+type Dictionary = {
+  [key: string]: any;
+};
+
 class ObjectNode extends BaseNode {
   public children = () => this._children;
   public getValue = (): any => this._value;
@@ -34,6 +38,17 @@ class ObjectNode extends BaseNode {
     this._value = this.defaultValue;
     this._draft = {};
 
+    const keys = Object.keys(schema.properties || {});
+    const sortObjectKeys = (obj: Dictionary) => {
+      const newObj: Dictionary = {};
+      keys.forEach(key => {
+        if (key in obj) {
+          newObj[key] = obj[key];
+        }
+      })
+      return newObj;
+    };
+
     this._emitChange = () => {
       if (this._ready && (this._draft === undefined || Object.keys(this._draft).length >= 0)) {
         if (this._draft === undefined) {
@@ -41,10 +56,10 @@ class ObjectNode extends BaseNode {
         } else if (Object.keys(this._draft || {}).length === 0 && !this._replace) {
           return undefined;
         } else if (this._replace) {
-          this._value = { ...this._draft };
+          this._value = sortObjectKeys(this._draft);
           this._replace = false;
         } else {
-          this._value = { ...this._value, ...this._draft };
+          this._value = sortObjectKeys({ ...this._value, ...this._draft });
         }
         this._draft = {};
         if (typeof onChange === 'function') {
