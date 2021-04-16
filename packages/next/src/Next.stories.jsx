@@ -703,3 +703,69 @@ export const dirtyAndTouched = () => {
   );
 };
 
+
+
+export const renderCustomChildNode = () => {
+  const [value, setValue] = useState({});
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        items: {
+          type: 'array',
+          items: {
+            type: 'string',
+            maxLength: 5,
+          },
+          minItems: 2,
+        },
+      },
+    }
+  }, []);
+
+  const formTypeMap = useMemo(() => {
+    return {
+      '$.items': TypeArray2,
+    }
+  }, []);
+
+  // const [value, setValue] = useState(null);
+
+  // const errors = [{ "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "name" }, "message": "should have required property 'name'" }, { "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "email" }, "message": "should have required property 'email'" }]
+  return (
+    <div>
+      <Form schema={schema} showError={true} formTypeMap={formTypeMap} onChange={setValue} />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
+  );
+};
+
+
+function TypeArray2({ childNodes }) {
+  return childNodes.map(Node => {
+    return <Node renderNode={CustomRenderNode} renderFormComponent={CustomArrayItem} />
+  })
+}
+
+function CustomRenderNode({ Input, errorMessage, ...rest }) {
+  console.log(rest);
+  return (
+    <div>
+      <Input />
+      {errorMessage}
+      {/* <p>{errorMessage}</p> */}
+    </div>
+  )
+}
+
+function CustomArrayItem({ defaultValue, onChange }) {
+  const handleChange = (event) => {
+    if (typeof onChange === 'function') {
+      onChange(event.target.value)
+    }
+
+  }
+  return (
+    <input type="text" onChange={handleChange} />
+  )
+}

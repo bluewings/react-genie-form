@@ -338,7 +338,7 @@ const Row = ({ node, childItems: children, restProps }: any) => {
                   </div>
                 )
               }
-              dict.current[node.getKey()] = React.memo((props: any) => {
+              dict.current[node.getKey()] = React.memo(({ renderNode, ...props }: any) => {
 
 
                 return (
@@ -346,7 +346,7 @@ const Row = ({ node, childItems: children, restProps }: any) => {
 
 
 
-                    <NodeProxy node={node} restProps={props} Wrapper={Wrapper} />
+                    <NodeProxy node={node} restProps={props} renderNode={renderNode} Wrapper={Wrapper} />
 
                   )
                 )
@@ -381,7 +381,9 @@ const AdapterCore = React.memo(
     const readOnly = !!(schema?.readOnly);
 
     const formTypes = useContext(FormTypesContext);
-    const FormComponent = useFormComponent(node, formTypes);
+    const BaseFormComponent = useFormComponent(node, formTypes);
+
+    const FormComponent = restProps?.renderFormComponent || BaseFormComponent;
 
     // const [, setTick] = useState(0);
     // useEffect(() => {
