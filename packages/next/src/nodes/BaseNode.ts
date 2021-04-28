@@ -282,8 +282,8 @@ function find(target: any, path: string): BaseNode | any {
 
 export const transformErrors = (errors: any) => {
   return (Array.isArray(errors) ? errors : []).map((error: any) => {
-    if (error.dataPath && error.keyword === 'required' && error.params?.missingProperty) {
-      return { ...error, dataPath: `${error.dataPath}.${error.params.missingProperty}` };
+    if (typeof error.dataPath === 'string' && error.keyword === 'required' && error.params?.missingProperty) {
+      return { ...error, dataPath: `${error.dataPath ? `${error.dataPath}.` : ''}${error.params.missingProperty}` };
     }
     return error;
   }, []);
