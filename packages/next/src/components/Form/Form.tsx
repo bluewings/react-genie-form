@@ -1,4 +1,5 @@
 import React, { ReactNode, forwardRef, useImperativeHandle, useMemo } from 'react';
+import { Ajv } from 'ajv';
 import FormGroup from '../FormGroup';
 import FormInput from '../FormInput';
 import FormRender from '../FormRender';
@@ -21,6 +22,7 @@ interface IFormProps {
   formatError?: Function;
   form?: Form[];
   children?: ReactNode;
+  ajv?: Ajv;
   errors?: any[];
   showError?: any;
   context?: { [key: string]: any };
@@ -38,6 +40,7 @@ function Form({
   formatError,
   form,
   children,
+  ajv,
   errors,
   showError = 'dirty+touched',
   context,
@@ -66,6 +69,7 @@ function Form({
         defaultValue={defaultValue}
         onChange={handleChange}
         onReady={handleReady}
+        ajv={ajv}
         errors={errors}
       >
         <FormTypesContextProvider formTypes={formTypes} formTypeMap={formTypeMap}>

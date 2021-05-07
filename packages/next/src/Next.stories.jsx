@@ -9,6 +9,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 // import { plugin } from '../../plugin-antd/src';
 // import { isUndefined } from 'lodash-es';
 // import flyers from '../../data/flyers.json';
+import Ajv from 'ajv';
 import Form from './components/Form';
 import 'antd/dist/antd.css';
 // @ts-ignore
@@ -615,6 +616,9 @@ export const spreadRequiredErrorsForChildren = () => {
     return {
       type: 'object',
       properties: {
+        what: {
+          type: 'string',
+        },
         profile: {
           type: 'object',
           properties: {
@@ -627,8 +631,9 @@ export const spreadRequiredErrorsForChildren = () => {
             },
           },
           required: ['name', 'email'],
-        }
-      }
+        },
+      },
+      required: ['profile', 'what'],
     }
   }, []);
 
@@ -644,7 +649,9 @@ export const spreadRequiredErrorsForChildren = () => {
   const errors = [{ "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "name" }, "message": "should have required property 'name'" }, { "keyword": "required", "dataPath": ".profile", "schemaPath": "#/properties/profile/required", "params": { "missingProperty": "email" }, "message": "should have required property 'email'" }]
   return (
     <div>
-      <Form schema={schema} defaultValue={defaultValue} showError={true} errors={errors} />
+      <Form schema={schema} defaultValue={defaultValue} showError={true}
+      // errors={errors} 
+      />
     </div>
   );
 };
@@ -769,3 +776,46 @@ function CustomArrayItem({ defaultValue, onChange }) {
     <input type="text" onChange={handleChange} />
   )
 }
+
+export const AjvInstance = () => {
+  const [value, setValue] = useState({
+    text1: 'abc',
+    text2: 'xyz',
+  });
+
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        text1: {
+          type: 'string',
+          excludeChars: 'x',
+        },
+        text2: {
+          type: 'string',
+          excludeChars: 'x',
+        }
+      },
+    }
+  }, []);
+
+  const ajv = useMemo(() => {
+    const ajv = new Ajv({ allErrors: true, unknownFormats: 'ignore' });
+    ajv.addKeyword('excludeChars', {
+      validate: (schema, data) => {
+        if (typeof data === 'string' && typeof schema === 'string' && data.indexOf(schema) !== -1) {
+          return false;
+        }
+        return true;
+      },
+      errors: true,
+    });
+    return ajv;
+  }, []);
+
+  return (
+    <div>
+      <Form schema={schema} ajv={ajv} defaultValue={value} showError={true} onChange={setValue} />
+    </div>
+  );
+};

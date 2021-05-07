@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { Ajv } from 'ajv';
 import { useConstant, useHandle } from '../hooks';
 import { Schema, nodeFromSchema } from '../nodes';
 import { transformErrors } from '../nodes/BaseNode';
@@ -18,6 +19,7 @@ interface INodeContextProvider {
   onChange?: (value: any) => void;
   onReady?: (rootNode: any) => void;
   children: ReactNode;
+  ajv?: Ajv;
   errors?: any[];
 }
 
@@ -27,6 +29,7 @@ const Provider = ({
   onChange,
   onReady,
   children,
+  ajv,
   errors,
 }: INodeContextProvider) => {
   const initialValue = useConstant(defaultValue);
@@ -52,10 +55,11 @@ const Provider = ({
   const rootNode = useMemo(
     () =>
       nodeFromSchema(schema, {
+        ajv,
         defaultValue: initialValue,
         onChange: handleChange,
       }),
-    [schema, initialValue, handleChange],
+    [schema, ajv, initialValue, handleChange],
   );
   useEffect(() => {
     if (typeof onReady === 'function') {
