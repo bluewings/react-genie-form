@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import BaseCodeMirror from 'react-codemirror';
+import React, { useMemo, Suspense } from 'react';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/javascript/javascript';
@@ -12,6 +11,8 @@ import 'codemirror/theme/dracula.css';
 import 'codemirror/theme/darcula.css';
 import 'codemirror/theme/base16-light.css';
 import './FormTypeCode.theme.css';
+
+const BaseCodeMirror = React.lazy(() => import('react-codemirror'));
 
 const alias: any = {
   js: 'javascript',
@@ -57,11 +58,13 @@ const FormTypeCode = ({
 
   return (
     <div className={styles.root}>
-      <BaseCodeMirror
-        value={defaultValue}
-        options={options}
-        onChange={handleChange}
-      />
+      <Suspense fallback={<></>}>
+        <BaseCodeMirror
+          value={defaultValue}
+          options={options}
+          onChange={handleChange}
+        />
+      </Suspense>
     </div>
   );
 };
