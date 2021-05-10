@@ -1,10 +1,4 @@
-import React, { useMemo, Suspense } from 'react';
-import 'codemirror/mode/yaml/yaml';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/mode/xml/xml';
+import React, { useMemo, Suspense, useEffect, useState } from 'react';
 import styles from './FormTypeCode.module.scss';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/dracula.css';
@@ -56,17 +50,45 @@ const FormTypeCode = ({
     onChange(value.trim());
   };
 
+  const ready = useCodemirror();
+
   return (
     <div className={styles.root}>
-      <Suspense fallback={<></>}>
-        <BaseCodeMirror
-          value={defaultValue}
-          options={options}
-          onChange={handleChange}
-        />
-      </Suspense>
+      {ready && (
+        <Suspense fallback={<></>}>
+          <BaseCodeMirror
+            value={defaultValue}
+            options={options}
+            onChange={handleChange}
+          />
+        </Suspense>
+      )}
     </div>
   );
 };
 
 export default FormTypeCode;
+
+function useCodemirror() {
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    (async () => {
+      await Promise.all([
+        // @ts-ignore
+        import('codemirror/mode/yaml/yaml'),
+        // @ts-ignore
+        import('codemirror/mode/css/css'),
+        // @ts-ignore
+        import('codemirror/mode/javascript/javascript'),
+        // @ts-ignore
+        import('codemirror/mode/jsx/jsx'),
+        // @ts-ignore
+        import('codemirror/mode/htmlmixed/htmlmixed'),
+        // @ts-ignore
+        import('codemirror/mode/xml/xml'),
+      ]);
+      setReady(true);
+    })();
+  }, []);
+  return ready;
+}
