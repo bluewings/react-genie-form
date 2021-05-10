@@ -1,127 +1,147 @@
 import React from 'react';
 import { Divider } from 'antd';
-import FormTypeCode from './FormTypeCode';
-import FormTypeDate from './FormTypeDate';
-import FormTypeDateRange from './FormTypeDateRange';
-import FormTypeDateTimeRange from './FormTypeDateTimeRange';
-import FormTypeTime from './FormTypeTime';
-import FormTypeMonth from './FormTypeMonth';
-import FormTypeMonthRange from './FormTypeMonthRange';
-import FormTypeEnum from './FormTypeEnum';
-import FormTypeRadioGroup from './FormTypeRadioGroup';
-import FormTypeSlider from './FormTypeSlider';
-import FormTypeSwitch from './FormTypeSwitch';
-import FormTypeTextarea from './FormTypeTextarea';
-import FormTypeURI from './FormTypeURI';
-import TypeArray from './TypeArray';
-import TypeBoolean from './TypeBoolean';
-import TypeNumber from './TypeNumber';
-import TypeString from './TypeString';
+import BaseFormTypeCode from './FormTypeCode';
+import BaseFormTypeDate from './FormTypeDate';
+import BaseFormTypeDateRange from './FormTypeDateRange';
+import BaseFormTypeDateTimeRange from './FormTypeDateTimeRange';
+import BaseFormTypeTime from './FormTypeTime';
+import BaseFormTypeMonth from './FormTypeMonth';
+import BaseFormTypeMonthRange from './FormTypeMonthRange';
+import BaseBaseFormTypeEnum from './FormTypeEnum';
+import BaseFormTypeRadioGroup from './FormTypeRadioGroup';
+import BaseFormTypeSlider from './FormTypeSlider';
+import BaseFormTypeSwitch from './FormTypeSwitch';
+import BaseFormTypeTextarea from './FormTypeTextarea';
+import BaseFormTypeURI from './FormTypeURI';
+import BaseTypeArray from './TypeArray';
+import BaseTypeBoolean from './TypeBoolean';
+import BaseTypeNumber from './TypeNumber';
+import BaseTypeString from './TypeString';
 
-const formTypes: FormType[] = [
-  {
-    component: FormTypeDateRange,
-    test: { type: 'array', formType: ['date-range', 'dateRange', 'daterange'] },
+export const FormTypeDateRange = {
+  component: BaseFormTypeDateRange,
+  test: { type: 'array', formType: ['date-range', 'dateRange', 'daterange'] },
+};
+
+export const FormTypeDateTimeRange = {
+  component: BaseFormTypeDateTimeRange,
+  test: {
+    type: 'array',
+    formType: ['date-time-range', 'dateTimeRange', 'datetimerange'],
   },
-  {
-    component: FormTypeDateTimeRange,
-    test: {
-      type: 'array',
-      formType: ['date-time-range', 'dateTimeRange', 'datetimerange'],
-    },
+};
+
+export const FormTypeMonthRange = {
+  component: BaseFormTypeMonthRange,
+  test: {
+    type: 'array',
+    formType: ['month-range', 'monthRange', 'monthrange'],
   },
-  {
-    component: FormTypeMonthRange,
-    test: {
-      type: 'array',
-      formType: ['month-range', 'monthRange', 'monthrange'],
-    },
+};
+
+export const FormTypeDate = {
+  component: BaseFormTypeDate,
+  test: { type: 'string', format: 'date' },
+};
+
+export const FormTypeTime = {
+  component: BaseFormTypeTime,
+  test: { type: 'string', format: 'time' },
+};
+
+export const FormTypeMonth = {
+  component: BaseFormTypeMonth,
+  test: { type: 'string', format: 'month' },
+};
+
+export const FormTypeSwitch = {
+  component: BaseFormTypeSwitch,
+  test: ({ type, schema, formType }: any) => {
+    return (type === 'string' && formType === 'switch' && Array.isArray(schema?.enum) && schema?.enum.length === 2) ||
+      (type === 'boolean' && formType === 'switch');
   },
-  {
-    component: FormTypeDate,
-    test: { type: 'string', format: 'date' },
+};
+
+export const FormTypeRadioGroup = {
+  component: BaseFormTypeRadioGroup,
+  test: ({ type, schema, formType }: any) =>
+    ['string', 'number'].indexOf(type) !== -1 &&
+    Array.isArray(schema.enum) &&
+    ['radio', 'radiogroup'].includes(
+      (formType || '').toLowerCase().replace(/[^a-z]/g, ''),
+    ),
+};
+
+export const BaseFormTypeEnum = {
+  component: BaseBaseFormTypeEnum,
+  test: ({ type, schema }: any) => {
+    return (type === 'array' && schema?.items?.type === 'string' && Array.isArray(schema?.items?.enum)) ||
+      (['string', 'number'].indexOf(type) !== -1 && Array.isArray(schema.enum));
   },
-  {
-    component: FormTypeTime,
-    test: { type: 'string', format: 'time' },
+};
+
+export const FormTypeSlider = {
+  component: BaseFormTypeSlider,
+  test: { type: 'number', formType: 'slider' },
+};
+
+export const FormTypeTextarea = {
+  component: BaseFormTypeTextarea,
+  test: ({ type, format, formType }: any) => {
+    return type === 'string' && (format === 'textarea' || formType === 'textarea');
   },
-  {
-    component: FormTypeMonth,
-    test: { type: 'string', format: 'month' },
+};
+
+export const FormTypeURI = {
+  component: BaseFormTypeURI,
+  test: ({ type, format, formType }: any) => {
+    return type === 'string' && (format === 'uri' || formType === 'uri');
   },
-  {
-    component: FormTypeSwitch,
-    test: ({ type, schema, formType }: any) =>
-      type === 'string' &&
-      formType === 'switch' &&
-      Array.isArray(schema?.enum) &&
-      schema?.enum.length === 2,
-  },
-  {
-    component: FormTypeSwitch,
-    test: { type: 'boolean', formType: 'switch' },
-  },
-  {
-    component: FormTypeRadioGroup,
-    test: ({ type, schema, formType }: any) =>
-      ['string', 'number'].indexOf(type) !== -1 &&
-      Array.isArray(schema.enum) &&
-      ['radio', 'radiogroup'].includes(
-        (formType || '').toLowerCase().replace(/[^a-z]/g, ''),
-      ),
-  },
-  {
-    component: FormTypeEnum,
-    test: ({ type, schema }: any) =>
-      type === 'array' &&
-      schema?.items?.type === 'string' &&
-      Array.isArray(schema?.items?.enum),
-  },
-  {
-    component: FormTypeEnum,
-    test: ({ type, schema }: any) =>
-      ['string', 'number'].indexOf(type) !== -1 && Array.isArray(schema.enum),
-  },
-  {
-    component: FormTypeSlider,
-    test: { type: 'number', formType: 'slider' },
-  },
-  {
-    component: FormTypeTextarea,
-    test: { type: 'string', format: 'textarea' },
-  },
-  {
-    component: FormTypeTextarea,
-    test: { type: 'string', formType: 'textarea' },
-  },
-  {
-    component: FormTypeURI,
-    test: { type: 'string', format: 'uri' },
-  },
-  {
-    component: FormTypeURI,
-    test: { type: 'string', formType: 'uri' },
-  },
-  {
-    component: FormTypeCode,
-    test: { type: 'string', formType: 'code' },
-  },
-  {
-    component: TypeArray,
-    test: { type: 'array' },
-  },
-  {
-    component: TypeBoolean,
-    test: { type: 'boolean' },
-  },
-  {
-    component: TypeString,
-    test: { type: 'string' },
-  },
-  {
-    component: TypeNumber,
-    test: { type: ['number', 'integer'] },
-  },
+};
+
+export const FormTypeCode = {
+  component: BaseFormTypeCode,
+  test: { type: 'string', formType: 'code' },
+};
+
+export const TypeArray = {
+  component: BaseTypeArray,
+  test: { type: 'array' },
+};
+
+export const TypeBoolean = {
+  component: BaseTypeBoolean,
+  test: { type: 'boolean' },
+};
+
+export const TypeString = {
+  component: BaseTypeString,
+  test: { type: 'string' },
+};
+
+export const TypeNumber = {
+  component: BaseTypeNumber,
+  test: { type: ['number', 'integer'] },
+};
+
+export const formTypes: FormType[] = [
+  FormTypeDateRange,
+  FormTypeDateTimeRange,
+  FormTypeMonthRange,
+  FormTypeDate,
+  FormTypeTime,
+  FormTypeMonth,
+  FormTypeSwitch,
+  FormTypeRadioGroup,
+  BaseFormTypeEnum,
+  FormTypeSlider,
+  FormTypeTextarea,
+  FormTypeURI,
+  FormTypeCode,
+  TypeArray,
+  TypeBoolean,
+  TypeString,
+  TypeNumber,
   {
     component: () => <Divider style={{ margin: '0 0 1.5rem' }} />,
     test: { type: '__divider' },
@@ -131,21 +151,21 @@ const formTypes: FormType[] = [
 export default formTypes;
 
 export const formType = {
-  FormTypeCode,
-  FormTypeDate,
-  FormTypeDateRange,
-  FormTypeDateTimeRange,
-  FormTypeTime,
-  FormTypeMonth,
-  FormTypeMonthRange,
-  FormTypeEnum,
-  FormTypeRadioGroup,
-  FormTypeSlider,
-  FormTypeSwitch,
-  FormTypeTextarea,
-  FormTypeURI,
-  TypeArray,
-  TypeBoolean,
-  TypeNumber,
-  TypeString,
+  FormTypeCode: BaseFormTypeCode,
+  FormTypeDate: BaseFormTypeDate,
+  FormTypeDateRange: BaseFormTypeDateRange,
+  FormTypeDateTimeRange: BaseFormTypeDateTimeRange,
+  FormTypeTime: BaseFormTypeTime,
+  FormTypeMonth: BaseFormTypeMonth,
+  FormTypeMonthRange: BaseFormTypeMonthRange,
+  FormTypeEnum: BaseBaseFormTypeEnum,
+  FormTypeRadioGroup: BaseFormTypeRadioGroup,
+  FormTypeSlider: BaseFormTypeSlider,
+  FormTypeSwitch: BaseFormTypeSwitch,
+  FormTypeTextarea: BaseFormTypeTextarea,
+  FormTypeURI: BaseFormTypeURI,
+  TypeArray: BaseTypeArray,
+  TypeBoolean: BaseTypeBoolean,
+  TypeNumber: BaseTypeNumber,
+  TypeString: BaseTypeString,
 };
