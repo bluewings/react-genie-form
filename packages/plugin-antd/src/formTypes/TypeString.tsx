@@ -11,6 +11,7 @@ function TypeString({
   onChange,
   readOnly,
   __ui,
+  ...rest
 }: any) {
   const { style } = __ui || {};
   const Input = useMemo(
@@ -22,6 +23,7 @@ function TypeString({
   );
   return (
     <Input
+      {...rest}
       name={name}
       size={size}
       defaultValue={defaultValue}
