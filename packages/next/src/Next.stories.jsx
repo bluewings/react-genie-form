@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useLayoutEffect } from 'react';
 // import { Provider } from '@flyer/core-client';
 // import Flyer from './Flyer';
 // import { flyer } from '../../data';
@@ -166,7 +166,7 @@ export const watch = () => {
           <>
             <strong>
               hello '{watchvalues[0]}'
-          </strong>
+            </strong>
             <pre>
               {JSON.stringify(watchvalues, null, 2)}
             </pre>
@@ -816,6 +816,68 @@ export const AjvInstance = () => {
   return (
     <div>
       <Form schema={schema} ajv={ajv} defaultValue={value} showError={true} onChange={setValue} />
+    </div>
+  );
+};
+
+function CustomInput(props) {
+
+  useEffect(() => {
+    props.onChange('lazy update');
+  }, []);
+
+  const handleClick = () => {
+
+    props.onChange('lazy update 2');
+  }
+
+  return (
+    <button onClick={handleClick}>update</button>
+  );
+}
+
+function CustomInput2({ watchvalues }) {
+  return (
+    <pre>
+      {JSON.stringify(watchvalues)}
+    </pre>
+  );
+}
+
+const formTypeMap = {
+  '$.value1': CustomInput,
+  '$.value2': CustomInput2,
+};
+
+export const WatchValueAndLazyUpdate = () => {
+  const [value, setValue] = useState({
+  });
+
+  const schema = useMemo(() => {
+    return {
+      type: 'object',
+      properties: {
+        value1: {
+          type: 'string',
+        },
+        value2: {
+          type: 'string',
+          options: {
+            watch: ['$.value1'],
+          }
+        }
+      },
+    }
+  }, []);
+
+  return (
+    <div>
+      <Form
+        schema={schema}
+        defaultValue={value}
+        formTypeMap={formTypeMap}
+        showError={true} onChange={setValue} />
+      <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>
   );
 };

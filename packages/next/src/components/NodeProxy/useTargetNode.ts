@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useLayoutEffect, useMemo, useState } from 'react';
 import useTracker from '../../hooks/useTracker';
 import { NodeContext } from '../../providers';
 
@@ -74,7 +74,7 @@ function useTargetNode(path: string | undefined, __node?: any) {
     return [];
   }, [getWatchValues, _deps]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (_dependencies.length > 0 && node.rootNode) {
       const unsubs = _dependencies
         .map((e, i) => {
