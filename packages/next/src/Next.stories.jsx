@@ -271,11 +271,13 @@ export const errors = () => {
     setErrors([]);
   }
 
+  const [_errors, _setErrors] = useState([]);
   return (
     <div>
-      <Form schema={schema} onChange={handleChange} errors={errors} />
+      <Form schema={schema} onChange={handleChange} onValidate={_setErrors} errors={errors} showError={true} />
       <button onClick={clearErrors}>clear received errors</button>
-      {/* <pre>{JSON.stringify(value, null, 2)}</pre> */}
+      <hr />
+      <pre>{JSON.stringify(_errors, null, 2)}</pre>
     </div>
   );
 };
@@ -288,7 +290,7 @@ const _formTypes = [
   ...formTypes,
 ];
 
-const customRender = ({ isArrayItem, path, depth, name, errors, Input, node }: any) => {
+const customRender = ({ isArrayItem, path, depth, name, errors, Input, node }) => {
   const isLeaf = node.children().length === 0;
 
   return depth === 0 ? (

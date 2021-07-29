@@ -16,6 +16,7 @@ interface IFormProps {
   schema: Schema;
   defaultValue?: any;
   onChange?: (value: any) => void;
+  onValidate?: (errors: any[]) => void;
   formTypes?: any[];
   formTypeMap?: { [key: string]: Function };
   customRender?: Function;
@@ -34,6 +35,7 @@ function Form({
   schema,
   defaultValue,
   onChange,
+  onValidate,
   formTypes,
   formTypeMap,
   customRender,
@@ -68,6 +70,7 @@ function Form({
         schema={schema}
         defaultValue={defaultValue}
         onChange={handleChange}
+        onValidate={onValidate}
         onReady={handleReady}
         ajv={ajv}
         errors={errors}

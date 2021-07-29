@@ -17,6 +17,7 @@ interface INodeContextProvider {
   schema: Schema;
   defaultValue?: any;
   onChange?: (value: any) => void;
+  onValidate?: (errors: any[]) => void;
   onReady?: (rootNode: any) => void;
   children: ReactNode;
   ajv?: Ajv;
@@ -27,6 +28,7 @@ const Provider = ({
   schema,
   defaultValue,
   onChange,
+  onValidate,
   onReady,
   children,
   ajv,
@@ -67,15 +69,30 @@ const Provider = ({
     }
   }, [rootNode]);
 
+  const handleValidate = useHandle(onValidate);
+  useEffect(() => {
+    if (rootNode) {
+      rootNode.subscribe((type: string, payload: any) => {
+        if (type === 'validate') {
+          handleValidate(payload);
+        }
+      });
+    }
+  }, [rootNode]);
+
   const lastErrors = useRef<any>({});
   useEffect(() => {
-    const currErrors = transformErrors(errors || []).reduce((accum: any, e) => {
+    const errorsTransformed = transformErrors(errors || [], true)
+    const currErrors = errorsTransformed.reduce((accum: any, e) => {
       if (!accum[e.dataPath]) {
         accum[e.dataPath] = [];
       }
       accum[e.dataPath].push(e);
       return accum
     }, {});
+    if (rootNode?.setReceivedErrors && errorsTransformed) {
+      rootNode.setReceivedErrors(errorsTransformed);
+    }
     [...Object.keys(lastErrors.current), ...Object.keys(currErrors),]
       .filter((e, i, arr) => arr.indexOf(e) === i)
       .forEach(dataPath => {

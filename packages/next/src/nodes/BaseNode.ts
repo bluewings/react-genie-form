@@ -96,9 +96,24 @@ abstract class BaseNode {
   };
   clearReceivedErrors = () => {
     if (this._receivedErrors && this._receivedErrors.length > 0) {
+      if (!this.isRoot) {
+        this.rootNode.removeFromReceivedErrors(this._receivedErrors);
+      }
       this.setReceivedErrors([]);
     }
   };
+
+  removeFromReceivedErrors = (errors: any[]) => {
+    const errorKeysToDelete = errors
+      .map(({ key }: any) => key)
+      .filter(key => typeof key === 'number');
+    const nextErrors = this._receivedErrors.filter((e: any) => {
+      return !errorKeysToDelete.includes(e.key)
+    })
+    if (this._receivedErrors.length !== nextErrors.length) {
+      this.setReceivedErrors(nextErrors);
+    }
+  }
 
   getState = () => this._state;
   setState = (state: Function | { [key: string]: any }) => {
@@ -226,6 +241,7 @@ abstract class BaseNode {
           return accum;
         }, {});
 
+        this.setErrors(errors);
         Object.entries(errorsByDataPath).forEach(([dataPath, errors]: any) => {
           const node = this.findNode(dataPath);
           node?.setErrors(errors);
@@ -280,11 +296,15 @@ function find(target: any, path: string): BaseNode | any {
   return null;
 }
 
-export const transformErrors = (errors: any) => {
+let keySeq = 0;
+
+export const transformErrors = (errors: any, useKey = false) => {
+
   return (Array.isArray(errors) ? errors : []).map((error: any) => {
+    let key = useKey ? ++keySeq : undefined;
     if (typeof error.dataPath === 'string' && error.keyword === 'required' && error.params?.missingProperty) {
-      return { ...error, dataPath: `${error.dataPath ? `${error.dataPath}.` : ''}${error.params.missingProperty}` };
+      return { ...error, key, dataPath: `${error.dataPath ? `${error.dataPath}.` : ''}${error.params.missingProperty}` };
     }
-    return error;
+    return { ...error, key };
   }, []);
 };
