@@ -6,8 +6,8 @@ interface IFormRenderProps {
   children: Function;
 }
 
-function FormRender({ path, children }: IFormRenderProps) {
-  return <NodeProxy path={path} renderNode={children} />;
+function FormRender({ path, children, ...rest }: IFormRenderProps) {
+  return <NodeProxy path={path} {...rest} renderNode={children} />;
 }
 
 export default FormRender;
