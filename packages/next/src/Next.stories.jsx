@@ -197,6 +197,13 @@ export const form_types = () => {
         textNode: {
           type: 'string',
         },
+        arrayNode: {
+          type: 'array',
+          items: {
+            type: 'object',
+          },
+          minItems: 1,
+        },
       },
     }
   }, []);
@@ -222,6 +229,11 @@ export const form_types = () => {
         }
         return (
           <button onClick={handleClick}>text set</button>
+        )
+      },
+      '$.arrayNode.#': ({ value, watchvalues, onChange }) => {
+        return (
+          <div>i am array item</div>
         )
       },
     }
